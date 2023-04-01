@@ -25,7 +25,6 @@
     "@prisma/client": "^4.12.0",
     "@trpc/client": "^10.12.0",
     "@trpc/server": "^10.12.0",
-    "firebase": "9.19.1",
     "superjson": "^1.12.2",
     "trpc-nuxt": "^0.7.0",
     "zod": "^3.21.2"

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useCollection } from '../lib/firebase/events'
 const { data: events, refresh, pending, error } = useFetch('/api/events')
-const { data: firebaseEvents, pending: firebasePending, error: firebaseError } = useCollection('events')
 
 async function add () {
   await useFetch('/api/events', {
@@ -25,17 +24,6 @@ async function add () {
       </p>
       <p v-else class="text-green-500">
         [Prisma] loaded {{ events?.length || 0 }} records
-      </p>
-    </div>
-    <div class="p-4">
-      <p v-if="firebasePending" class="text-orange-500">
-        [Firebase] loading
-      </p>
-      <p v-else-if="firebaseError" class="text-red-500">
-        [Firebase] error: {{ firebaseError }}
-      </p>
-      <p v-else class="text-green-500">
-        [Firebase]: loaded {{ firebaseEvents.length }} records
       </p>
     </div>
   </div>
