@@ -1,7 +1,0 @@
-name = "wedance-prisma"
-main = "./.output/server/index.mjs"
-workers_dev = true
-compatibility_date = "2022-09-10"
-account_id = "f95aa84daa9d32075ef113a4382fdfc2"
-[site]
-bucket = ".output/public"
