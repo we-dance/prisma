@@ -2,7 +2,8 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
-    '@huntersofbook/naive-ui-nuxt'
+    '@huntersofbook/naive-ui-nuxt',
+    '@pinia/nuxt'
   ],
   build: {
     transpile: [
@@ -11,5 +12,11 @@ export default defineNuxtConfig({
   },
   typescript: {
     shim: false
+  },
+  imports: {
+    dirs: ['./stores']
+  },
+  pinia: {
+    autoImports: ['defineStore', 'acceptHMRUpdate']
   }
 })
