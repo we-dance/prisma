@@ -1,33 +1,26 @@
 <script setup lang="ts">
 import format from 'date-fns/format'
+// import type { DanceEvent } from 'schema-dts'
+import { Prisma } from '@prisma/client'
+type EventDetails = Prisma.EventGetPayload<{
+  include: {
+    venue: true,
+    organizer: true,
+    styles: true
+  }
+}>
 
-interface Profile {
-  name: string
-  username: string
-}
-
-interface Event {
-  id: string
-  createdAt: Date
-  startDate: Date
-  name: string
-  role?: string
-  org?: Profile
-  venue?: Profile
-  type: string
-  styles: string[]
-  cover: string
-  price: string
-}
-
-function formatDate (val: Date, formatStr: string) {
-  return format(val, formatStr)
-}
-
-defineProps<{
-  event: Event
+const props = withDefaults(defineProps<{
+  event: EventDetails
   isEmbed?: boolean
-}>()
+}>(),
+{
+  isEmbed: false
+})
+
+const startDate = new Date(props.event.startDate)
+const eventTime = computed(() => format(startDate, 'HH:mm'))
+const role = ''
 </script>
 
 <template>
@@ -38,7 +31,7 @@ defineProps<{
   >
     <div class="text-center">
       <div class="font-bold text-sm leading-none">
-        {{ formatDate(event.startDate, 'HH:mm') }}
+        {{ eventTime }}
       </div>
     </div>
     <div class="w-full">
@@ -49,10 +42,12 @@ defineProps<{
       </div>
       <div>
         <div class="text-xs pt-1 leading-none">
-          <template v-if="event.role">
-            {{ event.role }} ·
+          <template v-if="role">
+            {{ role }} ·
           </template>
-          {{ event.org ? event.org.username : '' }}
+          <template v-if="event.organizer">
+            {{ event.organizer.name }}
+          </template>
           <template v-if="event.venue">
             · {{ event.venue.name }}
           </template>
@@ -61,9 +56,9 @@ defineProps<{
       <div class="text-xs text-gray-700 pt-1">
         <span class="text-primary">{{ event.type }}</span>
         ·
-        {{
-          event.styles.join(' · ')
-        }}
+        <template v-if="event.styles">
+          <span v-for="style in event.styles" :key="style.id">{{ style.name }}</span>
+        </template>
         <template v-if="event.price">
           · {{ event.price }}
         </template>

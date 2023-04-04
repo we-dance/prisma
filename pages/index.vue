@@ -1,12 +1,11 @@
 <script setup lang="ts">
-const calendar = useCalendar()
-onMounted(calendar.load)
+const { data } = useFetch('/api/events')
 </script>
 
 <template>
   <div class="max-w-md m-auto border my-4">
     <EventCard
-      v-for="event in calendar.data"
+      v-for="event in data"
       :key="event.id"
       :event="event"
     />

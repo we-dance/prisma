@@ -13,20 +13,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id      Int      @id @default(autoincrement())
+model Account {
+  userId  Int      @id @default(autoincrement())
   email   String   @unique
-  name    String?
-  posts   Post[]
-  events   Event[]
+  name    String
   profile Profile?
 }
 
 model Profile {
-  id     Int    @id @default(autoincrement())
-  bio    String
-  user   User   @relation(fields: [userId], references: [id])
-  userId Int    @unique
+  id              Int      @id @default(autoincrement())
+  username        String
+  name            String
+  bio             String
+  user            Account? @relation(fields: [userId], references: [userId])
+  userId          Int?     @unique
+  posts           Post[]
+  eventsCreated   Event[]  @relation("event_created_by")
+  eventsOrganized Event[]  @relation("event_organized_by")
+  eventsHosted    Event[]  @relation("event_hosted_by")
 }
 
 model Post {
@@ -34,18 +38,35 @@ model Post {
   createdAt  DateTime   @default(now())
   title      String
   published  Boolean    @default(false)
-  author     User       @relation(fields: [authorId], references: [id])
+  author     Profile    @relation(fields: [authorId], references: [id])
   authorId   Int
   categories Category[]
 }
 
 model Event {
-  id         Int        @id @default(autoincrement())
-  createdAt  DateTime   @default(now())
-  title      String
-  published  Boolean    @default(false)
-  author     User       @relation(fields: [authorId], references: [id])
-  authorId   Int
+  id          Int        @id @default(autoincrement())
+  createdAt   DateTime   @default(now())
+  name        String
+  published   Boolean    @default(false)
+  creator     Profile    @relation("event_created_by", fields: [creatorId], references: [id])
+  creatorId   Int
+  organizer   Profile    @relation("event_organized_by", fields: [organizerId], references: [id])
+  organizerId Int
+  venue       Profile    @relation("event_hosted_by", fields: [venueId], references: [id])
+  venueId     Int
+  startDate   DateTime
+  endDate     DateTime
+  description String
+  type        String
+  styles      DanceStyle[]
+  cover       String
+  price       String
+}
+
+model DanceStyle {
+  id    Int    @id @default(autoincrement())
+  name  String
+  events Event[]
 }
 
 model Category {
