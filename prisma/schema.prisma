@@ -10,50 +10,76 @@ datasource db {
   provider = "postgres"
 
   // This value is read from the .env file.
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")
 }
 
 model Account {
-  userId  Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String
-  profile Profile?
+  id              String    @id @default(nanoid())
+  email           String    @unique
+  name            String
+  profile         Profile?  @relation("owned_by")
+  firebaseId      String    @default("")
+  createdAt       DateTime  @default(now())
+  updateAt        DateTime  @default(now())
+  lastLoginAt     DateTime  @default(now())
+  profileId       String?
+  profilesCreated Profile[] @relation("profile_created_by")
 }
 
 model Profile {
-  id              Int      @id @default(autoincrement())
-  username        String
-  name            String
-  bio             String
-  user            Account? @relation(fields: [userId], references: [userId])
-  userId          Int?     @unique
-  posts           Post[]
-  eventsCreated   Event[]  @relation("event_created_by")
-  eventsOrganized Event[]  @relation("event_organized_by")
-  eventsHosted    Event[]  @relation("event_hosted_by")
+  id               String   @id @default(nanoid())
+  username         String
+  name             String
+  bio              String
+  account          Account? @relation("owned_by", fields: [accountId], references: [id])
+  accountId        String?  @unique
+  posts            Post[]
+  eventsCreated    Event[]  @relation("event_created_by")
+  eventsOrganized  Event[]  @relation("event_organized_by")
+  eventsHosted     Event[]  @relation("event_hosted_by")
+  firebaseId       String   @default("")
+  createdAt        DateTime @default(now())
+  updateAt         DateTime @default(now())
+  lastLoginAt      DateTime @default(now())
+  claimed          Boolean  @default(false)
+  createdBy        Account? @relation("profile_created_by", fields: [createdById], references: [id])
+  createdById      String?
+  formattedAddress String?
+  mapUrl           String?
+  lng              Float?
+  lat              Float?
+  placeId          String?
+  type             String
+  photo            String?
+  website          String?
+  instagram        String?
+  facebook         String?
+  phone            String?
 }
 
 model Post {
-  id         Int        @id @default(autoincrement())
+  id         String     @id @default(nanoid())
   createdAt  DateTime   @default(now())
   title      String
   published  Boolean    @default(false)
   author     Profile    @relation(fields: [authorId], references: [id])
-  authorId   Int
+  authorId   String
   categories Category[]
+  firebaseId String     @default("")
 }
 
 model Event {
-  id          Int        @id @default(autoincrement())
-  createdAt   DateTime   @default(now())
+  id          String       @id @default(nanoid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now())
   name        String
-  published   Boolean    @default(false)
-  creator     Profile    @relation("event_created_by", fields: [creatorId], references: [id])
-  creatorId   Int
-  organizer   Profile    @relation("event_organized_by", fields: [organizerId], references: [id])
-  organizerId Int
-  venue       Profile    @relation("event_hosted_by", fields: [venueId], references: [id])
-  venueId     Int
+  published   Boolean      @default(false)
+  creator     Profile      @relation("event_created_by", fields: [creatorId], references: [id])
+  creatorId   String
+  organizer   Profile      @relation("event_organized_by", fields: [organizerId], references: [id])
+  organizerId String
+  venue       Profile      @relation("event_hosted_by", fields: [venueId], references: [id])
+  venueId     String
   startDate   DateTime
   endDate     DateTime
   description String
@@ -61,11 +87,12 @@ model Event {
   styles      DanceStyle[]
   cover       String
   price       String
+  firebaseId  String       @default("")
 }
 
 model DanceStyle {
-  id    Int    @id @default(autoincrement())
-  name  String
+  id     Int     @id @default(autoincrement())
+  name   String
   events Event[]
 }
 

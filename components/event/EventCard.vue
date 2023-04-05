@@ -12,14 +12,20 @@ type EventDetails = Prisma.EventGetPayload<{
 
 const props = withDefaults(defineProps<{
   event: EventDetails
-  isEmbed?: boolean
+  isEmbed: boolean,
+  showRole: boolean,
+  showOrganizer: boolean
 }>(),
 {
-  isEmbed: false
+  isEmbed: false,
+  showRole: false,
+  showOrganizer: false
 })
 
 const startDate = new Date(props.event.startDate)
-const eventTime = computed(() => format(startDate, 'HH:mm'))
+const eventDay = computed(() => format(startDate, 'd'))
+const eventMonth = computed(() => format(startDate, 'MMM'))
+const eventTime = computed(() => format(startDate, 'EEE HH:mm'))
 const role = ''
 </script>
 
@@ -30,23 +36,31 @@ const role = ''
     class="flex border-b p-4 leading-none gap-2"
   >
     <div class="text-center">
-      <div class="font-bold text-sm leading-none">
-        {{ eventTime }}
+      <div class="font-bold leading-none">
+        <div class="text-red-500">
+          {{ eventDay }}
+        </div>
+        <div class="text-sm">
+          {{ eventMonth }}
+        </div>
       </div>
     </div>
     <div class="w-full">
       <div
-        class="font-bold text-sm leading-none hover:underline hover:text-primary"
+        class="font-bold leading-none hover:underline hover:text-primary"
       >
         {{ event.name }}
       </div>
       <div>
-        <div class="text-xs pt-1 leading-none">
-          <template v-if="role">
-            {{ role }} ·
+        <div class="text-sm pt-1 leading-none">
+          <template v-if="eventTime">
+            {{ eventTime }}
           </template>
-          <template v-if="event.organizer">
-            {{ event.organizer.name }}
+          <template v-if="showRole && role">
+            · {{ role }}
+          </template>
+          <template v-if="showOrganizer && event.organizer">
+            · {{ event.organizer.name }}
           </template>
           <template v-if="event.venue">
             · {{ event.venue.name }}
@@ -55,17 +69,16 @@ const role = ''
       </div>
       <div class="text-xs text-gray-700 pt-1">
         <span class="text-primary">{{ event.type }}</span>
-        ·
-        <template v-if="event.styles">
-          <span v-for="style in event.styles" :key="style.id">{{ style.name }}</span>
-        </template>
         <template v-if="event.price">
           · {{ event.price }}
+        </template>
+        <template v-if="event.styles">
+          <span v-for="style in event.styles" :key="style.id">· {{ style.name }}</span>
         </template>
       </div>
     </div>
     <div>
-      <img class="w-20 rounded" :src="event.cover">
+      <img v-if="event.cover" class="w-20 rounded" :src="event.cover">
     </div>
   </NuxtLink>
 </template>
