@@ -1,5 +1,10 @@
 <script setup lang="ts">
-const { data } = useFetch('/api/events')
+const { data } = useFetch('/api/events', {
+  query: {
+    startDate: '2023-04-03',
+    endDate: '2023-04-09'
+  }
+})
 </script>
 
 <template>

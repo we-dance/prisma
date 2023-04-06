@@ -27,6 +27,8 @@ const eventDay = computed(() => format(startDate, 'd'))
 const eventMonth = computed(() => format(startDate, 'MMM'))
 const eventTime = computed(() => format(startDate, 'EEE HH:mm'))
 const role = ''
+const loaded = ref(false)
+const error = ref(false)
 </script>
 
 <template>
@@ -78,7 +80,16 @@ const role = ''
       </div>
     </div>
     <div>
-      <img v-if="event.cover" class="w-20 rounded" :src="event.cover">
+      <img
+        :key="event.cover"
+        loading="lazy"
+        :class="(loaded ? 'bg-gray-500' : 'bg-gray:10')"
+        class="w-20 rounded"
+        :src="event.cover"
+        :alt="`${event.name} cover photo`"
+        @load="loaded = true"
+        @error="error = true"
+      >
     </div>
   </NuxtLink>
 </template>
