@@ -8,7 +8,6 @@ profile:
 -   duplicate usernames (save original before change)
 -   usernames should be lowercase
 -   display name camel case of username
--   duplicate cityId
 
 next to do:
 
@@ -25,3 +24,4 @@ done:
 -   dance styles for profiles
 -   dance styles for events
 -   subscribers of profiles
+-   profile: duplicate cityId
