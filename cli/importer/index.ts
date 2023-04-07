@@ -3,10 +3,11 @@ import { getProfiles } from '../provider/profiles'
 import { getAccounts } from '../provider/accounts'
 import { getEvents } from '../provider/events'
 import { addEvent } from './event'
-import { addProfile } from './profile'
+import { addProfile, addSubscribers } from './profile'
 import { addAccount } from './account'
 
 export async function importAccounts () {
+  console.log('[importing accounts]')
   const accounts = await getAccounts()
 
   for (const account of accounts) {
@@ -18,6 +19,7 @@ export async function importAccounts () {
 }
 
 export async function importProfiles () {
+  console.log('[importing cities]')
   const allProfiles = sortBy(await getProfiles(), 'createdAt')
   const cities = allProfiles.filter((p: any) => p.type === 'City')
   const addedCities: any = {}
@@ -37,14 +39,21 @@ export async function importProfiles () {
     addedCities[city.cityPlaceId] = city.username
   }
 
+  console.log('[importing profiles]')
   const profiles = allProfiles.filter((p: any) => p.type !== 'City')
 
   for (const profile of profiles) {
     await addProfile(profile)
   }
+
+  console.log('[importing subscribers]')
+  for (const profile of allProfiles) {
+    await addSubscribers(profile)
+  }
 }
 
 export async function importEvents () {
+  console.log('[importing events]')
   const events = await getEvents()
 
   for (const event of events) {

@@ -3,6 +3,46 @@ import { getDateOrNow } from '../utils/date'
 
 const prisma = new PrismaClient()
 
+type UserList = {
+  [key: string]: Boolean | UserList;
+};
+
+function extractUsernames (obj: UserList, prefix = '') {
+  let usernames: string[] = []
+
+  for (const key in obj) {
+    if (typeof obj[key] === 'object') {
+      usernames = usernames.concat(extractUsernames(obj[key] as UserList, `${key}.`))
+    } else {
+      usernames.push(prefix + key)
+    }
+  }
+
+  return usernames
+}
+
+export async function addSubscribers (profile: any) {
+  if (!profile.watch?.list) {
+    return
+  }
+
+  const usernames = extractUsernames(profile.watch?.list)
+  for (const username of usernames) {
+    const subscriberProfile = await prisma.profile.findFirst({ where: { username } })
+    if (!subscriberProfile) {
+      console.log(`profile(@${profile.username}) #subscriber_not_found <${username}>`)
+      continue
+    }
+
+    await prisma.subscription.create({
+      data: {
+        profileId: profile.id,
+        subscriberId: subscriberProfile.id
+      }
+    })
+  }
+}
+
 export async function addProfile (profile: any) {
   const existingProfile = await prisma.profile.findFirst({ where: { id: profile.id } })
   const exists = !!existingProfile

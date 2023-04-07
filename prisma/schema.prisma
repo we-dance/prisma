@@ -20,33 +20,33 @@ model Account {
   profile         Profile?  @relation("owned_by")
   firebaseId      String    @default("")
   createdAt       DateTime  @default(now())
-  updateAt        DateTime  @default(now())
+  updateAt        DateTime  @updatedAt
   lastLoginAt     DateTime  @default(now())
   profileId       String?
   profilesCreated Profile[] @relation("profile_created_by")
 }
 
 model Profile {
-  id               String       @id @default(nanoid())
+  id               String         @id @default(nanoid())
   username         String
   name             String
   bio              String
-  account          Account?     @relation("owned_by", fields: [accountId], references: [id])
-  accountId        String?      @unique
+  account          Account?       @relation("owned_by", fields: [accountId], references: [id])
+  accountId        String?        @unique
   posts            Post[]
-  eventsCreated    Event[]      @relation("event_created_by")
-  eventsOrganized  Event[]      @relation("event_organized_by")
-  eventsHosted     Event[]      @relation("event_hosted_by")
-  firebaseId       String       @default("")
-  createdAt        DateTime     @default(now())
-  updateAt         DateTime     @default(now())
-  lastLoginAt      DateTime     @default(now())
-  claimed          Boolean      @default(false)
-  createdBy        Account?     @relation("profile_created_by", fields: [createdById], references: [id])
-  city             Profile?     @relation("profile_city", fields: [cityId], references: [id])
+  eventsCreated    Event[]        @relation("event_created_by")
+  eventsOrganized  Event[]        @relation("event_organized_by")
+  eventsHosted     Event[]        @relation("event_hosted_by")
+  firebaseId       String         @default("")
+  createdAt        DateTime       @default(now())
+  updateAt         DateTime       @updatedAt
+  lastLoginAt      DateTime       @default(now())
+  claimed          Boolean        @default(false)
+  createdBy        Account?       @relation("profile_created_by", fields: [createdById], references: [id])
+  city             Profile?       @relation("profile_city", fields: [cityId], references: [id])
   cityId           String?
-  profiles         Profile[]    @relation("profile_city")
-  styles           Experience[] @relation("profile_experience")
+  profiles         Profile[]      @relation("profile_city")
+  styles           Experience[]   @relation("profile_experience")
   createdById      String?
   formattedAddress String?
   mapUrl           String?
@@ -59,6 +59,8 @@ model Profile {
   instagram        String?
   facebook         String?
   phone            String?
+  subscribers      Subscription[] @relation("profile_subscribers")
+  subscriptions    Subscription[] @relation("profile_subscriptions")
 }
 
 model Experience {
@@ -86,7 +88,7 @@ model Post {
 model Event {
   id          String       @id @default(nanoid())
   createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   name        String
   published   Boolean      @default(false)
   creator     Profile      @relation("event_created_by", fields: [creatorId], references: [id])
@@ -117,4 +119,15 @@ model Category {
   id    Int    @id @default(autoincrement())
   name  String
   posts Post[]
+}
+
+model Subscription {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  subscriberId String
+  profileId    String
+  subscriber   Profile  @relation("profile_subscribers", fields: [subscriberId], references: [id])
+  profile      Profile  @relation("profile_subscriptions", fields: [profileId], references: [id])
+
+  @@unique([subscriberId, profileId])
 }

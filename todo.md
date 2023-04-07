@@ -12,7 +12,6 @@ profile:
 
 next to do:
 
--   subscribers of profiles
 -   artists of the events
 -   guests of the events
 -   reviews of the profiles
@@ -25,3 +24,4 @@ done:
 
 -   dance styles for profiles
 -   dance styles for events
+-   subscribers of profiles
