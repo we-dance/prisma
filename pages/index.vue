@@ -1,18 +1,25 @@
 <script setup lang="ts">
-const { data } = useFetch('/api/events', {
+const { data } = useFetch('/api/profiles', {
   query: {
-    startDate: '2023-04-03',
-    endDate: '2023-04-09'
+    type: 'City'
   }
 })
 </script>
 
 <template>
-  <div class="max-w-md m-auto border my-4">
-    <EventCard
-      v-for="event in data"
-      :key="event.id"
-      :event="event"
-    />
+  <div>
+    <nuxt-link
+      v-for="profile in data"
+      :key="profile.id"
+      class="block px-4 py-2 m-1 hover:bg-gray-200 flex"
+      :to="`/${profile.username}`"
+    >
+      <span class="flex-grow">
+        {{ profile.name }}
+      </span>
+      <span>
+        {{ profile._count.profiles }}
+      </span>
+    </nuxt-link>
   </div>
 </template>

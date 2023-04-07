@@ -1,15 +1,17 @@
 import { getQuery } from 'h3'
 
 export default defineEventHandler((event) => {
-  const { startDate, endDate } = getQuery(event)
+  const { username } = getQuery(event)
 
   return event.context.prisma.event.findMany({
     where: {
       startDate: {
-        gte: new Date(startDate)
+        gte: new Date()
       },
-      endDate: {
-        lte: new Date(endDate)
+      venue: {
+        city: {
+          username
+        }
       }
     },
     include: {
@@ -22,6 +24,6 @@ export default defineEventHandler((event) => {
         startDate: 'asc'
       }
     ],
-    take: 100
+    take: 10
   })
 })

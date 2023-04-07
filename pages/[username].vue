@@ -1,10 +1,15 @@
 <script setup lang="ts">
 const { username } = useRoute().params
-const { data } = useFetch(`/api/profiles/${username}`)
+const { data: profile } = useFetch(`/api/profiles/${username}`)
+
+const { data: events } = useFetch('/api/events', {
+  query: {
+    username
+  }
+})
 </script>
 
 <template>
-  <div class="max-w-md m-auto border my-4">
-    <pre>{{ data }}</pre>
-  </div>
+  <CityProfile v-if="profile.type === 'City'" :profile="profile" :events="events" />
+  <pre v-else>{{ profile }}</pre>
 </template>

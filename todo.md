@@ -4,20 +4,34 @@ account:
 
 profile:
 
+-   gender
+-   visibility
+-   objectives
+-   main language
+-   languages
+-   hometown
+-   currently in
+-   social media (facebook, tiktok, youtube)
+-   team
+-   reviews of the profiles
 -   username should have rules (min symbols, allowed symbols)
 -   duplicate usernames (save original before change)
 -   usernames should be lowercase
 -   display name camel case of username
 
-next to do:
+events:
 
 -   artists of the events
 -   guests of the events
--   reviews of the profiles
+
+posts:
+
 -   posts
 -   comments for posts
+
+chats:
+
 -   chats
--   languages of the profiles
 
 done:
 

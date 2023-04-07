@@ -6,6 +6,11 @@ export default defineEventHandler((event) => {
       username
     },
     include: {
+      _count: {
+        select: {
+          subscribers: true
+        }
+      },
       eventsCreated: {
         take: 5,
         orderBy: [

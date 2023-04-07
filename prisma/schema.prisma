@@ -126,8 +126,8 @@ model Subscription {
   createdAt    DateTime @default(now())
   subscriberId String
   profileId    String
-  subscriber   Profile  @relation("profile_subscribers", fields: [subscriberId], references: [id])
-  profile      Profile  @relation("profile_subscriptions", fields: [profileId], references: [id])
+  subscriber   Profile  @relation("profile_subscriptions", fields: [subscriberId], references: [id])
+  profile      Profile  @relation("profile_subscribers", fields: [profileId], references: [id])
 
   @@unique([subscriberId, profileId])
 }
