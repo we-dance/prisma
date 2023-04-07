@@ -3,7 +3,7 @@ import { getDate, getDateOrNow } from '../utils/date'
 
 const prisma = new PrismaClient()
 
-async function addVenue (venue: any, creatorProfileId: string) {
+async function addVenue (venue: any, cityId: string, creatorProfileId: string) {
   if (!venue?.place_id) {
     return {
       state: 'failed',
@@ -32,6 +32,11 @@ async function addVenue (venue: any, creatorProfileId: string) {
     placeId: venue.place_id,
     phone: venue.international_phone_number,
     type: 'Venue'
+  }
+
+  const city = await prisma.profile.findFirst({ where: { placeId: cityId, type: 'City' } })
+  if (city) {
+    data.cityId = city.id
   }
 
   const creator = await prisma.account.findFirst({ where: { id: creatorProfileId } })
@@ -110,7 +115,7 @@ export async function addEvent (event: any) {
   }
   const organizerId = organizer.id
 
-  const venueId = (await addVenue(event.venue, creatorId)).id
+  const venueId = (await addVenue(event.venue, event.place, creatorId)).id
   if (!venueId) {
     return {
       state: 'failed',
@@ -120,12 +125,29 @@ export async function addEvent (event: any) {
     }
   }
 
+  const connectStyles: any[] = []
+  if (event.styles) {
+    const hashtags = Object.keys(event.styles)
+    for (const hashtag of hashtags) {
+      const style = await prisma.danceStyle.upsert({
+        where: { hashtag },
+        create: { name: hashtag, hashtag },
+        update: { name: hashtag }
+      })
+
+      connectStyles.push({ id: style.id })
+    }
+  }
+
   const data = {
     id: event.id,
     createdAt: getDateOrNow(event.createdAt),
     updatedAt: getDateOrNow(event.updatedAt),
     name: event.name,
     published: true,
+    styles: {
+      connect: connectStyles
+    },
     startDate: getDate(event.startDate),
     endDate: getDate(event.endDate),
     description: event.description || '',

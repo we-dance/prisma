@@ -5,12 +5,7 @@ const prisma = new PrismaClient()
 
 export async function addProfile (profile: any) {
   const existingProfile = await prisma.profile.findFirst({ where: { id: profile.id } })
-  if (existingProfile) {
-    return {
-      state: 'exists',
-      id: existingProfile.id
-    }
-  }
+  const exists = !!existingProfile
 
   const username = profile.username || profile.id
 
@@ -30,6 +25,15 @@ export async function addProfile (profile: any) {
     facebook: profile.facebook || ''
   }
 
+  if (profile.type === 'City') {
+    data.placeId = profile.cityPlaceId
+  }
+
+  const city = await prisma.profile.findFirst({ where: { placeId: profile.place, type: 'City' } })
+  if (city) {
+    data.cityId = city.id
+  }
+
   const account = await prisma.account.findFirst({ where: { id: profile.id } })
   if (account) {
     data.accountId = profile.id
@@ -45,10 +49,30 @@ export async function addProfile (profile: any) {
     }
   }
 
-  const result = await prisma.profile.create({ data })
+  const result = await prisma.profile.upsert({ where: { id: profile.id }, create: data, update: data })
+
+  if (!exists && profile.type !== 'City' && profile.styles) {
+    const hashtags = Object.keys(profile.styles)
+    for (const hashtag of hashtags) {
+      const style = await prisma.danceStyle.upsert({
+        where: { hashtag },
+        create: { name: hashtag, hashtag },
+        update: { name: hashtag }
+      })
+
+      await prisma.experience.create({
+        data: {
+          profileId: result.id,
+          styleId: style.id,
+          level: profile.styles[hashtag].level,
+          highlighted: profile.styles[hashtag].highlighted ?? true
+        }
+      })
+    }
+  }
 
   return {
-    state: 'created',
+    state: exists ? 'updated' : 'created',
     id: result.id
   }
 }

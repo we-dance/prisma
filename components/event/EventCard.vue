@@ -12,9 +12,9 @@ type EventDetails = Prisma.EventGetPayload<{
 
 const props = withDefaults(defineProps<{
   event: EventDetails
-  isEmbed: boolean,
-  showRole: boolean,
-  showOrganizer: boolean
+  isEmbed?: boolean,
+  showRole?: boolean,
+  showOrganizer?: boolean
 }>(),
 {
   isEmbed: false,
