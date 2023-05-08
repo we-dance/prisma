@@ -26,11 +26,19 @@ export async function addSubscribers (profile: any) {
     return
   }
 
+  if (!profile.id) {
+    return
+  }
+
   const usernames = extractUsernames(profile.watch?.list)
   for (const username of usernames) {
     const subscriberProfile = await prisma.profile.findFirst({ where: { username } })
     if (!subscriberProfile) {
       console.log(`profile(@${profile.username}) #subscriber_not_found <${username}>`)
+      continue
+    }
+
+    if (!subscriberProfile.id) {
       continue
     }
 

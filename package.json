@@ -32,11 +32,13 @@
     "yaml": "^2.2.1"
   },
   "dependencies": {
+    "@formkit/vue": "^0.16.4",
     "@pinia/nuxt": "^0.4.7",
     "@prisma/client": "^4.12.0",
     "@trpc/client": "^10.12.0",
     "@trpc/server": "^10.12.0",
     "lodash": "^4.17.21",
+    "primevue": "^3.26.1",
     "schema-dts": "^1.1.2",
     "superjson": "^1.12.2",
     "trpc-nuxt": "^0.7.0",
