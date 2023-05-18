@@ -10,5 +10,18 @@ services:
       POSTGRES_DB: db
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
+
+  postgis:
+    image: postgis/postgis
+    volumes:
+      - postgis-data:/var/lib/postgis/data
+    ports:
+      - 5431:5431
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
 volumes:
   postgres-data:
+  postgis-data:

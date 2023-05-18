@@ -1,29 +1,23 @@
-import { getQuery } from 'h3'
+import { getQuery } from "h3";
+import { PrismaClient } from "@prisma/client";
 
-export default defineEventHandler((event) => {
-  const { username } = getQuery(event)
+const prisma = new PrismaClient();
 
-  return event.context.prisma.event.findMany({
-    where: {
-      startDate: {
-        gte: new Date()
-      },
-      venue: {
-        city: {
-          username
-        }
-      }
-    },
-    include: {
-      venue: true,
-      organizer: true,
-      styles: true
-    },
-    orderBy: [
-      {
-        startDate: 'asc'
-      }
-    ],
-    take: 10
-  })
-})
+export default defineEventHandler(async (event) => {
+  const { lng, lat, distance } = getQuery(event);
+
+  const events = await prisma.$queryRaw`
+    SELECT *
+    FROM "Event"
+    WHERE venueId IN (
+      SELECT id
+      FROM "Profile"
+      WHERE ST_Distance_Sphere(
+        ST_MakePoint(${lng}, ${lat}),
+        ST_MakePoint(lng, lat)
+      ) <= ${((distance as number) ?? 50) * 1000}
+    );
+  `;
+
+  return events;
+});
