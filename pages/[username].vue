@@ -1,10 +1,13 @@
 <script setup lang="ts">
 const { username } = useRoute().params
+const { type, dance } = useRoute().query
 const { data: profile } = useFetch(`/api/profiles/${username}`)
 
 const { data: events } = useFetch('/api/events', {
   query: {
-    username
+    cityName: username,
+    type,
+    dance
   }
 })
 </script>
