@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { ref, computed } from "vue"; 
 import format from 'date-fns/format'
 // import type { DanceEvent } from 'schema-dts'
-import { Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client' 
 type EventDetails = Prisma.EventGetPayload<{
   include: {
     venue: true,
