@@ -3,7 +3,8 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@huntersofbook/naive-ui-nuxt',
-    '@pinia/nuxt'
+    '@pinia/nuxt', 
+    '@formkit/nuxt'
   ],
   build: {
     transpile: [
