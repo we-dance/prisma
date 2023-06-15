@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import "@formkit/themes/genesis";
+import "@formkit/themes";
 </script>
 
 <template>
