@@ -6,10 +6,17 @@ export default defineNuxtConfig({
     '@pinia/nuxt', 
     '@formkit/nuxt'
   ],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
+  css: ['~/assets/css/main.css'],
   build: {
     transpile: [
       'trpc-nuxt'
-    ]
+    ],
   },
   typescript: {
     shim: false

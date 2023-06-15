@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-md m-auto border my-4">
+  <div class="max-w-md m-auto my-4">
     <NuxtPage />
   </div>
 </template>
