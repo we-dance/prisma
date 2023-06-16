@@ -7,8 +7,17 @@ const data = ref({
   startDate: "",
   endDate: "",
 });
-const addEvent = () => {
-  console.log(data.value);
+const addEvent = async () => {
+  const { name, description, startDate, endDate } = data.value;
+  await useFetch("/api/events", {
+    method: "post",
+    body: {
+      name,
+      description,
+      startDate,
+      endDate,
+    },
+  });
 };
 </script>
 

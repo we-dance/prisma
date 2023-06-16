@@ -1,17 +1,15 @@
-import { readBody } from 'h3'
+import { readBody } from "h3";
 
 export default defineEventHandler(async (event) => {
-  const { title } = await readBody(event)
+  const { name, description, startDate, endDate } = await readBody(event);
 
-  await event.context.prisma.event.create({
+  const newEvent = await event.context.prisma.event.create({
     data: {
-      createdAt: new Date(),
-      title,
-      authorId: 1
-    }
-  })
-
-  return {
-    success: true
-  }
-})
+      name,
+      description,
+      startDate,
+      endDate,
+    },
+  });
+  return newEvent;
+});
