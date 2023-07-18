@@ -3,8 +3,6 @@ import { getQuery } from 'h3'
 export default defineEventHandler(async (event) => {
   const prisma = event.context.prisma
 
-  const danceStyles = await prisma.danceStyle.findMany()
-
   let lng, lat
 
   const { type, dance, cityName, lng: reqLng, lat: reqLat, distance = 10000 } = getQuery(event)
@@ -31,7 +29,7 @@ export default defineEventHandler(async (event) => {
 
   const where: any = {
     startDate: {
-      gte: new Date()
+      gte: new Date('2023-01-01')
     },
     venue: {
       is: {
@@ -54,7 +52,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const pureEvents = await prisma.event.findMany({
+  const events = await prisma.event.findMany({
     where,
     include: {
       venue: true,
@@ -66,16 +64,27 @@ export default defineEventHandler(async (event) => {
         startDate: 'asc'
       }
     ],
-    take: 10
+    take: 100
   })
 
-  const eventsWithDistance = pureEvents.map(event => ({
-    ...event,
-    distance: venues.find(venue => venue.id === event.venue.id).distance
-  }))
+  const groupedEvents: any[] = []
+
+  for (const event of events) {
+    for (const style of event.styles) {
+      const groupIndex = groupedEvents.findIndex(e => e.style.id === style.id)
+      if (groupIndex > -1) {
+        groupedEvents[groupIndex].events.push(event)
+        continue
+      }
+
+      groupedEvents.push({
+        style,
+        events: [event]
+      })
+    }
+  }
 
   return {
-    events: eventsWithDistance,
-    danceStyles
+    groups: groupedEvents
   }
 })
