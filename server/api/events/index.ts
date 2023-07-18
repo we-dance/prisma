@@ -3,6 +3,8 @@ import { getQuery } from 'h3'
 export default defineEventHandler(async (event) => {
   const prisma = event.context.prisma
 
+  const danceStyles = await prisma.danceStyle.findMany()
+
   let lng, lat
 
   const { type, dance, cityName, lng: reqLng, lat: reqLat, distance = 10000 } = getQuery(event)
@@ -52,7 +54,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const events = await prisma.event.findMany({
+  const pureEvents = await prisma.event.findMany({
     where,
     include: {
       venue: true,
@@ -67,10 +69,13 @@ export default defineEventHandler(async (event) => {
     take: 10
   })
 
-  const eventsWithDistance = events.map(event => ({
+  const eventsWithDistance = pureEvents.map(event => ({
     ...event,
     distance: venues.find(venue => venue.id === event.venue.id).distance
   }))
 
-  return eventsWithDistance
+  return {
+    events: eventsWithDistance,
+    danceStyles
+  }
 })
