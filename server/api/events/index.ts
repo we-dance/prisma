@@ -22,7 +22,13 @@ export default defineEventHandler(async (event) => {
   }
 
   const venues = await prisma.$queryRaw`
-    SELECT ROUND(earth_distance(ll_to_earth(${lng}, ${lat}), ll_to_earth(lat, lng))::NUMERIC, 2) AS distance, id FROM "Profile"
+    SELECT
+      ROUND(earth_distance(ll_to_earth(${lng}, ${lat}), ll_to_earth(lat, lng))::NUMERIC, 2) AS distance,
+      id,
+      name,
+      photo,
+      username
+    FROM "Profile"
     WHERE earth_distance(ll_to_earth(${lng}, ${lat}), ll_to_earth(lat, lng)) < ${distance}
     ORDER BY distance;
   `
@@ -64,27 +70,21 @@ export default defineEventHandler(async (event) => {
         startDate: 'asc'
       }
     ],
-    take: 100
+    take: 10
   })
 
-  const groupedEvents: any[] = []
-
-  for (const event of events) {
-    for (const style of event.styles) {
-      const groupIndex = groupedEvents.findIndex(e => e.style.id === style.id)
-      if (groupIndex > -1) {
-        groupedEvents[groupIndex].events.push(event)
-        continue
-      }
-
-      groupedEvents.push({
-        style,
-        events: [event]
-      })
+  const organisers = await prisma.profile.findMany({
+    where: {
+      city: {
+        is: {
+          username: cityName
+        }
+      },
+      type: 'Organiser'
     }
-  }
+  })
 
   return {
-    groups: groupedEvents
+    events, venues, organisers
   }
 })

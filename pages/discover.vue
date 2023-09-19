@@ -9,8 +9,6 @@ const { data: cities } = await useFetch('/api/profiles', {
 
 const selectedCity = useRoute().query.city
 
-const { data: profile } = await useFetch(`/api/profiles/${selectedCity}`)
-
 const { data } = await useFetch('/api/events', {
   query: {
     cityName: selectedCity
@@ -30,16 +28,50 @@ const { data } = await useFetch('/api/events', {
       @update:value="val => $router.push({ query: { city: val}})"
     />
 
-    <div v-for="group in data.groups" :key="group.style.hashtag" class="mt-4">
+    <div class="mt-4">
       <div class="text-lg font-bold">
-        {{ group.style.name }}
+        Events
       </div>
       <n-scrollbar x-scrollable>
         <div class="flex">
           <EventCardSmall
-            v-for="event in group.events"
+            v-for="event in data.events"
             :key="event.id"
             :event="event"
+          />
+        </div>
+      </n-scrollbar>
+    </div>
+
+    <div class="mt-4">
+      <div class="text-lg font-bold">
+        Organisers
+      </div>
+      <n-scrollbar x-scrollable>
+        <div class="flex">
+          <CardSmall
+            v-for="organiser in data.organisers"
+            :key="organiser.id"
+            :link="`/${organiser.username}`"
+            :image="organiser.photo"
+            :text="organiser.name"
+          />
+        </div>
+      </n-scrollbar>
+    </div>
+
+    <div class="mt-4">
+      <div class="text-lg font-bold">
+        Venues
+      </div>
+      <n-scrollbar x-scrollable>
+        <div class="flex">
+          <CardSmall
+            v-for="venue in data.venues"
+            :key="venue.id"
+            :link="`/${venue.username}`"
+            :image="venue.photo"
+            :text="venue.name"
           />
         </div>
       </n-scrollbar>
