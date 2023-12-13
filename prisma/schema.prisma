@@ -61,7 +61,6 @@ model User {
   createdAt       DateTime  @default(now())
   updateAt        DateTime  @updatedAt
   lastLoginAt     DateTime  @default(now())
-  profileId       String?
   profilesCreated Profile[] @relation("profile_created_by")
   accounts        Account[]
   sessions        Session[]

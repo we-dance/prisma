@@ -1,13 +1,9 @@
 import { Command } from 'commander'
 import { importAccounts, importEvents, importProfiles } from './importer'
 
-const packageJson = require('../package.json')
-const version: string = packageJson.version
-
 const program = new Command()
 
 program
-  .version(version)
   .name('prisma-import')
   .option('-d, --debug', 'enables verbose logging', false)
 

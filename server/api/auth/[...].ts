@@ -5,12 +5,14 @@ import { PrismaClient } from '@prisma/client'
 import { FirebaseScrypt } from 'firebase-scrypt'
 import { NuxtAuthHandler } from '#auth'
 
-const prisma = new PrismaClient({
-  log: ['query', 'error', 'warn']
-})
+const prisma = new PrismaClient()
 
 export default NuxtAuthHandler({
   secret: process.env.AUTH_SECRET,
+  session: {
+    strategy: 'jwt',
+    maxAge: 3000
+  },
   adapter: PrismaAdapter(prisma),
   pages: {
     signIn: '/login'
@@ -25,7 +27,7 @@ export default NuxtAuthHandler({
         }
       })
 
-      session.user = user
+      session.user.id = user.id
       return Promise.resolve(session)
     }
   },
@@ -42,8 +44,6 @@ export default NuxtAuthHandler({
         password: { label: 'Password', type: 'password' }
       },
       async authorize (credentials: any) {
-        // console.log('credentials', credentials)
-
         if (!credentials.email) {
           return null
         }
@@ -53,8 +53,6 @@ export default NuxtAuthHandler({
             email: credentials.email
           }
         })
-
-        // console.log('user', user)
 
         if (!user) {
           return null

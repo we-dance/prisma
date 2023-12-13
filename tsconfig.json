@@ -8,8 +8,10 @@
     "outDir": "dist",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017",
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+    "target": "esnext",
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "types": ["node", "bun-types"],
+    "verbatimModuleSyntax": false
   },
   "compileOnSave": true,
   "exclude": ["dist"],

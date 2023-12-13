@@ -1,14 +1,7 @@
 <script setup lang="ts">
-import { useAuth, useRoute, useFetch, useRequestHeaders } from '#imports'
+import { useAuth } from '#imports'
 
-const { data, status, lastRefreshedAt, getCsrfToken, getProviders, signIn, signOut, getSession } = useAuth()
-
-const providers = await getProviders()
-const csrfToken = await getCsrfToken()
-
-const headers = useRequestHeaders(['cookie']) as HeadersInit
-
-const route = useRoute()
+const { data, status } = useAuth()
 </script>
 
 <template>
@@ -21,6 +14,7 @@ const route = useRoute()
     </nuxt-link>
 
     <nuxt-link
+      v-if="status === 'unauthenticated'"
       class="block px-4 py-2 m-1 hover:bg-gray-200 flex"
       to="/login"
     >
@@ -28,18 +22,15 @@ const route = useRoute()
     </nuxt-link>
 
     <nuxt-link
+      v-if="status === 'authenticated'"
       class="block px-4 py-2 m-1 hover:bg-gray-200 flex"
       to="/logout"
     >
       Log out
     </nuxt-link>
 
-    <h3>Authentication Overview</h3>
-    <pre>Status: {{ status }}</pre>
-    <pre>Data: {{ data || 'no session data present, are you logged in?' }}</pre>
-    <pre>Last refreshed at: {{ lastRefreshedAt || 'no refresh happened' }}</pre>
-    <pre>CSRF Token: {{ csrfToken }}</pre>
-    <pre>Providers: {{ providers }}</pre>
-    <hr>
+    <div v-if="status === 'authenticated'">
+      Hello {{ data.user.name }}
+    </div>
   </div>
 </template>
