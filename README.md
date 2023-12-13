@@ -34,15 +34,28 @@ Some tasks you should probably do in the beginning are:
 Make sure to install the dependencies:
 
 ```bash
-yarn install
+bun install
 ```
 
 ### Development Server
 
+Start postgres:
+
+```bash
+docker-compose up -d
+```
+
+Run PgAdmin4 and execute query:
+
+```sql
+CREATE EXTENSION cube;
+CREATE EXTENSION earthdistance;
+```
+
 Start the development server on http://localhost:3000
 
 ```bash
-yarn run dev
+bun dev
 ```
 
 ### Production
@@ -50,24 +63,11 @@ yarn run dev
 Build the application for production:
 
 ```bash
-yarn run build
+bun run build
 ```
 
 Locally preview production build:
 
 ```bash
-yarn run preview
+bun run preview
 ```
-
-# AWS Lambda deployment example
-
-[Deployment Guide](https://www.prisma.io/docs/guides/deployment/deploying-to-aws-lambda)
-
-## Download manually
-
-```bash
-curl https://codeload.github.com/prisma/prisma-examples/tar.gz/latest | tar -xz --strip=2 prisma-examples-latest/deployment-platforms/aws-lambda
-cd aws-lambda
-```
-
-The Serverless configuration file includes a package pattern that excludes all Prisma Engine binaries but the one relevant for the Lambda runtime. You can read more in our [documentation](https://www.prisma.io/docs/guides/deployment/deployment-guides/deploying-to-aws-lambda#package-pattern-in-serverlessyml).
