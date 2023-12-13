@@ -1,5 +1,5 @@
 <template>
-  <SignInForm />
+  <SignInForm register />
 </template>
 
 <script setup lang="ts">
