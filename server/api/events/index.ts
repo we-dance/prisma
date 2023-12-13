@@ -23,13 +23,14 @@ export default defineEventHandler(async (event) => {
 
   const venues = await prisma.$queryRaw`
     SELECT
-      ROUND(earth_distance(ll_to_earth(${lng}, ${lat}), ll_to_earth(lat, lng))::NUMERIC, 2) AS distance,
+      ROUND(earth_distance(ll_to_earth(${lat}, ${lng}), ll_to_earth(lat, lng))::NUMERIC, 2) AS distance,
       id,
       name,
       photo,
       username
     FROM "Profile"
-    WHERE earth_distance(ll_to_earth(${lng}, ${lat}), ll_to_earth(lat, lng)) < ${distance}
+    WHERE ROUND(earth_distance(ll_to_earth(${lat}, ${lng}), ll_to_earth(lat, lng))::NUMERIC, 2) < ${distance}
+    AND type = 'Venue'
     ORDER BY distance;
   `
 

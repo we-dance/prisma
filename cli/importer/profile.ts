@@ -57,9 +57,6 @@ export async function addProfile (profile: any) {
 
   const username = profile.username || profile.id
 
-  // check if is object
-  typeof profile.bio === 'object' && (profile.bio = '')
-
   const data: any = {
     id: profile.id,
     username,
@@ -74,6 +71,12 @@ export async function addProfile (profile: any) {
     website: profile.website || '',
     instagram: profile.instagram || '',
     facebook: profile.facebook || ''
+  }
+
+  if (profile.location) {
+    data.lat = profile.location.latitude
+    data.lng = profile.location.longitude
+    data.placeId = profile.location.place_id
   }
 
   if (profile.type === 'City') {

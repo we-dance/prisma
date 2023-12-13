@@ -34,18 +34,11 @@ const eventMonth = computed(() => format(startDate, 'MMM'))
     class="p-2 leading-none gap-2 w-20"
   >
     <div>
-      <n-image
-        class="w-20 rounded"
-        lazy
+      <img
+        class="w-32 rounded"
         :src="event.cover"
         :alt="`${event.name} cover photo`"
       >
-        <template #placeholder>
-          <div
-            class="bg-gray-500 w-20 h-16 rounded"
-          />
-        </template>
-      </n-image>
     </div>
 
     <div class="mt-2 text-center">

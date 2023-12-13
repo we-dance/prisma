@@ -1,3 +1,7 @@
+city:
+
+-   add lng and lat
+
 account:
 
 -   duplicate emails

@@ -1,18 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
+    '@bg-dev/nuxt-naiveui',
     '@nuxtjs/tailwindcss',
-    '@huntersofbook/naive-ui-nuxt',
-    '@pinia/nuxt',
     '@sidebase/nuxt-auth'
   ],
   auth: {
     provider: {
       type: 'authjs'
     }
-    // globalAppMiddleware: {
-    //   isEnabled: true
-    // }
   },
   build: {
     transpile: [
@@ -24,8 +20,5 @@ export default defineNuxtConfig({
   },
   imports: {
     dirs: ['./stores']
-  },
-  pinia: {
-    autoImports: ['defineStore', 'acceptHMRUpdate']
   }
 })

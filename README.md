@@ -47,9 +47,9 @@ docker-compose up -d
 
 Run PgAdmin4 and execute query:
 
-```sql
-CREATE EXTENSION cube;
-CREATE EXTENSION earthdistance;
+```bash
+PGPASSWORD=password  psql -U user -d db -h 127.0.0.1 -c "CREATE EXTENSION cube;"
+PGPASSWORD=password  psql -U user -d db -h 127.0.0.1 -c "CREATE EXTENSION earthdistance;"
 ```
 
 Start the development server on http://localhost:3000
