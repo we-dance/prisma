@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
 }
 
 datasource db {
@@ -14,9 +15,47 @@ datasource db {
 }
 
 model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model User {
   id              String    @id @default(nanoid())
-  email           String
+  email           String    @unique
   name            String
+  salt            String    @default("")
+  hash            String    @default("")
+  emailVerified   Boolean   @default(false)
   profile         Profile?  @relation("owned_by")
   firebaseId      String    @default("")
   createdAt       DateTime  @default(now())
@@ -24,6 +63,8 @@ model Account {
   lastLoginAt     DateTime  @default(now())
   profileId       String?
   profilesCreated Profile[] @relation("profile_created_by")
+  accounts        Account[]
+  sessions        Session[]
 }
 
 model Profile {
@@ -31,8 +72,8 @@ model Profile {
   username         String
   name             String
   bio              String
-  account          Account?       @relation("owned_by", fields: [accountId], references: [id])
-  accountId        String?        @unique
+  user             User?          @relation("owned_by", fields: [userId], references: [id])
+  userId           String?        @unique
   posts            Post[]
   eventsCreated    Event[]        @relation("event_created_by")
   eventsOrganized  Event[]        @relation("event_organized_by")
@@ -42,7 +83,7 @@ model Profile {
   updateAt         DateTime       @updatedAt
   lastLoginAt      DateTime       @default(now())
   claimed          Boolean        @default(false)
-  createdBy        Account?       @relation("profile_created_by", fields: [createdById], references: [id])
+  createdBy        User?          @relation("profile_created_by", fields: [createdById], references: [id])
   city             Profile?       @relation("profile_city", fields: [cityId], references: [id])
   cityId           String?
   profiles         Profile[]      @relation("profile_city")

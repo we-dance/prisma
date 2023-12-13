@@ -57,6 +57,9 @@ export async function addProfile (profile: any) {
 
   const username = profile.username || profile.id
 
+  // check if is object
+  typeof profile.bio === 'object' && (profile.bio = '')
+
   const data: any = {
     id: profile.id,
     username,
@@ -82,14 +85,14 @@ export async function addProfile (profile: any) {
     data.cityId = city.id
   }
 
-  const account = await prisma.account.findFirst({ where: { id: profile.id } })
-  if (account) {
-    data.accountId = profile.id
+  const user = await prisma.user.findFirst({ where: { id: profile.id } })
+  if (user) {
+    data.userId = profile.id
     data.claimed = true
   }
 
   if (profile.createdBy) {
-    const createdBy = await prisma.account.findFirst({ where: { id: profile.createdBy } })
+    const createdBy = await prisma.user.findFirst({ where: { id: profile.createdBy } })
     if (createdBy) {
       data.createdById = createdBy.id
     } else {

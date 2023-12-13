@@ -39,7 +39,7 @@ async function addVenue (venue: any, cityId: string, creatorProfileId: string) {
     data.cityId = city.id
   }
 
-  const creator = await prisma.account.findFirst({ where: { id: creatorProfileId } })
+  const creator = await prisma.user.findFirst({ where: { id: creatorProfileId } })
   if (creator) {
     data.createdById = creator.id
   } else {

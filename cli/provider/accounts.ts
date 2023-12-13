@@ -5,3 +5,8 @@ export function getAccounts () {
   const backupPath = String(process.env.BACKUP_PATH)
   return readFiles(backupPath + '/accounts')
 }
+
+export function getUsers () {
+  const backupPath = String(process.env.BACKUP_PATH)
+  return require(backupPath + '/users.json').users
+}

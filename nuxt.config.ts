@@ -3,8 +3,17 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@huntersofbook/naive-ui-nuxt',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@sidebase/nuxt-auth'
   ],
+  auth: {
+    provider: {
+      type: 'authjs'
+    }
+    // globalAppMiddleware: {
+    //   isEnabled: true
+    // }
+  },
   build: {
     transpile: [
       'trpc-nuxt'

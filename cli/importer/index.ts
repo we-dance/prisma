@@ -1,6 +1,6 @@
 import { sortBy } from 'lodash'
 import { getProfiles } from '../provider/profiles'
-import { getAccounts } from '../provider/accounts'
+import { getAccounts, getUsers } from '../provider/accounts'
 import { getEvents } from '../provider/events'
 import { addEvent } from './event'
 import { addProfile, addSubscribers } from './profile'
@@ -9,11 +9,19 @@ import { addAccount } from './account'
 export async function importAccounts () {
   console.log('[importing accounts]')
   const accounts = await getAccounts()
+  const users = getUsers()
+  // const remainingUsers = users.filter((u: any) => !accounts.find((a: any) => a.id === u.localId)).map((u: any) => u.email)
 
   for (const account of accounts) {
-    const result = await addAccount(account)
+    const user = users.find((u: any) => u.localId === account.id)
+    const result = await addAccount(account, user)
+
     if (result.state === 'failed') {
-      console.log(`account(${result.id}) #${result.error} <${result.ref}>`)
+      console.log(`account(${result.id}) #${result.error} <${result.ref}> ${result.exception ? '\n' + result.exception : ''}`)
+    }
+
+    if (result.state === 'suspended') {
+      console.log(`account(${result.id}) #suspended <${result.ref}>`)
     }
   }
 }
