@@ -14,21 +14,22 @@ const props = withDefaults(defineProps<{
   event: EventDetails
   isEmbed?: boolean,
   showRole?: boolean,
-  showOrganizer?: boolean
+  showOrganizer?: boolean,
+  side: 'date' | 'time'
 }>(),
 {
   isEmbed: false,
   showRole: false,
-  showOrganizer: false
+  showOrganizer: false,
+  side: 'date'
 })
 
 const startDate = new Date(props.event.startDate)
 const eventDay = computed(() => format(startDate, 'd'))
 const eventMonth = computed(() => format(startDate, 'MMM'))
-const eventTime = computed(() => format(startDate, 'EEE HH:mm'))
+const eventDayName = computed(() => format(startDate, 'EEE'))
+const eventTime = computed(() => format(startDate, 'HH:mm'))
 const role = ''
-const loaded = ref(false)
-const error = ref(false)
 </script>
 
 <template>
@@ -38,12 +39,17 @@ const error = ref(false)
     class="flex border-b p-4 leading-none gap-2"
   >
     <div class="text-center">
-      <div class="font-bold leading-none">
-        <div class="text-red-500">
+      <div v-if="side === 'date'" class="font-bold leading-none">
+        <div class="text-primary">
           {{ eventDay }}
         </div>
         <div class="text-sm">
           {{ eventMonth }}
+        </div>
+      </div>
+      <div v-if="side === 'time'" class="font-bold leading-none">
+        <div class="text-primary">
+          {{ eventTime }}
         </div>
       </div>
     </div>
@@ -55,17 +61,14 @@ const error = ref(false)
       </div>
       <div>
         <div class="text-sm pt-1 leading-none">
-          <template v-if="eventTime">
-            {{ eventTime }}
-          </template>
-          <template v-if="showRole && role">
-            · {{ role }}
+          <template v-if="side === 'date' && eventTime">
+            {{ eventDayName }} {{ eventTime }}
           </template>
           <template v-if="showOrganizer && event.organizer">
-            · {{ event.organizer.name }}
+            {{ event.organizer.name }}
           </template>
           <template v-if="event.venue">
-            · {{ event.venue.name }}
+            {{ event.venue.name }}
           </template>
         </div>
       </div>
@@ -83,12 +86,10 @@ const error = ref(false)
       <img
         :key="event.cover"
         loading="lazy"
-        :class="(loaded ? 'bg-gray-500' : 'bg-gray:10')"
         class="w-20 rounded"
         :src="event.cover"
         :alt="`${event.name} cover photo`"
-        @load="loaded = true"
-        @error="error = true"
+        onerror="this.classList.add('hidden')"
       >
     </div>
   </NuxtLink>

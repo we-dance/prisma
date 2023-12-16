@@ -7,18 +7,18 @@ const profile = computed(() => props.profile)
   <div>
     <NuxtLink
       :to="`/${profile.username}`"
-      class="w-48 leading-none gap-2 m-2 border overflow-hidden rounded shadow-sm"
+      class="flex leading-none gap-4 border overflow-hidden rounded shadow-sm p-4"
     >
-      <div class="w-48 h-48 bg-gray-500 rounded">
+      <div class="w-16">
         <img
-          class="w-full"
+          class="w-16 rounded-full"
           :src="profile.photo"
           :alt="`${profile.name} cover photo`"
           onerror="this.src='https://via.placeholder.com/200';"
         >
       </div>
 
-      <div class="p-2">
+      <div class="flex-1 overflow-hidden">
         <div
           class="truncate font-bold leading-none hover:underline hover:text-primary"
         >

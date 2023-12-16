@@ -10,10 +10,12 @@ const { data } = await useFetch('/api/events', {
 
 <template>
   <UContainer class="max-w-xl">
-    <template v-if="data">
-      <EventList
-        :items="data.events"
+    <div class="space-y-4">
+      <ProfileCard
+        v-for="item in data.organisers"
+        :key="item.id"
+        :profile="item"
       />
-    </template>
+    </div>
   </UContainer>
 </template>
