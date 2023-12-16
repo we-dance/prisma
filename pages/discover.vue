@@ -41,15 +41,36 @@ const { data } = await useFetch('/api/events', {
     <NavCitySelector v-model="selectedCity" />
     <template v-if="data">
       <PageSection class="mt-4">
-        <EventList :items="data.events" />
+        <div class="carousel w-full">
+          <EventCardBig
+            v-for="item in data.events"
+            :key="item.id"
+            class="carousel-item"
+            :event="item"
+          />
+        </div>
       </PageSection>
 
       <PageSection title="Organisers" class="mt-4">
-        <ProfileCarousel :items="data.organisers" />
+        <div class="carousel w-full">
+          <ProfileCard
+            v-for="item in data.organisers"
+            :key="item.id"
+            class="carousel-item"
+            :profile="item"
+          />
+        </div>
       </PageSection>
 
       <PageSection title="Venues" class="mt-4">
-        <ProfileCarousel :items="data.venues" />
+        <div class="carousel w-full">
+          <ProfileCard
+            v-for="item in data.venues"
+            :key="item.id"
+            class="carousel-item"
+            :profile="item"
+          />
+        </div>
       </PageSection>
     </template>
   </div>

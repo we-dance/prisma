@@ -1,56 +1,62 @@
 <template>
-  <div class="p-4 border rounded-sm gap-2 flex flex-col">
-    <div v-if="error" class="text-red-500 p-4">
-      {{ error }}
-    </div>
-    <button class="border" @click="login('google')">
-      Sign in with Google
-    </button>
-    <div>
-      <input v-if="register" v-model="name" type="text" class="border px-4 py-2 rounded-sm w-full" placeholder="name">
-    </div>
-    <div>
-      <input v-model="email" type="text" class="border px-4 py-2 rounded-sm w-full" placeholder="email">
-    </div>
-    <div>
-      <input v-model="password" type="password" class="border px-4 py-2 rounded-sm w-full" placeholder="password">
-    </div>
-    <button v-if="register" class="border" @click="login('register', { name, email, password })">
-      Register
-    </button>
-    <button v-else class="border" @click="login('credentials', { email, password })">
-      Log in
-    </button>
-    <nuxt-link
-      v-if="!register"
-      class="underline hover:no-underline"
-      to="/register"
-    >
-      Create an account
-    </nuxt-link>
-    <nuxt-link
-      v-if="register"
-      class="underline hover:no-underline"
-      to="/login"
-    >
-      Login
-    </nuxt-link>
-  </div>
+  <UCard>
+    <UForm class="space-y-4" :state="state">
+      <div v-if="error" class="text-red-500 p-4">
+        {{ error }}
+      </div>
+      <button class="btn w-full" @click="login('google')">
+        Sign in with Google
+      </button>
+      <UDivider label="OR" />
+      <div>
+        <input v-if="register" v-model="state.name" class="input input-bordered w-full" type="text" placeholder="Name">
+      </div>
+      <div>
+        <input v-model="state.email" type="text" class="input input-bordered w-full" placeholder="Email">
+      </div>
+      <div>
+        <input v-model="state.password" type="password" class="input input-bordered w-full" placeholder="Password">
+      </div>
+      <button v-if="register" class="btn" @click="login('register', { name: state.name, email: state.email, password: state.password })">
+        Register
+      </button>
+      <button v-else class="btn" @click="login('credentials', { email: state.email, password: state.password })">
+        Log in
+      </button>
+      <div>
+        <nuxt-link
+          v-if="!register"
+          class="underline hover:no-underline"
+          to="/register"
+        >
+          Create an account
+        </nuxt-link>
+        <nuxt-link
+          v-if="register"
+          class="underline hover:no-underline"
+          to="/login"
+        >
+          Login
+        </nuxt-link>
+      </div>
+    </UForm>
+  </UCard>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { definePageMeta, navigateTo, useAuth } from '#imports'
-
-definePageMeta({ auth: false })
+import { navigateTo, useAuth } from '#imports'
 
 const { register } = defineProps({
   register: Boolean
 })
 
-const email = ref('')
-const name = ref('')
-const password = ref('')
+const state = reactive({
+  email: undefined,
+  password: undefined,
+  name: undefined
+})
+
 const error = ref('')
 const callbackUrl = '/'
 
