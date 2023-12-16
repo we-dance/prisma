@@ -1,5 +1,5 @@
 <template>
-  <SignInForm register />
+  <AuthForm register />
 </template>
 
 <script setup lang="ts">

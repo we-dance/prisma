@@ -6,7 +6,7 @@ defineProps({
 
 <template>
   <div>
-    <h3 class="text-lg font-bold">
+    <h3 v-if="title" class="text-lg font-bold">
       {{ title }}
     </h3>
     <div>

@@ -6,7 +6,7 @@ const { items } = defineProps({
 
 <template>
   <n-carousel
-    :slides-per-view="2"
+    :slides-per-view="4"
     :space-between="4"
     :loop="false"
     draggable
@@ -16,13 +16,13 @@ const { items } = defineProps({
       v-for="item in items"
       :key="item.id"
     >
-      <n-card :title="item.name">
+      <n-card embedded size="small">
         <template #cover>
           <img v-if="item.photo" :src="item.photo">
           <div v-else class="bg-gray-300 w-full" />
         </template>
-        <div class="h-16">
-          {{ item.bio }}
+        <div class="py-2">
+          {{ item.name }}
         </div>
       </n-card>
     </n-carousel-item>

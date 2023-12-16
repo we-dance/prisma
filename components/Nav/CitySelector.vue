@@ -1,22 +1,25 @@
 <script setup>
-const { data: cities } = await useFetch('/api/profiles', {
+const props = defineProps(['modelValue'])
+defineEmits(['update:modelValue'])
+
+const { data } = await useFetch('/api/profiles', {
   query: {
     type: 'City'
   }
 })
+
+const cities = computed(() => data.value.map(city => ({ label: city.name, value: city.username })))
+const selected = computed(() => cities.value.find(city => city.value === props.modelValue))
 </script>
 
 <template>
-  <!-- <n-select
-    v-model:value="selectedCity"
-    filterable
-    placeholder="Select a city"
-    label-field="name"
-    value-field="username"
+  <USelectMenu
+    :model-value="selected"
+    searchable
+    searchable-placeholder="Select a city..."
+    class="w-full lg:w-40"
+    placeholder="Select a city..."
     :options="cities"
-    @update:value="val => $router.push({ query: { city: val}})"
-  /> -->
-  <div class="border p-2">
-    select from {{ cities.length }} cities
-  </div>
+    @change="city => $emit('update:modelValue', city.value)"
+  />
 </template>

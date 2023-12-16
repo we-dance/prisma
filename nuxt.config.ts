@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   modules: [
     '@bg-dev/nuxt-naiveui',
+    '@nuxt/ui',
     '@nuxtjs/tailwindcss',
     '@sidebase/nuxt-auth'
   ],
@@ -20,5 +21,8 @@ export default defineNuxtConfig({
   },
   imports: {
     dirs: ['./stores']
+  },
+  ui: {
+    global: true
   }
 })

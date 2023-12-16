@@ -4,6 +4,7 @@ export default defineEventHandler(async (event) => {
   const prisma = event.context.prisma
 
   let lng, lat
+  let venues
 
   const { type, dance, cityName, lng: reqLng, lat: reqLat, distance = 10000 } = getQuery(event)
 
@@ -14,14 +15,17 @@ export default defineEventHandler(async (event) => {
       }
     })
 
-    lng = city.lng
-    lat = city.lat
+    if (city) {
+      lng = city.lng
+      lat = city.lat
+    }
   } else {
     lng = Number(reqLng)
     lat = Number(reqLat)
   }
 
-  const venues = await prisma.$queryRaw`
+  if (lng) {
+    venues = await prisma.$queryRaw`
     SELECT
       ROUND(earth_distance(ll_to_earth(${lat}, ${lng}), ll_to_earth(lat, lng))::NUMERIC, 2) AS distance,
       id,
@@ -31,8 +35,14 @@ export default defineEventHandler(async (event) => {
     FROM "Profile"
     WHERE ROUND(earth_distance(ll_to_earth(${lat}, ${lng}), ll_to_earth(lat, lng))::NUMERIC, 2) < ${distance}
     AND type = 'Venue'
-    ORDER BY distance;
-  `
+    ORDER BY distance;`
+  } else {
+    venues = await prisma.profile.findMany({
+      where: {
+        type: 'Venue'
+      }
+    })
+  }
 
   const where: any = {
     startDate: {
@@ -85,7 +95,10 @@ export default defineEventHandler(async (event) => {
     }
   })
 
+  const venuesFirst10 = venues.slice(0, 10)
+  const organisersFirst10 = organisers.slice(0, 10)
+
   return {
-    events, venues, organisers
+    events, venues: venuesFirst10, organisers: organisersFirst10
   }
 })
