@@ -95,10 +95,21 @@ export default defineEventHandler(async (event) => {
     }
   })
 
+  const teachers = await prisma.profile.findMany({
+    where: {
+      city: {
+        is: {
+          username: cityName
+        }
+      },
+      type: 'Artist'
+    }
+  })
+
   const venuesFirst10 = venues.slice(0, 10)
   const organisersFirst10 = organisers.slice(0, 10)
 
   return {
-    events, venues: venuesFirst10, organisers: organisersFirst10
+    events, venues: venuesFirst10, organisers: organisersFirst10, teachers
   }
 })

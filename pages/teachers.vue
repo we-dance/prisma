@@ -10,7 +10,11 @@ const { data } = await useFetch('/api/events', {
 </script>
 
 <template>
-  <EventList
-    :items="data.events"
-  />
+  <div class="space-y-4">
+    <ProfileCard
+      v-for="item in data.teachers"
+      :key="item.id"
+      :profile="item"
+    />
+  </div>
 </template>

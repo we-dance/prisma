@@ -117,9 +117,9 @@
     </div>
 
     <main class="py-10 lg:pl-72">
-      <div class="px-4 sm:px-6 lg:px-8">
+      <UContainer class="max-w-xl">
         <slot />
-      </div>
+      </UContainer>
     </main>
   </div>
 </template>
@@ -137,13 +137,16 @@ const router = useRouter()
 const route = useRoute()
 
 const navigation = [
+  // Alternative names: Wall, Feed, Marketplace, Forum, Community, News, City Chat, City Board, Dance Market, Q&A
+  { name: 'Broadcast', href: '#', icon: FolderIcon, current: false },
+  { name: 'Blog', href: '#', icon: FolderIcon, current: false },
   { name: 'Festivals', href: '#', icon: CalendarIcon, current: false },
   { name: 'Parties', href: '/discover?city=Munich', icon: CalendarIcon },
-  { name: 'Courses', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Find Partner', href: '#', icon: FolderIcon, current: false },
-  { name: 'Artists', href: '#', icon: FolderIcon, current: false },
-  { name: 'Organisers', href: '/organisers?city=Munich', icon: FolderIcon },
-  { name: 'Locations', href: '#', icon: FolderIcon, current: false }
+  { name: 'Teachers', href: '/teachers?city=Munich&dance=Salsa', icon: CalendarIcon, current: false },
+  { name: 'DJs', href: '#', icon: FolderIcon, current: false },
+  { name: 'Musicians', href: '#', icon: FolderIcon, current: false },
+  { name: 'Promoters', href: '/organisers?city=Munich', icon: FolderIcon },
+  { name: 'Venues', href: '#', icon: FolderIcon, current: false }
 ]
 
 const sidebarOpen = ref(false)

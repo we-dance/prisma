@@ -1,5 +1,5 @@
 <template>
-  <UCard>
+  <UCard class="max-w-sm">
     <UForm class="space-y-4" :state="state">
       <div v-if="error" class="text-red-500 p-4">
         {{ error }}

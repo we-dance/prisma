@@ -9,13 +9,11 @@ const { data } = await useFetch('/api/events', {
 </script>
 
 <template>
-  <UContainer class="max-w-xl">
-    <div class="space-y-4">
-      <ProfileCard
-        v-for="item in data.organisers"
-        :key="item.id"
-        :profile="item"
-      />
-    </div>
-  </UContainer>
+  <div class="space-y-4">
+    <ProfileCard
+      v-for="item in data.organisers"
+      :key="item.id"
+      :profile="item"
+    />
+  </div>
 </template>
