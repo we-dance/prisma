@@ -37,7 +37,7 @@
     "@formkit/vue": "^0.16.4",
     "@headlessui/vue": "^1.7.16",
     "@heroicons/vue": "^2.0.18",
-    "@nuxt/ui": "^2.11.1",
+    "@nuxt/ui": "^2.16.0",
     "@pinia/nuxt": "^0.4.7",
     "@prisma/client": "^5.7.0",
     "@trpc/client": "^10.40.0",

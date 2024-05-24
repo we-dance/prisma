@@ -6,7 +6,8 @@ const { data, status } = useAuth()
 
 <template>
   <div>
-    <div v-if="status === 'authenticated'">
+    <div v-if="!data?.user">Loading...</div>
+    <div v-else-if="status === 'authenticated'">
       Hello {{ data.user.name }}
     </div>
   </div>
