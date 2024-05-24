@@ -8,7 +8,6 @@ This is a [sidebase merino](https://sidebase.io/) app created by running `npm cr
 -   nuxt-auth
 -   tRPC 10
 -   Tailwind CSS
--   Naive UI
 -   GitHub Actions based CI
 
 ## How to get going?
