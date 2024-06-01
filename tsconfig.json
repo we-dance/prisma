@@ -1,4 +1,19 @@
 {
   // https://nuxt.com/docs/guide/concepts/typescript
-  "extends": "./.nuxt/tsconfig.json"
+  "extends": "./.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "strict": true,
+    "target": "esnext",
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "types": ["node", "bun-types"],
+    "verbatimModuleSyntax": false
+  },
+  "compileOnSave": true,
+  "exclude": ["dist"],
+  "include": ["src"]
 }
