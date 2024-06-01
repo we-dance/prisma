@@ -7,14 +7,15 @@ export async function addAccount (account: any, user: any) {
   const existingUser = await prisma.user.findFirst({ where: { id: account.id } })
   if (!user) {
     return {
-      state: 'suspended',
+      state: 'failed',
+      error: 'no_user',
       id: account.id,
-      ref: account.email
+      email: account.email
     }
   }
   if (existingUser) {
     return {
-      state: 'exists',
+      state: 'ignored',
       id: existingUser.id
     }
   }
@@ -45,14 +46,14 @@ export async function addAccount (account: any, user: any) {
         state: 'failed',
         id: account.id,
         error: 'duplicate_email',
-        ref: account.email
+        email: account.email
       }
     } else {
       return {
         state: 'failed',
         id: account.id,
         error: 'invalid_prisma_account_create',
-        ref: account.email,
+        email: account.email,
         exception
       }
     }

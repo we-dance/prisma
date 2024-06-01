@@ -22,23 +22,23 @@ function extractUsernames (obj: UserList, prefix = '') {
 }
 
 export async function addSubscribers (profile: any) {
-  if (!profile.watch?.list) {
-    return
-  }
-
-  if (!profile.id) {
-    return
-  }
+  let created = 0
+  let failed = 0
+  const errors: any[] = []
 
   const usernames = extractUsernames(profile.watch?.list)
   for (const username of usernames) {
     const subscriberProfile = await prisma.profile.findFirst({ where: { username } })
-    if (!subscriberProfile) {
-      console.log(`profile(@${profile.username}) #subscriber_not_found <${username}>`)
-      continue
-    }
+    if (!subscriberProfile?.id) {
+      failed++
 
-    if (!subscriberProfile.id) {
+      errors.push({
+        error: 'subscriber_not_found',
+        profileId: profile.id,
+        profileUsername: profile.username,
+        subscriberUsername: username
+      })
+
       continue
     }
 
@@ -48,6 +48,14 @@ export async function addSubscribers (profile: any) {
         subscriberId: subscriberProfile.id
       }
     })
+
+    created++
+  }
+
+  return {
+    created,
+    failed,
+    errors
   }
 }
 
@@ -66,7 +74,7 @@ export async function addProfile (profile: any) {
     createdAt: getDateOrNow(profile.createdAt),
     updateAt: getDateOrNow(profile.updateAt),
     lastLoginAt: getDateOrNow(profile.lastLoginAt),
-    type: profile.type,
+    type: profile.type || 'FanPage',
     photo: profile.photo || '',
     website: profile.website || '',
     instagram: profile.instagram || '',
@@ -98,8 +106,6 @@ export async function addProfile (profile: any) {
     const createdBy = await prisma.user.findFirst({ where: { id: profile.createdBy } })
     if (createdBy) {
       data.createdById = createdBy.id
-    } else {
-      console.log(`profile(${profile.id} @${profile.username}): creator(${profile.createdBy}) not found`)
     }
   }
 

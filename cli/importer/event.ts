@@ -15,7 +15,7 @@ async function addVenue (venue: any, cityId: string, creatorProfileId: string) {
   const existingVenue = await prisma.profile.findFirst({ where: { id: venue.place_id } })
   if (existingVenue) {
     return {
-      state: 'exists',
+      state: 'ignored',
       id: existingVenue.id
     }
   }
@@ -42,8 +42,6 @@ async function addVenue (venue: any, cityId: string, creatorProfileId: string) {
   const creator = await prisma.user.findFirst({ where: { id: creatorProfileId } })
   if (creator) {
     data.createdById = creator.id
-  } else {
-    console.log(`venue(${data.id}): creator (${creatorProfileId}) not found`)
   }
 
   const result = await prisma.profile.create({
@@ -60,7 +58,7 @@ export async function addEvent (event: any) {
   const existingEvent = await prisma.event.findFirst({ where: { id: event.id } })
   if (existingEvent) {
     return {
-      state: 'exists',
+      state: 'ignored',
       id: existingEvent.id
     }
   }
@@ -68,7 +66,7 @@ export async function addEvent (event: any) {
   if (!event.name) {
     return {
       state: 'failed',
-      code: 'no_name',
+      error: 'no_name',
       id: event.id
     }
   }
@@ -170,8 +168,6 @@ export async function addEvent (event: any) {
       id: result.id
     }
   } catch (exception) {
-    console.log(`event(${event.id})`)
-
     return {
       state: 'failed',
       error: 'invalid_prisma_event_create',
