@@ -9,16 +9,18 @@ import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
 
-const formSchema = toTypedSchema(
-  z.object({
-    name: z.string().min(2).max(50),
-    email: z.string().email(),
-    password: z.string().min(8),
-  })
-);
+const schema = z.object({
+  name: z.string().min(2).max(50),
+  email: z.string().email(),
+  password: z.string().min(8),
+  acceptTerms: z.boolean().refine((value) => value, {
+    message: "You must accept the terms and conditions.",
+    path: ["acceptTerms"],
+  }),
+});
 
 const form = useForm({
-  validationSchema: formSchema,
+  validationSchema: toTypedSchema(schema),
 });
 
 const onSubmit = form.handleSubmit((values) => {
@@ -27,39 +29,28 @@ const onSubmit = form.handleSubmit((values) => {
 </script>
 
 <template>
-  <form @submit="onSubmit" class="flex flex-col gap-4">
-    <FormField v-slot="{ componentField }" name="name">
-      <FormItem>
-        <FormLabel>Name</FormLabel>
-        <FormControl>
-          <Input type="text" v-bind="componentField" />
-        </FormControl>
-        <FormDescription />
-        <FormMessage />
-      </FormItem>
-    </FormField>
-    <FormField v-slot="{ componentField }" name="email">
-      <FormItem>
-        <FormLabel>Email</FormLabel>
-        <FormControl>
-          <Input type="text" v-bind="componentField" />
-        </FormControl>
-        <FormDescription />
-        <FormMessage />
-      </FormItem>
-    </FormField>
-    <FormField v-slot="{ componentField }" name="password">
-      <FormItem>
-        <FormLabel>Password</FormLabel>
-        <FormControl>
-          <Input type="password" v-bind="componentField" />
-        </FormControl>
-        <FormDescription />
-        <FormMessage />
-      </FormItem>
-    </FormField>
+  <AutoForm
+    class="space-y-4"
+    :form="form"
+    :schema="schema"
+    :field-config="{
+      email: { type: 'email' },
+      password: { inputProps: { type: 'password' } },
+      acceptTerms: {
+        label: 'Accept terms and conditions.',
+        inputProps: {
+          required: true,
+        },
+      },
+    }"
+    @submit="onSubmit"
+  >
+    <template #acceptTerms="slotProps">
+      <AutoFormField v-bind="slotProps" />
+      <TermsInfo />
+    </template>
     <div class="flex justify-end">
-      <Button type="submit">Submit</Button>
+      <Button type="submit"> Register </Button>
     </div>
-  </form>
+  </AutoForm>
 </template>

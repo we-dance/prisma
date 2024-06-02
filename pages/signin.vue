@@ -1,3 +1,12 @@
+<script setup lang="ts">
+definePageMeta({
+  auth: {
+    unauthenticatedOnly: true,
+    navigateAuthenticatedTo: "/",
+  },
+});
+</script>
+
 <template>
   <Tabs default-value="login" class="w-[400px]">
     <Card>
