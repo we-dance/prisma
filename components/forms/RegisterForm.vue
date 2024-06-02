@@ -1,0 +1,65 @@
+<script setup lang="ts">
+defineProps({
+  register: Boolean,
+});
+
+const { login, error } = useAppAuth();
+
+import { useForm } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as z from "zod";
+
+const formSchema = toTypedSchema(
+  z.object({
+    name: z.string().min(2).max(50),
+    email: z.string().email(),
+    password: z.string().min(8),
+  })
+);
+
+const form = useForm({
+  validationSchema: formSchema,
+});
+
+const onSubmit = form.handleSubmit((values) => {
+  login("register", values);
+});
+</script>
+
+<template>
+  <form @submit="onSubmit" class="flex flex-col gap-4">
+    <FormField v-slot="{ componentField }" name="name">
+      <FormItem>
+        <FormLabel>Name</FormLabel>
+        <FormControl>
+          <Input type="text" v-bind="componentField" />
+        </FormControl>
+        <FormDescription />
+        <FormMessage />
+      </FormItem>
+    </FormField>
+    <FormField v-slot="{ componentField }" name="email">
+      <FormItem>
+        <FormLabel>Email</FormLabel>
+        <FormControl>
+          <Input type="text" v-bind="componentField" />
+        </FormControl>
+        <FormDescription />
+        <FormMessage />
+      </FormItem>
+    </FormField>
+    <FormField v-slot="{ componentField }" name="password">
+      <FormItem>
+        <FormLabel>Password</FormLabel>
+        <FormControl>
+          <Input type="password" v-bind="componentField" />
+        </FormControl>
+        <FormDescription />
+        <FormMessage />
+      </FormItem>
+    </FormField>
+    <div class="flex justify-end">
+      <Button type="submit">Submit</Button>
+    </div>
+  </form>
+</template>
