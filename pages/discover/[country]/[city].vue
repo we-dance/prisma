@@ -2,13 +2,13 @@
 const route = useRoute()
 const { $client } = useNuxtApp()
 
-const { data, error } = await $client.profiles.get.useQuery({ username: route.params.username })
+const { data, error } = await $client.events.list.useQuery({ city: route.query.city, dance: route.query.dance })
 </script>
 
 <template>
   <div v-if="error">Error: {{ error.message }}</div>
-  <pre
+  <EventList
     v-else
-  >
-  {{ data }}</pre>
+    :items="data"
+  />
 </template>

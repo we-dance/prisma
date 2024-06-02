@@ -126,23 +126,23 @@ model Post {
 
 model Event {
   id          String       @id @default(nanoid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
   name        String
-  published   Boolean      @default(false)
-  creator     Profile      @relation("event_created_by", fields: [creatorId], references: [id])
-  creatorId   String
-  organizer   Profile      @relation("event_organized_by", fields: [organizerId], references: [id])
-  organizerId String
-  venue       Profile      @relation("event_hosted_by", fields: [venueId], references: [id])
-  venueId     String
   startDate   DateTime
   endDate     DateTime
-  description String
-  type        String
+  creatorId   String
+  organizerId String
+  venueId     String
   styles      DanceStyle[]
-  cover       String
-  price       String
+  type        String       @default("Party")
+  description String       @default("")
+  cover       String       @default("")
+  price       String       @default("")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  published   Boolean      @default(false)
+  creator     Profile      @relation("event_created_by", fields: [creatorId], references: [id])
+  organizer   Profile      @relation("event_organized_by", fields: [organizerId], references: [id])
+  venue       Profile      @relation("event_hosted_by", fields: [venueId], references: [id])
   firebaseId  String       @default("")
 }
 
