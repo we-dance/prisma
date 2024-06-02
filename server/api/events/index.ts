@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
 
   const where: any = {
     startDate: {
-      gte: new Date('2023-01-01')
+      gte: new Date('2024-06-02')
     },
     venue: {
       is: {

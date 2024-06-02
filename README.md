@@ -16,11 +16,12 @@ Based on [sidebase merino](https://sidebase.io/)
     npx prisma db push --force-reset
     ```
 
-3. Install extensions
+3. Install db extensions
 
     ```
-    PGPASSWORD=password  psql -U user -d db -h 127.0.0.1 -c "CREATE EXTENSION earthdistance;"
-    PGPASSWORD=password  psql -U user -d db -h 127.0.0.1 -c "CREATE EXTENSION cube;"
+    PGPASSWORD=password psql -U user -d db -h 127.0.0.1
+    CREATE EXTENSION earthdistance;
+    CREATE EXTENSION cube;
     ```
 
 4. Generate the Prisma client
@@ -44,7 +45,4 @@ Based on [sidebase merino](https://sidebase.io/)
 ### Troubleshooting
 
 -   Error 500: Invalid `prisma.$queryRaw()` invocation: Raw query failed. Code: `42883`. Message: `ERROR: function ll_to_earth(numeric, numeric) does not exist HINT: No function matches the given name and argument types. You might need to add explicit type casts.`
-    ```
-    # check if extensions are installed
-    PGPASSWORD=password  psql -U user -d db -h 127.0.0.1 -c "SELECT * FROM pg_available_extensions WHERE name IN ('cube', 'earthdistance');"
-    ```
+    -   install db extensions, repeat setup
