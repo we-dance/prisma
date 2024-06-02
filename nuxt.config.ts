@@ -1,28 +1,18 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: [
-    '@bg-dev/nuxt-naiveui',
-    '@nuxt/ui',
-    '@nuxtjs/tailwindcss',
-    '@sidebase/nuxt-auth'
-  ],
+  modules: ["@nuxtjs/tailwindcss", "@sidebase/nuxt-auth"],
   auth: {
     provider: {
-      type: 'authjs'
-    }
+      type: "authjs",
+    },
   },
   build: {
-    transpile: [
-      'trpc-nuxt'
-    ]
+    transpile: ["trpc-nuxt"],
   },
   typescript: {
-    shim: false
+    shim: false,
   },
   imports: {
-    dirs: ['./stores']
+    dirs: ["./stores"],
   },
-  ui: {
-    global: true
-  }
-})
+});
