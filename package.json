@@ -10,12 +10,13 @@
     "lint": "eslint --max-warnings 0 .",
     "typecheck": "nuxt typecheck",
     "start": "NODE_ENV=production node .output/server/index.mjs",
-    "cli": "ts-node ./cli/cli.ts"
+    "cli": "ts-node ./cli/cli.ts",
+    "ui": "shadcn-vue"
   },
   "devDependencies": {
     "@auth/prisma-adapter": "^1.0.10",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
-    "@nuxtjs/tailwindcss": "^6.4.0",
+    "@nuxtjs/tailwindcss": "^6.12.0",
     "@sidebase/nuxt-auth": "^0.5.0",
     "@types/cli-progress": "^3.11.5",
     "@types/node": "^18.15.11",
@@ -30,6 +31,8 @@
     "nuxt": "^3.11.2",
     "path": "^0.12.7",
     "prisma": "^5.14.0",
+    "shadcn-nuxt": "^0.10.4",
+    "shadcn-vue": "0.10.4",
     "ts-node": "^10.9.1",
     "typescript": "^5.4.5",
     "vue-tsc": "^1.0.24",
@@ -44,12 +47,20 @@
     "@prisma/client": "^5.14.0",
     "@trpc/client": "^10.40.0",
     "@trpc/server": "^10.40.0",
+    "@vee-validate/zod": "^4.12.8",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "firebase-scrypt": "^2.2.0",
     "lodash": "^4.17.21",
+    "lucide-vue-next": "^0.383.0",
     "next-auth": "4.21.1",
+    "radix-vue": "^1.8.2",
     "schema-dts": "^1.1.2",
     "superjson": "^1.12.2",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7",
     "trpc-nuxt": "^0.7.0",
-    "zod": "^3.22.4"
+    "vee-validate": "^4.12.8",
+    "zod": "^3.23.8"
   }
 }

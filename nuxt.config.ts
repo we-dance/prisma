@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@nuxtjs/tailwindcss", "@sidebase/nuxt-auth"],
+  modules: ["@nuxtjs/tailwindcss", "@sidebase/nuxt-auth", "shadcn-nuxt"],
   auth: {
     provider: {
       type: "authjs",
@@ -15,4 +15,14 @@ export default defineNuxtConfig({
   imports: {
     dirs: ["./stores"],
   },
+  shadcn: {
+    prefix: "",
+    componentDir: "./components/ui",
+  },
+  components: [
+    {
+      path: "~/components",
+      pathPrefix: false,
+    },
+  ],
 });

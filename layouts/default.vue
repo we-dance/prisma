@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-lg mx-auto">
-    <NavMain />
+    <MainNav />
     <slot />
   </div>
 </template>
