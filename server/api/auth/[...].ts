@@ -4,6 +4,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import { FirebaseScrypt } from "firebase-scrypt";
 import { NuxtAuthHandler } from "#auth";
+import * as z from "zod";
 
 const prisma = new PrismaClient();
 
@@ -84,14 +85,27 @@ export default NuxtAuthHandler({
       id: "register",
       name: "register",
       credentials: {
-        name: { label: "Name", type: "text" },
+        username: { label: "Username", type: "text" },
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials: any) {
-        if (!credentials.email || !credentials.password || !credentials.name) {
-          return null;
+      async authorize(input: any) {
+        const schema = z.object({
+          username: z.string().min(2).max(50),
+          email: z.string().email(),
+          password: z.string().min(8),
+        });
+
+        const result = schema.safeParse(input);
+
+        if (!result.success) {
+          const errorMessages = result.error.errors
+            .map((err) => `${err.path.join(".")}: ${err.message}`)
+            .join(", ");
+          throw new Error(`Validation error: ${errorMessages}`);
         }
+
+        const credentials = result.data;
 
         const scrypt = new FirebaseScrypt(firebaseParameters);
         const salt = Buffer.from(String(Math.random()).slice(7)).toString(
@@ -100,24 +114,41 @@ export default NuxtAuthHandler({
 
         const hash = await scrypt.hash(credentials.password, salt);
 
-        let user = null;
-
+        let user;
         try {
           user = await prisma.user.create({
             data: {
-              name: credentials.name,
+              name: credentials.username,
               email: credentials.email,
               hash,
               salt,
             },
           });
-        } catch (error) {
-          console.log(error);
-          return null;
+        } catch (error: any) {
+          if (error.code === "P2002") {
+            throw new Error("Email already in use");
+          }
+
+          throw error;
         }
 
-        if (!user) {
-          return null;
+        let profile;
+        try {
+          profile = await prisma.profile.create({
+            data: {
+              username: credentials.username,
+              bio: "",
+              name: credentials.username,
+              type: "Dancer",
+              user: {
+                connect: {
+                  id: user.id,
+                },
+              },
+            },
+          });
+        } catch (error: any) {
+          throw error;
         }
 
         return user;

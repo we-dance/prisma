@@ -4,15 +4,13 @@ export const useAppAuth = () => {
   const { signIn } = useAuth();
 
   const login = async (provider: string, options?: any) => {
-    const { error: errorType, url } = await signIn(provider, {
+    const { error, url } = await signIn(provider, {
       ...options,
       redirect: false,
       callbackUrl,
     });
-    if (errorType) {
-      return signInErrors[errorType]
-        ? signInErrors[errorType]
-        : signInErrors.default;
+    if (error) {
+      return signInErrors[error] ? signInErrors[error] : error;
     } else {
       navigateTo(url, { external: true });
       return null;
