@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAuth } from "#imports";
 
-const { status } = useAuth();
+const { data, status } = useAuth();
 </script>
 
 <template>
@@ -27,7 +27,7 @@ const { status } = useAuth();
       class="block px-4 py-2 m-1 hover:bg-gray-200 flex"
       to="/signout"
     >
-      Log out
+      Log out ({{ data?.user?.name }})
     </nuxt-link>
   </div>
 </template>
