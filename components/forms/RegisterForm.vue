@@ -34,7 +34,7 @@ const schema = z.object({
       "Username cannot have multiple periods in a row."
     )
     .refine(notEndingInPeriod, "Username cannot end in a period.")
-    .refine(usernameValidator, "Username must be unique"),
+    .refine(usernameValidator, "Username is already taken."),
   email: z.string().email().default("elon@musk.com"),
   password: z.string().min(8),
   acceptTerms: z.boolean().refine((value) => value, {
@@ -61,7 +61,6 @@ const onSubmit = form.handleSubmit(async (values) => {
     :schema="schema"
     :field-config="{
       username: {
-        description: 'Use only letters, numbers, underscores and periods.',
         inputProps: {
           trim: '[^a-z0-9._\-]+',
           lowercase: true,
