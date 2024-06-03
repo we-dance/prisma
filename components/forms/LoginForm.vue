@@ -6,8 +6,9 @@ defineProps({
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
+import { toast } from "vue-sonner";
 
-const { login, error } = useAppAuth();
+const { login } = useAppAuth();
 
 const schema = z.object({
   email: z.string().email(),
@@ -18,9 +19,11 @@ const form = useForm({
 });
 
 const onSubmit = form.handleSubmit(async (values) => {
-  console.log("onSubmit", values);
-  await login("login", values);
-  console.log("error", error.value);
+  const error = await login("credentials", values);
+
+  if (error) {
+    toast.error(error);
+  }
 });
 </script>
 
@@ -36,6 +39,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     @submit="onSubmit"
   >
     <TermsInfo />
+
     <div class="flex justify-end">
       <Button type="submit"> Login </Button>
     </div>

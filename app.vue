@@ -1,5 +1,10 @@
+<script setup lang="ts">
+import { Toaster } from "@/components/ui/sonner";
+</script>
+
 <template>
   <NuxtLayout>
+    <Toaster richColors />
     <NuxtPage />
   </NuxtLayout>
 </template>
