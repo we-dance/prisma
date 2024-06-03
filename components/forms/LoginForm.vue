@@ -33,7 +33,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     :form="form"
     :schema="schema"
     :field-config="{
-      email: { type: 'email' },
+      email: { inputProps: { type: 'email' } },
       password: { inputProps: { type: 'password' } },
     }"
     @submit="onSubmit"

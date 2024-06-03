@@ -3,11 +3,12 @@ defineProps({
   register: Boolean,
 });
 
-const { login, error } = useAppAuth();
+const { login } = useAppAuth();
 
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
+import { toast } from "vue-sonner";
 
 const schema = z.object({
   name: z.string().min(2).max(50),
@@ -23,8 +24,12 @@ const form = useForm({
   validationSchema: toTypedSchema(schema),
 });
 
-const onSubmit = form.handleSubmit((values) => {
-  login("register", values);
+const onSubmit = form.handleSubmit(async (values) => {
+  const error = await login("register", values);
+
+  if (error) {
+    toast.error(error);
+  }
 });
 </script>
 
@@ -34,7 +39,7 @@ const onSubmit = form.handleSubmit((values) => {
     :form="form"
     :schema="schema"
     :field-config="{
-      email: { type: 'email' },
+      email: { inputProps: { type: 'email' } },
       password: { inputProps: { type: 'password' } },
       acceptTerms: {
         label: 'Accept terms and conditions.',
