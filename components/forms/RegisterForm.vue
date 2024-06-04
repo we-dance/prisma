@@ -35,6 +35,7 @@ const schema = z.object({
     )
     .refine(notEndingInPeriod, "Username cannot end in a period.")
     .refine(usernameValidator, "Username is already taken."),
+  city: z.string(),
   email: z.string().email().default("elon@musk.com"),
   password: z.string().min(8),
   acceptTerms: z.boolean().refine((value) => value, {
@@ -77,6 +78,17 @@ const onSubmit = form.handleSubmit(async (values) => {
     }"
     @submit="onSubmit"
   >
+    <template #city>
+      <FormField v-slot="slotProps" name="city">
+        <FormItem>
+          <FormLabel>Your city *</FormLabel>
+          <FormControl>
+            <CityInput v-bind="slotProps" />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+    </template>
     <template #acceptTerms="slotProps">
       <AutoFormField v-bind="slotProps" />
       <TermsInfo />
