@@ -35,7 +35,10 @@ const schema = z.object({
     )
     .refine(notEndingInPeriod, "Username cannot end in a period.")
     .refine(usernameValidator, "Username is already taken."),
-  city: z.string(),
+  city: z.object({
+    placeId: z.string(),
+    label: z.string(),
+  }),
   email: z.string().email().default("elon@musk.com"),
   password: z.string().min(8),
   acceptTerms: z.boolean().refine((value) => value, {
