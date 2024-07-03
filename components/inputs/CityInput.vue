@@ -19,9 +19,9 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emits = defineEmits(["update:modelValue"]);
 
-const modelValue = useVModel(props, "modelValue", emit);
+const modelValue = useVModel(props, "modelValue", emits);
 
 const query = ref("");
 const results = ref([]);
