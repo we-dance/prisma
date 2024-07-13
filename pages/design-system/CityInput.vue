@@ -1,4 +1,8 @@
 <script setup>
+definePageMeta({
+  layout: "design-system",
+});
+
 const data = ref("");
 </script>
 <template>
