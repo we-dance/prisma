@@ -60,7 +60,7 @@ const onSubmit = form.handleSubmit(async (values) => {
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit">
+  <Form @submit.prevent="onSubmit">
     <FormField v-slot="{ componentField }" name="username">
       <FormItem>
         <FormLabel>Username</FormLabel>
@@ -117,5 +117,5 @@ const onSubmit = form.handleSubmit(async (values) => {
     <div class="flex justify-end">
       <Button type="submit"> Register </Button>
     </div>
-  </form>
+  </Form>
 </template>
