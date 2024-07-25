@@ -21,7 +21,10 @@ const props = defineProps({
 
 const emits = defineEmits(["update:modelValue"]);
 
-const modelValue = useVModel(props, "modelValue", emits);
+const modelValue = useVModel(props, "modelValue", emits, {
+  passive: true,
+  defaultValue: props.defaultValue,
+});
 
 const query = ref("");
 const results = ref([]);
@@ -99,7 +102,7 @@ watch(query, () => {
             <ComboboxOption
               v-for="city in results"
               as="template"
-              :key="city.id"
+              :key="city.placeId"
               :value="city"
               v-slot="{ selected, active }"
             >
