@@ -21,12 +21,15 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  defaultValue: {
+    type: Object,
+    default: null,
+  },
 });
 
-const emits = defineEmits(["update:modelValue"]);
+const emits = defineEmits(["update:modelValue", "input"]);
 
 const modelValue = useVModel(props, "modelValue", emits, {
-  passive: true,
   defaultValue: props.defaultValue,
 });
 
@@ -50,6 +53,10 @@ const getPlacePredictions = () => {
     );
   });
 };
+
+watch(modelValue, () => {
+  emits("input", modelValue.value);
+});
 
 watch(query, () => {
   if (query.value.length > 1) {

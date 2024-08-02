@@ -1,3 +1,3 @@
 <template>
-  <RegisterForm />
+  <RegisterFormAuto />
 </template>

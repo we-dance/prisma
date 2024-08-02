@@ -18,13 +18,13 @@ const form = useForm({
   validationSchema: toTypedSchema(schema),
 });
 
-const onSubmit = form.handleSubmit(async (values) => {
+async function onSubmit(values: Record<string, any>) {
   const error = await login("credentials", values);
 
   if (error) {
     toast.error(error);
   }
-});
+}
 </script>
 
 <template>
