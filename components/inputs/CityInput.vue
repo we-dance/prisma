@@ -12,6 +12,10 @@ import { useVModel } from "@vueuse/core";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 import { loadGoogleMapsApi } from "~/lib/googleMapsApi";
 
+defineOptions({
+  inheritAttrs: false,
+});
+
 const props = defineProps({
   modelValue: {
     type: Object,
