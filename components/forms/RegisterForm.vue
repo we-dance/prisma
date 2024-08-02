@@ -51,73 +51,53 @@ const form = useForm({
 });
 
 const onSubmit = form.handleSubmit(async (values) => {
-  console.log(values);
-  // const error = await login("register", values);
-  // if (error) {
-  //   toast.error(error);
-  // }
+  const error = await login("register", values);
+  if (error) {
+    toast.error(error);
+  }
 });
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit">
-    <FormField v-slot="{ componentField }" name="username">
-      <FormItem>
-        <FormLabel>Username</FormLabel>
-        <FormControl>
-          <Input v-bind="componentField" trim="" lowercase />
-        </FormControl>
-        <FormDescription />
-        <FormMessage />
-      </FormItem>
-    </FormField>
-    <FormField v-slot="{ componentField }" name="city">
-      <FormItem>
-        <FormLabel>City</FormLabel>
-        <FormControl>
-          <CityInput v-bind="componentField" />
-        </FormControl>
-        <FormDescription />
-        <FormMessage />
-      </FormItem>
-    </FormField>
-    <FormField v-slot="{ componentField }" name="email">
-      <FormItem>
-        <FormLabel>Email</FormLabel>
-        <FormControl>
-          <Input v-bind="componentField" />
-        </FormControl>
-        <FormDescription />
-        <FormMessage />
-      </FormItem>
-    </FormField>
-    <FormField v-slot="{ componentField }" name="password">
-      <FormItem>
-        <FormLabel>Password</FormLabel>
-        <FormControl>
-          <Input v-bind="componentField" />
-        </FormControl>
-        <FormDescription />
-        <FormMessage />
-      </FormItem>
-    </FormField>
-    <FormField v-slot="{ componentField }" name="acceptTerms">
-      <FormItem>
-        <FormControl>
-          <div class="space-y-0 mb-3 flex items-center gap-3">
-            <Switch id="acceptTerms" v-bind="componentField" />
-            <AutoFormLabel for="acceptTerms"
-              >Accept terms and conditions</AutoFormLabel
-            >
-          </div>
-          <TermsInfo />
-        </FormControl>
-        <FormDescription />
-        <FormMessage />
-      </FormItem>
-    </FormField>
+  <AutoForm
+    class="space-y-4"
+    :form="form"
+    :schema="schema"
+    :field-config="{
+      username: {
+        inputProps: {
+          trim: '[^a-z0-9._\-]+',
+          lowercase: true,
+        },
+      },
+      email: { inputProps: { type: 'email' } },
+      password: { inputProps: { type: 'password' } },
+      acceptTerms: {
+        label: 'Accept terms and conditions.',
+        inputProps: {
+          required: true,
+        },
+      },
+    }"
+    @submit="onSubmit"
+  >
+    <template #city>
+      <FormField v-slot="slotProps" name="city">
+        <FormItem>
+          <FormLabel>Your city *</FormLabel>
+          <FormControl>
+            <CityInput v-bind="slotProps" />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+    </template>
+    <template #acceptTerms="slotProps">
+      <AutoFormField v-bind="slotProps" />
+      <TermsInfo />
+    </template>
     <div class="flex justify-end">
       <Button type="submit"> Register </Button>
     </div>
-  </form>
+  </AutoForm>
 </template>
