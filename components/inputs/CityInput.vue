@@ -8,7 +8,6 @@ import {
   ComboboxOption,
   TransitionRoot,
 } from "@headlessui/vue";
-import { useVModel } from "@vueuse/core";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 import { loadGoogleMapsApi } from "~/lib/googleMapsApi";
 
@@ -16,22 +15,7 @@ defineOptions({
   inheritAttrs: false,
 });
 
-const props = defineProps({
-  modelValue: {
-    type: Object,
-    default: null,
-  },
-  defaultValue: {
-    type: Object,
-    default: null,
-  },
-});
-
-const emits = defineEmits(["update:modelValue", "input"]);
-
-const modelValue = useVModel(props, "modelValue", emits, {
-  defaultValue: props.defaultValue,
-});
+const model = defineModel();
 
 const query = ref("");
 const results = ref([]);
@@ -54,10 +38,6 @@ const getPlacePredictions = () => {
   });
 };
 
-watch(modelValue, () => {
-  emits("input", modelValue.value);
-});
-
 watch(query, () => {
   if (query.value.length > 1) {
     getPlacePredictions();
@@ -69,7 +49,7 @@ watch(query, () => {
 
 <template>
   <div>
-    <Combobox v-model="modelValue" by="placeId">
+    <Combobox v-model="model" by="placeId">
       <div class="relative mt-1">
         <div
           class="relative w-full cursor-default rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm"
