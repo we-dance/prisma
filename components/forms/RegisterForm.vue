@@ -60,7 +60,7 @@ const onSubmit = form.handleSubmit(async (values) => {
 </script>
 
 <template>
-  <Form @submit.prevent="onSubmit">
+  <form @submit.prevent="onSubmit">
     <FormField v-slot="{ componentField }" name="username">
       <FormItem>
         <FormLabel>Username</FormLabel>
@@ -105,8 +105,10 @@ const onSubmit = form.handleSubmit(async (values) => {
       <FormItem>
         <FormControl>
           <div class="space-y-0 mb-3 flex items-center gap-3">
-            <Switch v-bind="componentField" />
-            <AutoFormLabel>Accept terms and conditions</AutoFormLabel>
+            <Switch id="acceptTerms" v-bind="componentField" />
+            <AutoFormLabel for="acceptTerms"
+              >Accept terms and conditions</AutoFormLabel
+            >
           </div>
           <TermsInfo />
         </FormControl>
@@ -117,5 +119,5 @@ const onSubmit = form.handleSubmit(async (values) => {
     <div class="flex justify-end">
       <Button type="submit"> Register </Button>
     </div>
-  </Form>
+  </form>
 </template>
