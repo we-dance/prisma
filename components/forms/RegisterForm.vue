@@ -53,7 +53,15 @@ const form = useForm({
 
 const onSubmit = form.handleSubmit(
   async (values) => {
-    const error = await login("register", values);
+    const error = await login("register", {
+      username: values.username,
+      cityId: values.city.placeId,
+      cityLabel: values.city.label,
+      pronounce: values.pronounce,
+      email: values.email,
+      password: values.password,
+      emailConsent: values.emailConsent,
+    });
     if (error) {
       toast.error(error);
     }

@@ -86,14 +86,22 @@ export default NuxtAuthHandler({
       name: "register",
       credentials: {
         username: { label: "Username", type: "text" },
+        pronounce: { label: "Pronounce", type: "text" },
+        cityId: { label: "City", type: "text" },
+        cityLabel: { label: "City Label", type: "text" },
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
+        emailConsent: { label: "Email Consent", type: "checkbox" },
       },
       async authorize(input: any) {
         const schema = z.object({
           username: z.string().min(2).max(50),
           email: z.string().email(),
           password: z.string().min(8),
+          pronounce: z.enum(["he", "she", "they"]),
+          cityId: z.string().min(2).max(50),
+          cityLabel: z.string().min(2).max(50),
+          emailConsent: z.coerce.boolean(),
         });
 
         const result = schema.safeParse(input);
@@ -132,14 +140,34 @@ export default NuxtAuthHandler({
           throw error;
         }
 
-        let profile;
+        let city = prisma.profile.findFirst({
+          where: {
+            placeId: credentials.cityId,
+          },
+        });
+
+        if (!city) {
+          city = await prisma.profile.create({
+            data: {
+              placeId: credentials.cityId,
+              name: credentials.cityLabel,
+              type: "City",
+              username: credentials.cityLabel,
+            },
+          });
+        }
+
         try {
-          profile = await prisma.profile.create({
+          await prisma.profile.create({
             data: {
               username: credentials.username,
               bio: "",
               name: credentials.username,
               type: "Dancer",
+              pronounce: credentials.pronounce,
+              lat: city.lat,
+              lng: city.lng,
+              placeId: city.placeId,
               user: {
                 connect: {
                   id: user.id,

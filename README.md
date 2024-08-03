@@ -13,7 +13,7 @@ Based on [sidebase merino](https://sidebase.io/)
 2. Reset database
 
     ```
-    npx prisma db push --force-reset
+    bunx prisma db push --force-reset
     ```
 
 3. Install db extensions
@@ -27,7 +27,7 @@ Based on [sidebase merino](https://sidebase.io/)
 4. Generate the Prisma client
 
     ```
-    npx prisma generate
+    bunx prisma generate
     ```
 
 5. Import data
