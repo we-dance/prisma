@@ -107,7 +107,7 @@ const onSubmit = form.handleSubmit(
       <FormItem>
         <FormLabel>Username</FormLabel>
         <FormControl>
-          <Input v-bind="componentField" trim="" lowercase />
+          <Input v-bind="componentField" trim="[^a-z0-9._\-]+" lowercase />
         </FormControl>
         <FormDescription />
         <FormMessage />

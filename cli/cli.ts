@@ -1,35 +1,65 @@
-import { Command } from 'commander'
-import { importAccounts, importEvents, importProfiles } from './importer'
-import { logger } from './utils/logger'
-import cliProgress from 'cli-progress'
+import { Command } from "commander";
+import {
+  importAccounts,
+  importEvents,
+  importProfiles,
+  importCities,
+  importSubscribers,
+} from "./importer";
+import { getUniqueUsername } from "./importer/profile";
+import { logger } from "./utils/logger";
+import cliProgress from "cli-progress";
 
 function getLogLevel(verbosity: number) {
   switch (verbosity) {
     case 0:
-      return '';
+      return "";
     case 1:
-      return 'warning';
+      return "warning";
     case 2:
-      return 'info';
+      return "info";
     default:
-      return 'debug';
+      return "debug";
   }
 }
 
-const program = new Command()
+const program = new Command();
 
 program
-  .name('prisma-import')
-  .option('-v, --verbose', 'increase verbosity', (value, previous) => previous + 1, 0)
+  .name("prisma-import")
+  .option(
+    "-v, --verbose",
+    "increase verbosity",
+    (value, previous) => previous + 1,
+    0
+  );
 
-program.command('import')
-  .option('--all', 'Import everything')
-  .option('-a, --accounts', 'Import accounts')
-  .option('-p, --profiles', 'Import profiles')
-  .option('-e, --events', 'Import events')
+program.command("username <name>").action(async (name) => {
+  const result = await getUniqueUsername(name);
+  console.log(result);
+});
+
+program
+  .command("import")
+  .option("--all", "Import everything")
+  .option("-a, --accounts", "Import accounts")
+  .option("-c, --cities", "Import cities")
+  .option("-p, --profiles", "Import profiles")
+  .option("-e, --events", "Import events")
+  .option("-s, --subscribers", "Import subscribers")
   .action(async (options) => {
-    const { all, accounts, profiles, events } = options;
+    const { all, accounts, profiles, events, cities, subscribers } = options;
     logger.level = getLogLevel(program.opts().verbose);
+
+    logger.info("Starting import", {
+      level: logger.level,
+      all,
+      accounts,
+      profiles,
+      events,
+      cities,
+      subscribers,
+    });
 
     const multibar = new cliProgress.MultiBar({
       clearOnComplete: false,
@@ -38,16 +68,28 @@ program.command('import')
     });
 
     if (all || accounts) {
-      await importAccounts(multibar)
+      await importAccounts(multibar);
+    }
+
+    if (all || cities) {
+      await importCities(multibar);
     }
 
     if (all || profiles) {
-      await importProfiles(multibar)
+      await importProfiles(multibar);
     }
 
     if (all || events) {
-      await importEvents(multibar)
+      await importEvents(multibar);
     }
-})
 
-program.parse(process.argv)
+    if (all || subscribers) {
+      await importSubscribers(multibar);
+    }
+
+    multibar.stop();
+
+    logger.info("Finish import");
+  });
+
+program.parse(process.argv);

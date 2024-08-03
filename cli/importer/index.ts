@@ -1,212 +1,238 @@
-import { sortBy } from 'lodash'
-import { getProfiles } from '../provider/profiles'
-import { getAccounts, getUsers, getSuspended } from '../provider/accounts'
-import { getEvents } from '../provider/events'
-import { addEvent } from './event'
-import { addProfile, addSubscribers } from './profile'
-import { addAccount } from './account'
-import cliProgress from 'cli-progress'
-import { getLogger } from '../utils/logger'
+import { sortBy } from "lodash";
+import { getProfiles } from "../provider/profiles";
+import { getAccounts, getUsers, getSuspended } from "../provider/accounts";
+import { getEvents } from "../provider/events";
+import { addEvent } from "./event";
+import {
+  addProfile,
+  addCity,
+  addFollowers,
+  addCitySubscribers,
+} from "./profile";
+import { addAccount } from "./account";
+import cliProgress from "cli-progress";
+import { getLogger } from "../utils/logger";
 
-export async function importAccounts (multibar: cliProgress.MultiBar) {
-  const accounts = await getAccounts()
-  const users = getUsers()
-  const suspended = getSuspended()
+export async function importAccounts(multibar: cliProgress.MultiBar) {
+  let collection = "accounts";
+  const logger = getLogger(collection);
+  logger.info("Importing accounts");
 
-  let created = 0
-  let ignored = 0
-  let skipped = 0
-  let failed = 0
+  const accounts = await getAccounts();
+  const users = getUsers();
+  const suspended = getSuspended();
 
-  let collection = 'accounts'
-  const logger = getLogger(collection)
+  let created = 0;
+  let ignored = 0;
+  let failed = 0;
 
   const bar = multibar.create(accounts.length, 0, {
     collection,
-    updated: 0
-  })
+    updated: 0,
+  });
 
   for (const account of accounts) {
-    const user = users.find((u: any) => u.localId === account.id)
-    const isSuspended = suspended.find((s: any) => s.uid === account.id)
-    bar.increment({ failed, created, skipped, ignored })
+    logger.debug({
+      state: "importing",
+      id: account.id,
+      email: account.email,
+    });
 
-    if (isSuspended) {
-      skipped++
-      continue
+    const user = users.find((u: any) => u.localId === account.id);
+    const isSuspended = suspended.find((s: any) => s.uid === account.id);
+    bar.increment({ failed, created, ignored });
+
+    const result = await addAccount(account, user, isSuspended);
+
+    if (result.state === "created") {
+      created++;
     }
 
-    const result = await addAccount(account, user)
-
-    if (result.state === 'created') {
-      created++
+    if (result.state === "ignored") {
+      ignored++;
     }
 
-    if (result.state === 'ignored') {
-      ignored++
+    if (result.state === "failed") {
+      failed++;
     }
 
-    if (result.state === 'failed') {
-      failed++
-      logger.error(result)
-    }
+    logger.log(result.state === "failed" ? "error" : "debug", result);
   }
 
-  bar.stop()
+  bar.stop();
 }
 
-async function importCities(multibar: cliProgress.MultiBar, cities: any[]) {
-  const addedCities: any = {}
+export async function importCities(multibar: cliProgress.MultiBar) {
+  let collection = "cities";
+  const logger = getLogger(collection);
+  logger.info("Importing cities");
 
-  let created = 0
-  let updated = 0
-  let failed = 0
+  const allProfiles = sortBy(await getProfiles(), "createdAt");
+  const cities = allProfiles.filter((p: any) => p.type === "City");
 
-  let collection = 'cities'
-  const logger = getLogger(collection)
+  let created = 0;
+  let updated = 0;
+  let failed = 0;
+  let ignored = 0;
+
   const bar = multibar.create(cities.length, 0, {
     collection,
-    ignored: 0
-  })
+  });
 
   for (const city of cities) {
-    bar.increment({ failed, created, updated })
+    logger.debug({
+      state: "importing",
+      id: city.id,
+      username: city.username,
+    });
 
-    if (addedCities[city.cityPlaceId]) {
-      failed++
-      logger.error({
-        error: 'city_duplicate',
-        type: 'City',
-        cityPlaceId: city.cityPlaceId,
-        id: city.id,
-        username: city.username,
-        redirect: addedCities[city.cityPlaceId]
-      })
-      continue
+    bar.increment({ failed, created, updated, ignored });
+
+    const result = await addCity(city);
+    if (result.state === "updated") {
+      updated++;
     }
 
-    if (!city.cityPlaceId && city.username !== 'Travel') {
-      failed++
-
-      logger.error({
-        error: 'city_no_place_id',
-        type: 'City',
-        id: city.id,
-        username: city.username
-      })
-
-      continue
+    if (result.state === "ignored") {
+      ignored++;
     }
 
-    const result = await addProfile(city)
-    if (result.state === 'updated') {
-      updated++
+    if (result.state === "created") {
+      created++;
     }
 
-    if (result.state === 'created') {
-      created++
+    if (result.state === "failed") {
+      failed++;
     }
 
-    addedCities[city.cityPlaceId] = city.username
+    logger.log(result.state === "failed" ? "error" : "debug", result);
   }
-  bar.stop()
+
+  bar.stop();
 }
 
-export async function importSubscribers(multibar: cliProgress.MultiBar, profiles: any[]) {
-  let created = 0
-  let failed = 0
+export async function importSubscribers(multibar: cliProgress.MultiBar) {
+  const profiles = sortBy(await getProfiles(), "createdAt");
+  let created = 0;
+  let failed = 0;
 
-  let collection = 'subscribers'
-  const logger = getLogger(collection)
+  let collection = "subscribers";
+  const logger = getLogger(collection);
 
   const bar = multibar.create(profiles.length, 0, {
     collection,
     ignored: 0,
-    updated: 0
-  })
+    updated: 0,
+  });
 
   for (const profile of profiles) {
-    const result = await addSubscribers(profile)
-    created += result.created
-    failed += result.failed
-
-    for (const error of result.errors) {
-      logger.error(error)
+    let result;
+    if (profile.type === "City") {
+      result = await addCitySubscribers(profile);
+      created += result.created;
+      failed += result.failed;
+    } else {
+      result = await addFollowers(profile);
+      created += result.created;
+      failed += result.failed;
     }
 
-    bar.increment({ failed, created })
+    for (const error of result.errors) {
+      logger.error(error);
+    }
+
+    bar.increment({ failed, created });
   }
-  bar.stop()
+  bar.stop();
 }
 
 export async function importProfiles(multibar: cliProgress.MultiBar) {
-  const allProfiles = sortBy(await getProfiles(), 'createdAt')
-  const cities = allProfiles.filter((p: any) => p.type === 'City')
+  let collection = "profiles";
+  const logger = getLogger(collection);
+  logger.info("Importing profiles");
 
-  await importCities(multibar, cities)
+  let profiles = sortBy(await getProfiles(), ["lastLoginAt", "viewsCount"]);
+  profiles = profiles.filter((p: any) => p.type !== "City");
 
-  const profiles = allProfiles.filter((p: any) => p.type !== 'City')
+  let created = 0;
+  let failed = 0;
+  let updated = 0;
 
-  let created = 0
-  let failed = 0
-  let updated = 0
-
-  let collection = 'profiles'
   const bar = multibar.create(profiles.length, 0, {
     collection,
-    ignored: 0
-  })
+    ignored: 0,
+  });
 
   for (const profile of profiles) {
-    const result = await addProfile(profile)
+    logger.debug({
+      state: "importing",
+      id: profile.id,
+      username: profile.username,
+    });
 
-    if (result.state === 'created') {
-      created++
+    const result = await addProfile(profile);
+
+    if (result.state === "created") {
+      created++;
     }
 
-    if (result.state === 'updated') {
-      updated++
+    if (result.state === "updated") {
+      updated++;
     }
 
-    bar.increment({ failed, created, updated })
+    if (result.state === "failed") {
+      failed++;
+    }
+
+    if (result.state === "ignored") {
+      failed++;
+    }
+
+    logger.log(result.state === "failed" ? "error" : "debug", result);
+
+    bar.increment({ failed, created, updated });
   }
-  bar.stop()
-
-  await importSubscribers(multibar, allProfiles)
+  bar.stop();
 }
 
-export async function importEvents (multibar: cliProgress.MultiBar) {
-  let created = 0
-  let updated = 0
-  let ignored = 0
-  let failed = 0
+export async function importEvents(multibar: cliProgress.MultiBar) {
+  let collection = "events";
+  const logger = getLogger(collection);
 
-  const events = await getEvents()
-  let collection = 'events'
+  logger.info("Importing events");
 
-  const logger = getLogger(collection)
+  let created = 0;
+  let updated = 0;
+  let ignored = 0;
+  let failed = 0;
+
+  const events = await getEvents();
+
   const bar = multibar.create(events.length, 0, {
-    collection
-  })
+    collection,
+  });
 
   for (const event of events) {
-    const result = await addEvent(event)
-    bar.increment({ created, updated, ignored, failed })
+    logger.debug("importing", event.id);
 
-    if (result.state === 'created') {
-      created++
+    const result = await addEvent(event);
+    bar.increment({ created, updated, ignored, failed });
+
+    if (result.state === "created") {
+      created++;
     }
-    if (result.state === 'updated') {
-      updated++
+    if (result.state === "updated") {
+      updated++;
     }
-    if (result.state === 'ignored') {
-      ignored++
+    if (result.state === "ignored") {
+      ignored++;
     }
-    if (result.state === 'failed') {
-      failed++
-      logger.error(result)
+    if (result.state === "failed") {
+      failed++;
     }
+
+    logger.log(result.state === "failed" ? "error" : "debug", result);
   }
 
-  bar.stop()
+  bar.stop();
 }

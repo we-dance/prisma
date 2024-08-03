@@ -164,6 +164,7 @@ export default NuxtAuthHandler({
               name: credentials.cityLabel,
               type: "City",
               username: credentials.cityLabel,
+              pronounce: "they",
             },
           });
         }
@@ -172,7 +173,6 @@ export default NuxtAuthHandler({
           await prisma.profile.create({
             data: {
               username: credentials.username,
-              bio: "",
               name: credentials.username,
               type: "Dancer",
               pronounce: credentials.pronounce,

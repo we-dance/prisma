@@ -1,28 +1,36 @@
-import winston from 'winston';
-import path from 'path';
-import fs from 'fs';
+import winston from "winston";
+import path from "path";
+import fs from "fs";
 
-const logDir = path.join(__dirname, '..', 'logs');
+const logDir = path.join(__dirname, "..", "..", "logs");
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir);
 }
 
-// const customFormat = winston.format.printf(({ level, message, label }) => {
-//   return `[${label}] ${level}: ${message}`;
-// });
+const importDate = new Date().toISOString();
 
 const logger = winston.createLogger({
-  level: 'info',
   transports: [
     new winston.transports.File({
-      filename: path.join(logDir, 'import.log'),
+      filename: path.join(logDir, `import.${importDate}.log`),
       format: winston.format.combine(
         winston.format.timestamp(),
         winston.format.json()
       ),
-      options: { flags: 'w' }
-    })
-  ]
+      level: "error",
+      options: { flags: "w" },
+    }),
+    new winston.transports.File({
+      filename: path.join(logDir, `import.log`),
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.json(),
+        winston.format.prettyPrint()
+      ),
+      level: "error",
+      options: { flags: "w" },
+    }),
+  ],
 });
 
 export { logger };

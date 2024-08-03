@@ -1,61 +1,59 @@
-import { PrismaClient } from '@prisma/client'
-import { getDateOrNow } from '../utils/date'
+import { PrismaClient } from "@prisma/client";
+import { getDateOrNow, getDateOrNull } from "../utils/date";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-export async function addAccount (account: any, user: any) {
-  const existingUser = await prisma.user.findFirst({ where: { id: account.id } })
+export async function addAccount(account: any, user: any, suspended: any) {
+  const existingUser = await prisma.user.findFirst({
+    where: { id: account.id },
+  });
   if (!user) {
     return {
-      state: 'failed',
-      error: 'no_user',
+      state: "failed",
+      error: "no_user",
       id: account.id,
-      email: account.email
-    }
+      email: account.email,
+    };
   }
   if (existingUser) {
     return {
-      state: 'ignored',
-      id: existingUser.id
-    }
+      state: "ignored",
+      id: existingUser.id,
+    };
   }
 
   try {
     const data = {
       id: account.id,
-      name: account.name || '',
+      name: account.name || "",
       email: account.email,
       emailVerified: user.emailVerified || false,
-      hash: user.passwordHash || '',
-      salt: user.salt || '',
+      hash: user.passwordHash || "",
+      salt: user.salt || "",
       firebaseId: account.id,
       createdAt: getDateOrNow(account.createdAt),
-      updateAt: getDateOrNow(account.updateAt),
-      lastLoginAt: getDateOrNow(account.lastLoginAt)
-    }
+      updatedAt: getDateOrNow(account.updatedAt),
+      lastLoginAt: getDateOrNow(account.lastLoginAt),
+      isDeleted: !!suspended,
+      deletedAt: getDateOrNull(suspended?.deletedAt),
+      deletedReason: suspended?.reason || "",
+    };
     await prisma.user.create({
-      data
-    })
+      data,
+    });
     return {
-      state: 'created',
-      id: account.id
-    }
+      state: "created",
+      id: account.id,
+    };
   } catch (exception: any) {
-    if (exception.meta?.target[0] === 'email') {
+    if (exception.meta?.target[0] === "email") {
       return {
-        state: 'failed',
+        state: "failed",
         id: account.id,
-        error: 'duplicate_email',
-        email: account.email
-      }
-    } else {
-      return {
-        state: 'failed',
-        id: account.id,
-        error: 'invalid_prisma_account_create',
+        error: "duplicate_email",
         email: account.email,
-        exception
-      }
+      };
     }
+    throw exception;
   }
 }
