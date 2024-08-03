@@ -39,10 +39,11 @@ const schema = z.object({
     placeId: z.string(),
     label: z.string(),
   }),
+  pronounce: z.enum(["he", "she", "they"]),
   email: z.string().email(),
   password: z.string().min(8),
-  acceptTerms: z.boolean().refine((value) => value, {
-    message: "You must accept the terms and conditions.",
+  emailConsent: z.boolean().refine((value) => value, {
+    message: "We need your consent to send you emails.",
   }),
 });
 
@@ -50,16 +51,50 @@ const form = useForm({
   validationSchema: toTypedSchema(schema),
 });
 
-const onSubmit = form.handleSubmit(async (values) => {
-  const error = await login("register", values);
-  if (error) {
-    toast.error(error);
+const onSubmit = form.handleSubmit(
+  async (values) => {
+    const error = await login("register", values);
+    if (error) {
+      toast.error(error);
+    }
+  },
+  () => {
+    toast.error("Please fix the errors in the form.");
   }
-});
+);
 </script>
 
 <template>
   <form @submit="onSubmit">
+    <FormField v-slot="{ componentField }" name="pronounce">
+      <FormItem>
+        <FormLabel>Pronounce</FormLabel>
+        <FormControl>
+          <RadioGroup class="flex gap-4 justify-center" v-bind="componentField">
+            <FormItem class="flex items-center space-y-0 gap-x-3">
+              <FormControl>
+                <RadioGroupItem value="he" />
+              </FormControl>
+              <FormLabel class="font-normal"> he </FormLabel>
+            </FormItem>
+            <FormItem class="flex items-center space-y-0 gap-x-3">
+              <FormControl>
+                <RadioGroupItem value="she" />
+              </FormControl>
+              <FormLabel class="font-normal"> she </FormLabel>
+            </FormItem>
+            <FormItem class="flex items-center space-y-0 gap-x-3">
+              <FormControl>
+                <RadioGroupItem value="they" />
+              </FormControl>
+              <FormLabel class="font-normal"> they </FormLabel>
+            </FormItem>
+          </RadioGroup>
+        </FormControl>
+        <FormDescription />
+        <FormMessage />
+      </FormItem>
+    </FormField>
     <FormField v-slot="{ componentField }" name="username">
       <FormItem>
         <FormLabel>Username</FormLabel>
@@ -100,20 +135,22 @@ const onSubmit = form.handleSubmit(async (values) => {
         <FormMessage />
       </FormItem>
     </FormField>
-    <FormField v-slot="{ value, handleChange }" name="acceptTerms">
+    <FormField v-slot="{ value, handleChange }" name="emailConsent">
       <FormItem class="flex flex-row items-start gap-x-3 space-y-0 py-4">
         <FormControl>
           <Checkbox :checked="value" @update:checked="handleChange" />
         </FormControl>
         <div class="space-y-1 leading-none">
-          <FormLabel>Accept terms and conditions.</FormLabel>
-          <FormDescription>
-            <TermsInfo />
-          </FormDescription>
+          <FormLabel
+            >I agree to receive emails from WeDance. I can unsubscribe from
+            non-essential emails at any time.</FormLabel
+          >
+          <FormDescription />
           <FormMessage />
         </div>
       </FormItem>
     </FormField>
+    <TermsInfo />
     <div class="flex justify-end">
       <Button type="submit"> Register </Button>
     </div>

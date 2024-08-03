@@ -39,10 +39,11 @@ const schema = z.object({
     placeId: z.string(),
     label: z.string(),
   }),
+  pronounce: z.enum(["he", "she", "they"]),
   email: z.string().email(),
   password: z.string().min(8),
-  acceptTerms: z.boolean().refine((value) => value, {
-    message: "You must accept the terms and conditions.",
+  emailConsent: z.boolean().refine((value) => value, {
+    message: "We need your consent to send you emails.",
   }),
 });
 
@@ -73,8 +74,9 @@ async function onSubmit(values: Record<string, any>) {
       },
       email: { inputProps: { type: 'email' } },
       password: { inputProps: { type: 'password' } },
-      acceptTerms: {
-        label: 'Accept terms and conditions.',
+      emailConsent: {
+        label:
+          'I agree to receive emails from WeDance. I can unsubscribe from non-essential emails at any time.',
         inputProps: {
           required: true,
         },
@@ -93,10 +95,10 @@ async function onSubmit(values: Record<string, any>) {
         </FormItem>
       </FormField>
     </template>
-    <template #acceptTerms="slotProps">
+    <template #emailConsent="slotProps">
       <AutoFormField v-bind="slotProps" />
-      <TermsInfo />
     </template>
+    <TermsInfo />
     <div class="flex justify-end">
       <Button type="submit"> Register </Button>
     </div>
