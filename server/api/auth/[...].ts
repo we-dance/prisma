@@ -35,8 +35,19 @@ export default NuxtAuthHandler({
         },
       });
 
+      const profile = await prisma.profile.findFirst({
+        where: {
+          userId: user.id,
+        },
+      });
+
       session.user.id = user.id;
-      return Promise.resolve(session);
+      return Promise.resolve({
+        userId: user.id,
+        username: profile?.username,
+        profileId: profile?.id,
+        cityId: profile?.cityId,
+      });
     },
   },
   providers: [
@@ -167,7 +178,8 @@ export default NuxtAuthHandler({
               pronounce: credentials.pronounce,
               lat: city.lat,
               lng: city.lng,
-              placeId: city.placeId,
+              cityId: city.placeId,
+              claimed: true,
               user: {
                 connect: {
                   id: user.id,
