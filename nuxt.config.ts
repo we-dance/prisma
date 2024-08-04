@@ -45,6 +45,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+      posthogPublicKey: "phc_N7rtjDNLzyAGTOkhwhPBrEPybpxBwLlMpfPI9j1xZWB",
+      posthogHost: "https://eu.i.posthog.com",
     },
   },
 

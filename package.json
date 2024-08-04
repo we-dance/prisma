@@ -64,6 +64,7 @@
     "lodash": "^4.17.21",
     "lucide-vue-next": "^0.383.0",
     "next-auth": "4.21.1",
+    "posthog-js": "^1.154.2",
     "radix-vue": "^1.8.2",
     "schema-dts": "^1.1.2",
     "superjson": "^1.12.2",

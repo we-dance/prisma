@@ -32,14 +32,12 @@ export default {
     const target = ref(null);
     const targetIsVisible = useElementVisibility(target);
 
-    const value = ref(true);
-
-    const $track = function (event, data) {};
+    const value = ref(false);
 
     watch(targetIsVisible, (isVisible) => {
       if (isVisible) {
         emit("visible", isVisible);
-        $track("banner_shown", { name: props.name });
+        root.$track("banner_shown", { name: props.name });
       }
     });
 

@@ -128,7 +128,6 @@ export default {
         this.$track(event, data);
       }
     },
-    $track(event, data) {},
   },
   setup() {
     const { uid, showAuthPopup, authTargetQuery } = useAppAuth();
