@@ -1,8 +1,8 @@
-import CyrillicToTranslit from "cyrillic-to-translit-js";
 import { PrismaClient } from "@prisma/client";
 import { getDateOrNow, getDateOrNull } from "../utils/date";
 import lookup from "country-code-lookup";
 import { getLogger } from "../utils/logger";
+import { getNormalizedString, getSlug } from "../utils/slug";
 
 const prisma = new PrismaClient();
 
@@ -294,70 +294,8 @@ export async function addCity(profile: any) {
   };
 }
 
-export function getSlug(name: string) {
-  // Username must be lowercase
-  let result = name.toLowerCase();
-
-  result = CyrillicToTranslit().transform(result);
-
-  if (result.startsWith("http") || result.startsWith("www")) {
-    result = result.replace("https://", "");
-    result = result.replace("http://", "");
-    result = result.replace("www.", "");
-    result = result.replace("m.", "");
-
-    const domain = result.split("/")[0];
-
-    const domainList = [
-      "facebook.com",
-      "instagram.com",
-      "fb.me",
-      "eventbrite.com",
-    ];
-
-    if (domainList.find((d) => domain.includes(d))) {
-      result = result.split("/")[1];
-
-      if (!result || result.length < 3) {
-        domainList.forEach((d) => {
-          result = result.replace(d, "");
-        });
-      }
-    } else {
-      result = domain;
-    }
-  }
-
-  result = result.trim();
-
-  // Replace space with dash
-  result = result.replace(/ /g, "-");
-
-  // Replace umlauts with their closest ASCII equivalent
-  result = result.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-  // Username cannot have special characters
-  result = result.replace(/[^a-z0-9._\-]/g, "");
-
-  // Username cannot have multiple periods in a row
-  result = result.replace(/\.{2,}/g, ".");
-
-  // Username cannot end in a period
-  result = result.replace(/\.$/, "");
-
-  return result;
-}
-
 export async function getUniqueUsername(name: string, count = 1) {
-  let result = getSlug(name);
-
-  // Username must be less than 30 characters
-  result = result.substring(0, 30);
-
-  // Username must be at least 2 characters
-  if (result.length < 2) {
-    result += "x";
-  }
+  let result = getSlug(name, 2, 30);
 
   if (count > 1) {
     result = result.substring(0, 30 - count.toString().length);
@@ -397,7 +335,7 @@ export async function addProfile(profile: any) {
   const data: any = {
     id: profile.id,
     username,
-    name: profile.name || username,
+    name: getNormalizedString(profile.name || username),
     firebaseUsername: profile.username || "",
     pronounce,
     bio: profile.bio || "",

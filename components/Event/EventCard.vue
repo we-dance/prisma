@@ -1,40 +1,42 @@
 <script setup lang="ts">
-import { format } from 'date-fns'
+import { format } from "date-fns";
 // import type { DanceEvent } from 'schema-dts'
-import { Prisma } from '@prisma/client'
+import { Prisma } from "@prisma/client";
 type EventDetails = Prisma.EventGetPayload<{
   include: {
-    venue: true,
-    organizer: true,
-    styles: true
+    venue: true;
+    organizer: true;
+    styles: true;
+  };
+}>;
+
+const props = withDefaults(
+  defineProps<{
+    event: EventDetails;
+    isEmbed?: boolean;
+    showRole?: boolean;
+    showOrganizer?: boolean;
+    side: "date" | "time";
+  }>(),
+  {
+    isEmbed: false,
+    showRole: false,
+    showOrganizer: false,
+    side: "date",
   }
-}>
+);
 
-const props = withDefaults(defineProps<{
-  event: EventDetails
-  isEmbed?: boolean,
-  showRole?: boolean,
-  showOrganizer?: boolean,
-  side: 'date' | 'time'
-}>(),
-{
-  isEmbed: false,
-  showRole: false,
-  showOrganizer: false,
-  side: 'date'
-})
-
-const startDate = new Date(props.event.startDate)
-const eventDay = computed(() => format(startDate, 'd'))
-const eventMonth = computed(() => format(startDate, 'MMM'))
-const eventDayName = computed(() => format(startDate, 'EEE'))
-const eventTime = computed(() => format(startDate, 'HH:mm'))
-const role = ''
+const startDate = new Date(props.event.startDate);
+const eventDay = computed(() => format(startDate, "d"));
+const eventMonth = computed(() => format(startDate, "MMM"));
+const eventDayName = computed(() => format(startDate, "EEE"));
+const eventTime = computed(() => format(startDate, "HH:mm"));
+const role = "";
 </script>
 
 <template>
   <NuxtLink
-    :to="`/events/${event.id}`"
+    :to="`/e/${event.slug}-${event.shortId}`"
     :target="isEmbed ? '_blank' : '_self'"
     class="flex border-b p-4 leading-none gap-2"
   >
@@ -54,9 +56,7 @@ const role = ''
       </div>
     </div>
     <div class="w-full">
-      <div
-        class="font-bold leading-none hover:underline hover:text-primary"
-      >
+      <div class="font-bold leading-none hover:underline hover:text-primary">
         {{ event.name }}
       </div>
       <div>
@@ -74,11 +74,11 @@ const role = ''
       </div>
       <div class="text-xs text-gray-700 pt-1">
         <span class="text-primary">{{ event.type }}</span>
-        <template v-if="event.price">
-          · {{ event.price }}
-        </template>
+        <template v-if="event.price"> · {{ event.price }} </template>
         <template v-if="event.styles">
-          <span v-for="style in event.styles" :key="style.id">· {{ style.name }}</span>
+          <span v-for="style in event.styles" :key="style.id"
+            >· {{ style.name }}</span
+          >
         </template>
       </div>
     </div>
@@ -90,7 +90,7 @@ const role = ''
         :src="event.cover"
         :alt="`${event.name} cover photo`"
         onerror="this.classList.add('hidden')"
-      >
+      />
     </div>
   </NuxtLink>
 </template>

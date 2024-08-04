@@ -4,11 +4,11 @@ import { prisma } from "../../prisma";
 
 export const eventsRouter = router({
   get: publicProcedure
-    .input(z.object({ id: z.string() }))
+    .input(z.object({ shortId: z.string() }))
     .query(async ({ input }) => {
       return await prisma.event.findFirst({
         where: {
-          id: input.id,
+          shortId: input.shortId,
         },
         include: {
           venue: true,
@@ -71,12 +71,14 @@ export const eventsRouter = router({
   list: publicProcedure
     .input(
       z.object({
-        city: z.string().optional(),
+        city: z.string(),
+        country: z.string(),
         dance: z.string().optional(),
         distance: z.number().optional(),
         lat: z.number().optional(),
         lng: z.number().optional(),
         type: z.string().optional(),
+        start: z.string().optional(),
       })
     )
     .query(async ({ input }) => {
@@ -86,22 +88,25 @@ export const eventsRouter = router({
       const {
         type,
         dance,
-        city: cityName,
+        city,
+        country,
         lng: reqLng,
         lat: reqLat,
         distance = 10000,
+        start = new Date(),
       } = input;
 
       if (!reqLng) {
-        const city = await prisma.profile.findFirst({
+        const cityProfile = await prisma.city.findFirst({
           where: {
-            username: cityName,
+            slug: city,
+            countryCode: country,
           },
         });
 
-        if (city) {
-          lng = city.lng;
-          lat = city.lat;
+        if (cityProfile) {
+          lng = cityProfile.lng;
+          lat = cityProfile.lat;
         }
       } else {
         lng = Number(reqLng);
@@ -130,7 +135,7 @@ export const eventsRouter = router({
 
       const where: any = {
         startDate: {
-          gte: new Date("2024-06-02"),
+          gte: start,
         },
         venue: {
           is: {
