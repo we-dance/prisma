@@ -1,12 +1,12 @@
 <script setup>
-import { MenuIcon } from "@heroicons/vue/24/outline";
+import WeDanceLogo from "~/public/svg/logo-horizontal-dark.svg?component";
 
 const isMenuOpen = ref(false);
 </script>
 
 <template>
   <div>
-    <Banner
+    <TBanner
       name="competition"
       desktop="Join WeDance Competition and Win 300€!"
       mobile="Win 300€"
@@ -35,14 +35,14 @@ const isMenuOpen = ref(false);
         class="md:hidden flex p-2 gap-2 justify-start items-center border-b"
       >
         <button class="mt-2" @click="isMenuOpen = !isMenuOpen">
-          <MenuIcon class="w-6 h-6" />
+          <Icon name="heroicons:menu" class="w-6 h-6" />
         </button>
 
         <router-link to="/">
-          <NuxtImg src="/svg/logo-horizontal-dark.svg" alt="WeDance" />
+          <WeDanceLogo />
         </router-link>
         <div class="flex-grow"></div>
-        <QrCodeButton label="Share" />
+        <TQrCodeButton label="Share" />
       </header>
 
       <div class="flex">

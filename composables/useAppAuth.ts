@@ -1,4 +1,8 @@
 export const useAppAuth = () => {
+  const uid = ref(null);
+  const showAuthPopup = ref(null);
+  const authTargetQuery = ref(null);
+
   const callbackUrl = "/";
 
   const { signIn } = useAuth();
@@ -33,5 +37,5 @@ export const useAppAuth = () => {
     SessionRequired: "Please sign in to access this page.",
   };
 
-  return { login, signInErrors };
+  return { login, signInErrors, uid, showAuthPopup, authTargetQuery };
 };

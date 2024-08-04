@@ -16,18 +16,27 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        lato: "Lato",
+        noto: "Noto Sans",
+        montserrat: "Montserrat",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        light: "#F4F1F1",
+        dark: "#210309",
+        black: "#000000",
+        white: "#FFFFFF",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "#F1023D",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
+          DEFAULT: "#FA9169",
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {

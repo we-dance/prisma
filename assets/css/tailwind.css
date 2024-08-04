@@ -1,6 +1,211 @@
 @tailwind base;
+
+html {
+  scroll-behavior: smooth;
+  font-size: 19px;
+}
+
+.typo {
+  @apply leading-normal break-words text-black;
+}
+.typo li + li {
+  @apply mt-1;
+}
+.typo li > p + p {
+  @apply mt-6;
+}
+.typo strong {
+  @apply font-semibold;
+}
+.preview a,
+.typo a {
+  @apply text-primary underline;
+}
+.preview a:hover,
+.typo a:hover {
+  @apply text-primary no-underline;
+}
+.typo strong a {
+  @apply font-bold;
+}
+.typo p {
+  @apply mb-4;
+}
+.typo h1 {
+  @apply leading-tight border-b text-4xl font-sans font-extrabold mb-4 mt-6 pb-2;
+}
+.typo h2 {
+  @apply leading-tight border-b text-2xl font-sans font-semibold mb-4 mt-6 pb-2;
+}
+.typo h3 {
+  @apply leading-snug text-lg font-sans font-semibold mb-4 mt-6;
+}
+.typo h4 {
+  @apply leading-none text-base font-sans font-semibold mb-4 mt-6;
+}
+.typo h5 {
+  @apply leading-tight text-sm font-sans font-semibold mb-4 mt-6;
+}
+.typo h6 {
+  @apply leading-tight text-sm font-sans font-semibold text-gray-600 mb-4 mt-6;
+}
+.typo blockquote {
+  @apply text-base border-l-4 border-gray-300 pl-4 pr-4 text-gray-600;
+}
+.typo ul {
+  @apply text-base pl-8 list-disc mb-2;
+}
+.typo ol {
+  @apply text-base pl-8 list-decimal mb-2;
+}
+.typo table {
+  @apply text-base border-gray-600;
+}
+.typo th {
+  @apply border py-1 px-3;
+}
+.typo td {
+  @apply border py-1 px-3;
+}
+.typo img,
+.typo iframe {
+  @apply mx-auto block;
+}
+.typo figcaption {
+  @apply font-semibold text-center text-gray-800 mt-2;
+}
+.details {
+  @apply p-2;
+}
+
+
 @tailwind components;
+
+.hero {
+  @apply p-2 text-center;
+}
+
+.divider {
+  display: table;
+  white-space: nowrap;
+  height: auto;
+  line-height: 1;
+  text-align: center;
+  margin: 1rem 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(0, 0, 0, 0.85);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.divider:before {
+  background-position: right 1em top 50%;
+}
+
+.divider:after {
+  background-position: left 1em top 50%;
+}
+
+.divider:after,
+.divider:before {
+  background-image: url(/img/divider.png);
+  content: '';
+  display: table-cell;
+  position: relative;
+  top: 50%;
+  width: 50%;
+  background-repeat: no-repeat;
+}
+
+.square {
+  width: 100%;
+  padding-top: 100%;
+}
+
+.aspect-ratio {
+  overflow: hidden;
+  /* Calculated from the aspect ratio of the content (in case of 16:9 it is 9/16= 0.5625) */
+  padding-top: 56.25%;
+  position: relative;
+  /* z-index: -1; */
+  z-index: 1;
+}
+
+.aspect-ratio iframe {
+  border: 0;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;
+}
+
+.menu .nuxt-link-exact-active {
+  @apply font-bold;
+}
+
 @tailwind utilities;
+
+.bg-light-pattern {
+  background-color: #dfdbe5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cg fill='%239C92AC' fill-opacity='0.19'%3E%3Cpolygon fill-rule='evenodd' points='8 4 12 6 8 8 6 12 4 8 0 6 4 4 6 0 8 4'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.bg-pina {
+  background: url('/img/pina_2.jpg') no-repeat fixed center;
+}
+
+.bg-dark-gradient {
+  background: linear-gradient(-38deg, #301e4e, #67568c);
+}
+
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.text-shadow-md {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.text-shadow-lg {
+  text-shadow: 0 15px 30px rgba(0, 0, 0, 0.11), 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.text-shadow-none {
+  text-shadow: none;
+}
+
+.min-w-40 {
+  min-width: 10rem;
+}
+
+.typo {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mx-input {
+  height: 40px !important;
+}
 
 @layer base {
   :root {
