@@ -1,1 +1,3 @@
-<template></template>
+<template>
+  <div>qr code</div>
+</template>
