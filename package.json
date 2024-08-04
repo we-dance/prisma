@@ -47,7 +47,6 @@
     "yaml": "^2.2.1"
   },
   "dependencies": {
-    "@formkit/vue": "^0.16.4",
     "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.5",
     "@pinia/nuxt": "^0.4.7",
@@ -63,15 +62,21 @@
     "firebase-scrypt": "^2.2.0",
     "lodash": "^4.17.21",
     "lucide-vue-next": "^0.383.0",
+    "next": "^14.2.5",
     "next-auth": "4.21.1",
     "posthog-js": "^1.154.2",
     "radix-vue": "^1.8.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "rollup": "^4.20.0",
     "schema-dts": "^1.1.2",
     "superjson": "^1.12.2",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "trpc-nuxt": "^0.7.0",
+    "unhead": "^1.9.16",
     "vee-validate": "^4.12.8",
+    "vue": "^3.4.35",
     "vue-sonner": "^1.1.2",
     "zod": "^3.23.8"
   }
