@@ -7,12 +7,13 @@ export default defineNuxtConfig({
     "@sidebase/nuxt-auth",
     "shadcn-nuxt",
     "@nuxt/image",
-    "@nuxt/icon"
+    "@nuxt/icon",
   ],
   auth: {
     provider: {
       type: "authjs",
     },
+    // origin: "http://localhost:3000",
   },
   build: {
     transpile: ["trpc-nuxt"],

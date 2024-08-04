@@ -85,43 +85,6 @@ html {
   @apply p-2 text-center;
 }
 
-.divider {
-  display: table;
-  white-space: nowrap;
-  height: auto;
-  line-height: 1;
-  text-align: center;
-  margin: 1rem 0;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: rgba(0, 0, 0, 0.85);
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.divider:before {
-  background-position: right 1em top 50%;
-}
-
-.divider:after {
-  background-position: left 1em top 50%;
-}
-
-.divider:after,
-.divider:before {
-  background-image: url(/img/divider.png);
-  content: '';
-  display: table-cell;
-  position: relative;
-  top: 50%;
-  width: 50%;
-  background-repeat: no-repeat;
-}
-
 .square {
   width: 100%;
   padding-top: 100%;
@@ -155,10 +118,6 @@ html {
 .bg-light-pattern {
   background-color: #dfdbe5;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cg fill='%239C92AC' fill-opacity='0.19'%3E%3Cpolygon fill-rule='evenodd' points='8 4 12 6 8 8 6 12 4 8 0 6 4 4 6 0 8 4'/%3E%3C/g%3E%3C/svg%3E");
-}
-
-.bg-pina {
-  background: url('/img/pina_2.jpg') no-repeat fixed center;
 }
 
 .bg-dark-gradient {
