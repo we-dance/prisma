@@ -9,37 +9,47 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxt/icon",
   ],
+
   auth: {
     provider: {
       type: "authjs",
     },
     // origin: "http://localhost:3000",
   },
+
   build: {
     transpile: ["trpc-nuxt"],
   },
+
   typescript: {
     shim: false,
   },
+
   imports: {
     dirs: ["./stores"],
   },
+
   shadcn: {
     prefix: "",
     componentDir: "./components/ui",
   },
+
   components: [
     {
       path: "~/components",
       pathPrefix: false,
     },
   ],
+
   runtimeConfig: {
     public: {
       googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     },
   },
+
   vite: {
     plugins: [svgLoader()],
   },
+
+  compatibilityDate: "2024-08-04",
 });

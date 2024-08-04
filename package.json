@@ -32,7 +32,7 @@
     "dotenv": "^16.0.3",
     "eslint": "^8.33.0",
     "fs": "^0.0.1-security",
-    "nuxt": "^3.11.2",
+    "nuxt": "^3.12.4",
     "path": "^0.12.7",
     "prisma": "^5.14.0",
     "shadcn-nuxt": "^0.10.4",
@@ -48,6 +48,7 @@
   "dependencies": {
     "@formkit/vue": "^0.16.4",
     "@headlessui/vue": "^1.7.22",
+    "@heroicons/vue": "^2.1.5",
     "@pinia/nuxt": "^0.4.7",
     "@prisma/client": "^5.14.0",
     "@trpc/client": "^10.40.0",
