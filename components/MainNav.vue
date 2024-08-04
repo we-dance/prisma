@@ -1,18 +1,10 @@
 <script setup lang="ts">
 import WeDanceLogo from "~/public/svg/logo-horizontal-dark.svg?component";
-import { StarIcon } from "@heroicons/vue/24/outline";
+const localePath = useLocalePath();
 
 const { data, status } = useAuth();
 const featureFindPartner = false;
 const currentCity = "/de/Munich";
-
-function localePath(path: string) {
-  return path;
-}
-
-function $t(key: string) {
-  return key;
-}
 
 function isAdmin(force = false) {
   return false;

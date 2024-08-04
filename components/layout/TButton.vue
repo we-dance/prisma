@@ -133,11 +133,7 @@ export default {
   setup() {
     const { uid, showAuthPopup, authTargetQuery } = useAppAuth();
 
-    function $t(key, params) {
-      return key;
-    }
-
-    return { $t, uid, showAuthPopup, authTargetQuery };
+    return { uid, showAuthPopup, authTargetQuery };
   },
 };
 </script>
