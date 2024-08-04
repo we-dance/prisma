@@ -50,6 +50,7 @@
     "@trpc/client": "^10.40.0",
     "@trpc/server": "^10.40.0",
     "@vee-validate/zod": "^4.12.8",
+    "@vue-hero-icons/outline": "^1.7.2",
     "@vueuse/core": "^10.10.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
