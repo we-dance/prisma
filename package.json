@@ -2,7 +2,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "NODE_OPTIONS=--no-experimental-fetch nuxt build",
+    "build": "prisma generate && NODE_OPTIONS=--no-experimental-fetch nuxt build",
     "reset": "prisma db push --force-reset && prisma generate",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
