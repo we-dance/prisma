@@ -8,7 +8,6 @@ import {
   ComboboxOption,
   TransitionRoot,
 } from "@headlessui/vue";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 import { loadGoogleMapsApi } from "~/lib/googleMapsApi";
 
 defineOptions({
@@ -62,9 +61,9 @@ watch(query, () => {
           <ComboboxButton
             class="absolute inset-y-0 right-0 flex items-center pr-2"
           >
-            <ChevronUpDownIcon
+            <Icon
+              name="heroicons-outline:chevron-down"
               class="h-5 w-5 text-gray-400"
-              aria-hidden="true"
             />
           </ComboboxButton>
         </div>
@@ -115,7 +114,7 @@ watch(query, () => {
                   class="absolute inset-y-0 left-0 flex items-center pl-3"
                   :class="{ 'text-white': active, 'text-teal-600': !active }"
                 >
-                  <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                  <Icon name="heroicons-outline:check" class="h-5 w-5" />
                 </span>
               </li>
             </ComboboxOption>
