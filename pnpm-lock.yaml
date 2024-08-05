@@ -30,7 +30,7 @@ specifiers:
   next-auth: 4.21.1
   nuxt: ^3.12.4
   path: ^0.12.7
-  posthog-js: ^1.154.2
+  posthog-js-lite: ^3.0.2
   prisma: ^5.14.0
   radix-vue: ^1.8.2
   react: ^18.3.1
@@ -70,7 +70,7 @@ dependencies:
   lucide-vue-next: 0.383.0_vue@3.4.35
   next: 13.5.6_nnrd3gsncyragczmpvfhocinkq
   next-auth: 4.21.1_h2ziv7mp53ozy3imzeub4vqvee
-  posthog-js: 1.154.2
+  posthog-js-lite: 3.0.2
   radix-vue: 1.9.2_vue@3.4.35
   react: 18.3.1
   react-dom: 18.3.1_react@18.3.1
@@ -5250,10 +5250,6 @@ packages:
     dependencies:
       reusify: 1.0.4
 
-  /fflate/0.4.8:
-    resolution: {integrity: sha512-FJqqoDBR00Mdj9ppamLa/Y7vxm+PRmNWA67N846RvsoYVMKB4q3y/de5PA7gUmRMYK/8CMz2GDZQmCRN1wBcWA==}
-    dev: false
-
   /file-entry-cache/6.0.1:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -7928,12 +7924,8 @@ packages:
       picocolors: 1.0.1
       source-map-js: 1.2.0
 
-  /posthog-js/1.154.2:
-    resolution: {integrity: sha512-EM8xn5V86fTg/pUhCyyMCRotI07tXDLQryc5TDQinT9kCRz8799G1n+Bq7drOEYdD/xbvcKfcfTWmlMrTZCZ6A==}
-    dependencies:
-      fflate: 0.4.8
-      preact: 10.23.1
-      web-vitals: 4.2.2
+  /posthog-js-lite/3.0.2:
+    resolution: {integrity: sha512-k4HDCyvlngVScQiIbxhOgl+vrCRW1uLIQuLsAKHEBheJTkh/qa4ikwxnXENrjOiN8ueRDSweiv4KHcFWGEoFGQ==}
     dev: false
 
   /preact-render-to-string/5.2.3_preact@10.11.3:
@@ -9970,10 +9962,6 @@ packages:
     dependencies:
       glob-to-regexp: 0.4.1
       graceful-fs: 4.2.11
-
-  /web-vitals/4.2.2:
-    resolution: {integrity: sha512-nYfoOqb4EmElljyXU2qdeE76KsvoHdftQKY4DzA9Aw8DervCg2bG634pHLrJ/d6+B4mE3nWTSJv8Mo7B2mbZkw==}
-    dev: false
 
   /webidl-conversions/3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
