@@ -34,11 +34,15 @@ const isMenuOpen = ref(false);
       <header
         class="md:hidden flex p-2 gap-2 justify-start items-center border-b"
       >
-        <button class="mt-2" @click="isMenuOpen = !isMenuOpen">
+        <button
+          class="mt-2"
+          title="Open Menu"
+          @click="isMenuOpen = !isMenuOpen"
+        >
           <Icon name="heroicons-outline:menu" class="w-6 h-6" />
         </button>
 
-        <router-link to="/">
+        <router-link title="Homepage" to="/">
           <WeDanceLogo />
         </router-link>
         <div class="flex-grow"></div>

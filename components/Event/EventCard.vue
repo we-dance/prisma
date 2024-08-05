@@ -86,7 +86,10 @@ const role = "";
         :key="event.cover"
         loading="lazy"
         class="w-20 rounded"
-        width="68px"
+        format="webp"
+        width="68"
+        height="68"
+        placeholder
         :src="event.cover"
         :alt="`${event.name} cover photo`"
         onerror="this.classList.add('hidden')"

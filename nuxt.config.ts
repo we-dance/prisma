@@ -18,6 +18,11 @@ export default defineNuxtConfig({
     // origin: "http://localhost:3000",
   },
 
+  sourcemap: {
+    server: true,
+    client: true,
+  },
+
   build: {
     transpile: ["trpc-nuxt"],
   },
