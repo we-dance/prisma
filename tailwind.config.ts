@@ -1,3 +1,4 @@
+const cssnano = require("cssnano");
 const animate = require("tailwindcss-animate");
 const typography = require("@tailwindcss/typography");
 
@@ -92,5 +93,5 @@ module.exports = {
       },
     },
   },
-  plugins: [animate, typography],
+  plugins: [animate, typography, cssnano],
 };

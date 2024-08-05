@@ -1,8 +1,8 @@
-import posthog from "posthog-js-lite";
+import PostHog from "posthog-js-lite";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const runtimeConfig = useRuntimeConfig();
-  const posthogClient = posthog.init(runtimeConfig.public.posthogPublicKey, {
+  const posthog = new PostHog(runtimeConfig.public.posthogPublicKey, {
     api_host: runtimeConfig.public.posthogHost,
     person_profiles: "identified_only",
     capture_pageview: false, // we add manual pageview capturing below
@@ -23,9 +23,9 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   return {
     provide: {
-      posthog: () => posthogClient,
+      posthog: () => posthog,
       track: (...params) => {
-        posthogClient.capture(...params);
+        posthog.capture(...params);
       },
     },
   };
