@@ -82,10 +82,11 @@ const role = "";
       </div>
     </div>
     <div>
-      <img
+      <NuxtImg
         :key="event.cover"
         loading="lazy"
         class="w-20 rounded"
+        width="68px"
         :src="event.cover"
         :alt="`${event.name} cover photo`"
         onerror="this.classList.add('hidden')"

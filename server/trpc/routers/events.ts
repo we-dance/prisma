@@ -73,7 +73,7 @@ export const eventsRouter = router({
       z.object({
         city: z.string(),
         country: z.string(),
-        dance: z.string().optional(),
+        style: z.string().optional(),
         distance: z.number().optional(),
         lat: z.number().optional(),
         lng: z.number().optional(),
@@ -87,7 +87,7 @@ export const eventsRouter = router({
 
       const {
         type,
-        dance,
+        style,
         city,
         country,
         lng: reqLng,
@@ -150,10 +150,10 @@ export const eventsRouter = router({
         where.type = type;
       }
 
-      if (dance) {
+      if (style) {
         where.styles = {
           some: {
-            hashtag: dance,
+            hashtag: style,
           },
         };
       }
