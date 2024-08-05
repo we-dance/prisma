@@ -1,6 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "./../../node_modules/.prisma/client";
 import { getDateOrNow, getDateOrNull } from "../utils/date";
-import lookup from "country-code-lookup";
+import * as lookup from "country-code-lookup";
 import { getLogger } from "../utils/logger";
 import { getNormalizedString, getSlug } from "../utils/slug";
 

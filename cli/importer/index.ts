@@ -10,7 +10,7 @@ import {
   addCitySubscribers,
 } from "./profile";
 import { addAccount } from "./account";
-import cliProgress from "cli-progress";
+import * as cliProgress from "cli-progress";
 import { getLogger } from "../utils/logger";
 
 export async function importAccounts(multibar: cliProgress.MultiBar) {

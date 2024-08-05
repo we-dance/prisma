@@ -77,5 +77,8 @@ export function getSlug(name: string, minLength = 2, maxLength = 30) {
   // remove leading period and dash
   result = result.replace(/^(\.|-)/g, "");
 
+  // remove multiple periods in a row
+  result = result.replace(/\-{2,}/g, "-");
+
   return result;
 }

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { format } from "date-fns";
-// import type { DanceEvent } from 'schema-dts'
 import { Prisma } from "@prisma/client";
 type EventDetails = Prisma.EventGetPayload<{
   include: {

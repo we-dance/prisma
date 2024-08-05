@@ -1,6 +1,6 @@
-import winston from "winston";
-import path from "path";
-import fs from "fs";
+import * as winston from "winston";
+import * as path from "path";
+import * as fs from "fs";
 
 const logDir = path.join(__dirname, "..", "..", "logs");
 if (!fs.existsSync(logDir)) {

@@ -8,7 +8,7 @@ import {
 } from "./importer";
 import { getUniqueUsername } from "./importer/profile";
 import { logger } from "./utils/logger";
-import cliProgress from "cli-progress";
+import * as cliProgress from "cli-progress";
 
 function getLogLevel(verbosity: number) {
   switch (verbosity) {
