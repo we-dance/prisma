@@ -101,6 +101,7 @@ const cover = computed(() => {
         height="68"
         fit="cover"
         placeholder
+        loading="lazy"
         :src="cover"
         :alt="`${event.name} cover photo`"
       />
