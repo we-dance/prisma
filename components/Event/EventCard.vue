@@ -98,6 +98,8 @@ const cover = computed(() => {
         format="webp"
         provider="cloudinary"
         width="68"
+        height="68"
+        fit="cover"
         placeholder
         :src="cover"
         :alt="`${event.name} cover photo`"
