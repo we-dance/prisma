@@ -9,7 +9,12 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxt/icon",
     "@nuxtjs/i18n",
+    "@nuxtjs/robots",
   ],
+
+  robots: {
+    disallow: ["/signin", "/admin"],
+  },
 
   auth: {
     provider: {
