@@ -31,6 +31,16 @@ const eventMonth = computed(() => format(startDate, "MMM"));
 const eventDayName = computed(() => format(startDate, "EEE"));
 const eventTime = computed(() => format(startDate, "HH:mm"));
 const role = "";
+
+const cover = computed(() => {
+  if (props.event.cover) {
+    return props.event.cover.replace(
+      "https://res.cloudinary.com/djumxevsm/image/upload",
+      ""
+    );
+  }
+  return "";
+});
 </script>
 
 <template>
@@ -83,17 +93,21 @@ const role = "";
     </div>
     <div>
       <NuxtImg
-        :key="event.cover"
-        loading="lazy"
+        v-if="cover"
         class="w-20 rounded"
         format="webp"
+        provider="cloudinary"
         width="68"
-        height="68"
         placeholder
-        :src="event.cover"
+        :src="cover"
         :alt="`${event.name} cover photo`"
-        onerror="this.classList.add('hidden')"
       />
     </div>
   </NuxtLink>
 </template>
+
+<style scoped>
+[data-error] {
+  @apply hidden;
+}
+</style>

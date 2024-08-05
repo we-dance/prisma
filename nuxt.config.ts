@@ -23,6 +23,12 @@ export default defineNuxtConfig({
     client: true,
   },
 
+  image: {
+    cloudinary: {
+      baseURL: "https://res.cloudinary.com/djumxevsm/image/upload/",
+    },
+  },
+
   build: {
     transpile: ["trpc-nuxt"],
   },
