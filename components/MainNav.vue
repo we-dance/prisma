@@ -19,6 +19,7 @@ function isAdmin(force = false) {
       allow-guests
       :to="localePath('/')"
       type="void"
+      title="Homepage"
       :track="{ event: 'main_menu', action: 'logo' }"
     >
       <WeDanceLogo />

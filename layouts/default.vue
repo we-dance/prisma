@@ -35,7 +35,7 @@ const isMenuOpen = ref(false);
         class="md:hidden flex p-2 gap-2 justify-start items-center border-b"
       >
         <button class="mt-2" @click="isMenuOpen = !isMenuOpen">
-          <Icon name="heroicons:menu" class="w-6 h-6" />
+          <Icon name="heroicons-outline:menu" class="w-6 h-6" />
         </button>
 
         <router-link to="/">
