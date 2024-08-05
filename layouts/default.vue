@@ -8,6 +8,9 @@ const head = useLocaleHead({
   identifierAttribute: "id",
   addSeoAttributes: true,
 });
+
+const runtimeConfig = useRuntimeConfig();
+const baseUrl = runtimeConfig.public.baseUrl;
 </script>
 
 <template>
@@ -18,7 +21,7 @@ const head = useLocaleHead({
           <Link
             :id="link.id"
             :rel="link.rel"
-            :href="link.href"
+            :href="`${baseUrl}${link.href}`"
             :hreflang="link.hreflang"
           />
         </template>
