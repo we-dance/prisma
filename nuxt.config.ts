@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@nuxtjs/i18n",
     "@nuxtjs/robots",
+    "nuxt-purgecss",
   ],
 
   robots: {
