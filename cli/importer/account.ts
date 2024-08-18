@@ -3,6 +3,22 @@ import { getDateOrNow, getDateOrNull } from "../utils/date";
 
 const prisma = new PrismaClient();
 
+export async function exportAccounts() {
+  const users = await prisma.user.findMany({
+    where: { isDeleted: false },
+    include: { profile: true },
+  });
+  let output = "id;name;email";
+
+  for (const user of users) {
+    output += `\n${user.id};${
+      user.name || user.profile?.name || user.profile?.username
+    };${user.email}`;
+  }
+
+  return output;
+}
+
 export async function addAccount(account: any, user: any, suspended: any) {
   const existingUser = await prisma.user.findFirst({
     where: { id: account.id },
