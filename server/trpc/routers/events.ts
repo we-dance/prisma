@@ -2,6 +2,58 @@ import { z } from "zod";
 import { publicProcedure, router } from "../trpc";
 import { prisma } from "../../prisma";
 
+function getWhere(
+  start: string | Date,
+  venues: any[],
+  type?: string,
+  style?: string
+) {
+  const where: any = {
+    startDate: {
+      gte: start,
+    },
+    venue: {
+      is: {
+        id: {
+          in: venues.map((venue) => venue.id),
+        },
+      },
+    },
+  };
+
+  if (type) {
+    where.type = type;
+  }
+
+  if (style) {
+    where.styles = {
+      some: {
+        hashtag: style,
+      },
+    };
+  }
+
+  return where;
+}
+
+async function getVenues(
+  lat: number,
+  lng: number,
+  distance: number
+): Promise<any[]> {
+  return await prisma.$queryRaw`
+    SELECT
+      ROUND(earth_distance(ll_to_earth(${lat}, ${lng}), ll_to_earth(lat, lng))::NUMERIC, 2) AS distance,
+      id,
+      name,
+      photo,
+      username
+    FROM "Profile"
+    WHERE ROUND(earth_distance(ll_to_earth(${lat}, ${lng}), ll_to_earth(lat, lng))::NUMERIC, 2) < ${distance}
+    AND type = 'Venue'
+    ORDER BY distance;`;
+}
+
 export const eventsRouter = router({
   get: publicProcedure
     .input(z.object({ shortId: z.string() }))
@@ -83,7 +135,6 @@ export const eventsRouter = router({
     )
     .query(async ({ input }) => {
       let lng, lat;
-      let venues;
 
       const {
         type,
@@ -115,50 +166,12 @@ export const eventsRouter = router({
         lat = Number(reqLat);
       }
 
-      if (lng) {
-        venues = await prisma.$queryRaw`
-    SELECT
-      ROUND(earth_distance(ll_to_earth(${lat}, ${lng}), ll_to_earth(lat, lng))::NUMERIC, 2) AS distance,
-      id,
-      name,
-      photo,
-      username
-    FROM "Profile"
-    WHERE ROUND(earth_distance(ll_to_earth(${lat}, ${lng}), ll_to_earth(lat, lng))::NUMERIC, 2) < ${distance}
-    AND type = 'Venue'
-    ORDER BY distance;`;
-      } else {
-        venues = await prisma.profile.findMany({
-          where: {
-            type: "Venue",
-          },
-        });
+      if (!lng || !lat) {
+        throw new Error("Missing city or coordinates");
       }
 
-      const where: any = {
-        startDate: {
-          gte: start,
-        },
-        venue: {
-          is: {
-            id: {
-              in: Array.isArray(venues) ? venues.map((venue) => venue.id) : [],
-            },
-          },
-        },
-      };
-
-      if (type) {
-        where.type = type;
-      }
-
-      if (style) {
-        where.styles = {
-          some: {
-            hashtag: style,
-          },
-        };
-      }
+      const venues = await getVenues(lat, lng, distance);
+      const where = getWhere(start, venues, type, style);
 
       const events = await prisma.event.findMany({
         where,

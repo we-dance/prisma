@@ -20,14 +20,17 @@ const { data } = await $client.events.list.useQuery({
 const view = "parties";
 
 useHead({
-  title: t(`explore.${view}.title`, { city, style }),
+  title: t(`explore.${view}.title`, {
+    city: data.value.cityProfile.name,
+    style,
+  }),
   titleTemplate: t("titleTemplate.calendar"),
   meta: [
     {
       hid: "description",
       name: "description",
       content: t(`explore.${view}.description`, {
-        city,
+        city: data.value.cityProfile.name,
         style,
         referenceStyle: style || "Salsa",
       }),
@@ -42,7 +45,7 @@ useHead({
       <h1 class="text-2xl font-bold">
         {{
           t(`explore.${view}.header`, {
-            city,
+            city: data.cityProfile.name,
             style,
           })
         }}
@@ -51,7 +54,7 @@ useHead({
       <div class="text-sm">
         {{
           t(`explore.${view}.subheader`, {
-            city,
+            city: data.cityProfile.name,
             style: style || "dance",
           })
         }}
