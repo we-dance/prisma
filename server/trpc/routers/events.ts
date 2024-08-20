@@ -4,6 +4,7 @@ import { prisma } from "../../prisma";
 
 function getWhere(
   start: string | Date,
+  anywhere = false,
   venues: any[],
   type?: string,
   style?: string
@@ -12,14 +13,17 @@ function getWhere(
     startDate: {
       gte: start,
     },
-    venue: {
+  };
+
+  if (!anywhere) {
+    where.venue = {
       is: {
         id: {
           in: venues.map((venue) => venue.id),
         },
       },
-    },
-  };
+    };
+  }
 
   if (type) {
     where.type = type;
@@ -171,7 +175,7 @@ export const eventsRouter = router({
       }
 
       const venues = await getVenues(lat, lng, distance);
-      const where = getWhere(start, venues, type, style);
+      const where = getWhere(start, false, venues, type, style);
 
       const events = await prisma.event.findMany({
         where,
@@ -192,6 +196,38 @@ export const eventsRouter = router({
         cityProfile,
         lng,
         venues,
+        events,
+      };
+    }),
+  listAll: publicProcedure
+    .input(
+      z.object({
+        style: z.string().optional(),
+        type: z.string().optional(),
+        start: z.string().optional(),
+      })
+    )
+    .query(async ({ input }) => {
+      const { type, style, start = new Date() } = input;
+
+      const where = getWhere(start, true, [], type, style);
+
+      const events = await prisma.event.findMany({
+        where,
+        include: {
+          venue: true,
+          organizer: true,
+          styles: true,
+        },
+        orderBy: [
+          {
+            startDate: "asc",
+          },
+        ],
+        take: 10,
+      });
+
+      return {
         events,
       };
     }),
