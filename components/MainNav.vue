@@ -4,7 +4,7 @@ const localePath = useLocalePath();
 
 const { data, status } = useAuth();
 const featureFindPartner = false;
-const currentCity = "/de/Munich";
+const currentCity = "/de/munich";
 
 function isAdmin(force = false) {
   return false;

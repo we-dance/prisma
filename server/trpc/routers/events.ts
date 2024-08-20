@@ -96,8 +96,10 @@ export const eventsRouter = router({
         start = new Date(),
       } = input;
 
+      let cityProfile;
+
       if (!reqLng) {
-        const cityProfile = await prisma.city.findFirst({
+        cityProfile = await prisma.city.findFirst({
           where: {
             slug: city,
             countryCode: country,
@@ -140,7 +142,7 @@ export const eventsRouter = router({
         venue: {
           is: {
             id: {
-              in: venues.map((venue) => venue.id),
+              in: Array.isArray(venues) ? venues.map((venue) => venue.id) : [],
             },
           },
         },
@@ -158,7 +160,7 @@ export const eventsRouter = router({
         };
       }
 
-      return await prisma.event.findMany({
+      const events = await prisma.event.findMany({
         where,
         include: {
           venue: true,
@@ -172,5 +174,12 @@ export const eventsRouter = router({
         ],
         take: 10,
       });
+
+      return {
+        cityProfile,
+        lng,
+        venues,
+        events,
+      };
     }),
 });

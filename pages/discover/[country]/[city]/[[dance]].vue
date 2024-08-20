@@ -11,7 +11,7 @@ const schema = z.object({
 
 const { country, city, style } = schema.parse(useRoute().params);
 
-const { data, error } = await $client.events.list.useQuery({
+const { data } = await $client.events.list.useQuery({
   country,
   city,
   style,
@@ -57,6 +57,6 @@ useHead({
         }}
       </div>
     </div>
-    <EventList :items="data" />
+    <EventList :items="data.events" />
   </div>
 </template>
