@@ -7,13 +7,13 @@ Based on [sidebase merino](https://sidebase.io/)
 1. Install dependencies
 
     ```
-    bun install
+    pnpm install
     ```
 
 2. Reset database
 
     ```
-    bunx prisma db push --force-reset
+    pnpm exec prisma db push --force-reset
     ```
 
 3. Install db extensions
@@ -27,19 +27,19 @@ Based on [sidebase merino](https://sidebase.io/)
 4. Generate the Prisma client
 
     ```
-    bunx prisma generate
+    pnpm exec prisma generate
     ```
 
 5. Import data
     ```
-    bun cli import
+    cd cli && bun i && bun cli import
     ```
 
 ## Usage
 
 1. Start development server
     ```
-    bun dev
+    pnpm dev
     ```
 
 ### Troubleshooting
