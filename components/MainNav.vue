@@ -46,8 +46,8 @@ function isAdmin(force = false) {
       allow-guests
       :to="
         currentCity
-          ? localePath(`/discover${currentCity}`)
-          : localePath('/discover')
+          ? localePath(`/explore${currentCity}`)
+          : localePath('/explore')
       "
       :label="$t('nav.local')"
       icon="heroicons:map-pin"
