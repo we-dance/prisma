@@ -8,12 +8,12 @@ export async function exportAccounts() {
     where: { isDeleted: false },
     include: { profile: true },
   });
-  let output = "id;name;email";
+  let output = "id, name, email";
 
   for (const user of users) {
-    output += `\n${user.id};${
+    output += `\n${user.id}, ${
       user.name || user.profile?.name || user.profile?.username
-    };${user.email}`;
+    }, ${user.email}`;
   }
 
   return output;
