@@ -60,7 +60,7 @@ useHead({
       </div>
     </div>
     <div v-if="data.events" class="w-full">
-      <EventListByVenue :events="data.events" />
+      <EventListByDate :events="data.events" />
     </div>
   </div>
 </template>
