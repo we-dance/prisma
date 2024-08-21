@@ -60,6 +60,8 @@ useHead({
         }}
       </div>
     </div>
-    <EventList :events="data.events" />
+    <div class="w-full">
+      <ProfileList :profiles="data.venues" />
+    </div>
   </div>
 </template>

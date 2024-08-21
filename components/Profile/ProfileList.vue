@@ -14,7 +14,7 @@ export default {
     v-for="profile in profiles"
     :key="profile.id"
     :to="localePath(`/${profile.username}`)"
-    class="border-b p-4 flex gap-2 items-center group hover:bg-gray-200"
+    class="border-b p-4 flex gap-2 items-center group whitespace-nowrap w-full"
     @click.native="
       $track('search_profile', {
         name: profile.name,
@@ -41,15 +41,17 @@ export default {
         <Icon name="heroicons:user-circle" class="text-gray-400" size="30px" />
       </div>
     </div>
-    <div class="flex-grow">
+    <div class="w-full overflow-hidden">
       <div class="block text-xs font-bold leading-tight">
         {{ profile.name }}
       </div>
-      <div class="block text-xs text-gray-800 leading-tight">
+      <div
+        class="block text-xs text-gray-800 leading-tight max-w-48 overflow-hidden text-ellipsis"
+      >
         @{{ profile.username }}
       </div>
       <div class="block text-xs text-gray-500 leading-tight">
-        {{ profile.followersCount }} followers
+        {{ profile.followersCount || 0 }} followers
       </div>
     </div>
   </NuxtLink>

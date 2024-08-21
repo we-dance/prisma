@@ -14,7 +14,7 @@ export default {
     v-for="city in cities"
     :key="city.id"
     :to="localePath(`/${city.slug}`)"
-    class="border-b p-4 flex gap-2 items-center group hover:bg-gray-200"
+    class="border-b p-4 flex gap-2 items-center grou"
     @click.native="$emit('click', city)"
   >
     <div class="w-12 flex-shrink-0">

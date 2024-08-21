@@ -28,7 +28,7 @@ const props = withDefaults(
 const startDate = new Date(props.event.startDate);
 const eventDay = computed(() => format(startDate, "d"));
 const eventMonth = computed(() => format(startDate, "MMM"));
-const eventDayName = computed(() => format(startDate, "EEE"));
+const dayOfWeek = computed(() => format(startDate, "EEE"));
 const eventTime = computed(() => format(startDate, "HH:mm"));
 const role = "";
 
@@ -52,51 +52,64 @@ const cover = computed(() => {
   <NuxtLink
     :to="`/e/${event.slug}-${event.shortId}`"
     :target="isEmbed ? '_blank' : '_self'"
-    class="flex border-b p-4 leading-none gap-2"
+    class="flex border-b p-4 leading-none gap-2 whitespace-nowrap"
   >
-    <div class="text-center">
-      <div v-if="side === 'date'" class="font-bold leading-none">
-        <div class="text-primary">
-          {{ eventDay }}
+    <div class="flex-shrink-0">
+      <div class="text-center text-xs bg-gray-100 p-2 rounded">
+        <div v-if="side === 'date'" class="font-bold leading-none">
+          <div class="text-primary">
+            {{ eventDay }}
+          </div>
+          <div class="text-xs">
+            {{ eventMonth }}
+          </div>
         </div>
-        <div class="text-sm">
-          {{ eventMonth }}
-        </div>
-      </div>
-      <div v-if="side === 'time'" class="font-bold leading-none">
-        <div class="text-primary">
-          {{ eventTime }}
+        <div v-if="side === 'time'" class="font-bold leading-none">
+          <div class="text-primary">
+            {{ eventTime }}
+          </div>
         </div>
       </div>
     </div>
-    <div class="w-full">
-      <div class="font-bold leading-none hover:underline hover:text-primary">
+    <div class="flex-grow overflow-hidden">
+      <div
+        class="font-bold text-xs hover:underline hover:text-primary overflow-hidden text-ellipsis"
+      >
         {{ event.name }}
       </div>
       <div>
-        <div class="text-sm pt-1 leading-none">
-          <template v-if="side === 'date' && eventTime">
-            {{ eventDayName }} {{ eventTime }}
-          </template>
-          <template v-if="showOrganizer && event.organizer">
-            {{ event.organizer.name }}
-          </template>
-          <template v-if="event.venue">
-            {{ event.venue.name }}
-          </template>
+        <div class="text-xs text-gray-600">
+          <div v-if="side === 'date' && eventTime" class="flex items-center">
+            <Icon name="heroicons-outline:clock" class="h-3 w-3 mr-1" />
+            <span class="truncate">{{ dayOfWeek }}, {{ eventTime }}</span>
+          </div>
+          <div class="flex items-center">
+            <Icon name="heroicons:map-pin" class="h-3 w-3 mr-1" />
+            <span class="truncate">{{ event.venue.name }}</span>
+          </div>
+          <div v-if="event.price" class="flex items-center">
+            <Icon name="heroicons:ticket" class="h-3 w-3 mr-1" />
+            <span class="truncate">{{ event.price }}</span>
+          </div>
         </div>
       </div>
-      <div class="text-xs text-gray-700 pt-1">
-        <span class="text-primary">{{ event.type }}</span>
-        <template v-if="event.price"> · {{ event.price }} </template>
-        <template v-if="event.styles">
-          <span v-for="style in event.styles" :key="style.id"
-            >· {{ style.name }}</span
-          >
-        </template>
+      <div class="mt-2 flex flex-wrap gap-1">
+        <span
+          class="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded-full"
+        >
+          {{ event.type }}
+        </span>
+
+        <span
+          v-for="style in event.styles"
+          :key="style.id"
+          class="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded-full"
+        >
+          {{ style.name }}
+        </span>
       </div>
     </div>
-    <div>
+    <div class="flex-shrink-0">
       <NuxtImg
         v-if="cover"
         class="w-20 rounded"
