@@ -47,11 +47,6 @@ export const profilesRouter = router({
           username,
         },
         include: {
-          _count: {
-            select: {
-              subscribers: true,
-            },
-          },
           eventsCreated: {
             take: 5,
             orderBy: [
