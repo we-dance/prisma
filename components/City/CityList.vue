@@ -13,7 +13,7 @@ export default {
   <NuxtLink
     v-for="city in cities"
     :key="city.id"
-    :to="localePath(`/${city.slug}`)"
+    :to="localePath(`/explore/${city.countryCode}/${city.slug}`)"
     class="border-b p-4 flex gap-2 items-center grou"
     @click.native="$emit('click', city)"
   >
