@@ -22,31 +22,27 @@ const remove = () => {};
 const softUpdate = () => {};
 const profileFields: any = [];
 
-const view = computed(() => useRoute().query.view);
+const view = computed(() => useRoute().query.view || "about");
 
 const tabs = computed(() => [
   {
     name: "About",
     to: `/${profile.value.username}#tabs`,
-    current: !view.value,
     value: "about",
   },
   {
     name: "Events",
     to: `/${profile.value.username}?view=events#tabs`,
-    current: view.value === "events",
     value: "events",
   },
   {
     name: "Stories",
     to: `/${profile.value.username}?view=stories#tabs`,
-    current: view.value === "stories",
     value: "stories",
   },
   {
     name: "Reviews",
     to: `/${profile.value.username}?view=reviews#tabs`,
-    current: view.value === "reviews",
     hidden: profile.value.type === "Dancer",
     value: "reviews",
   },
@@ -162,6 +158,6 @@ const tabs = computed(() => [
       <TContactsGrid :profile="profile" class="my-4 justify-center" />
     </div>
 
-    <TwTabs id="tabs" track="profile" :tabs="tabs" />
+    <TabsLinks id="tabs" track="profile" :tabs="tabs" :value="view" />
   </div>
 </template>
