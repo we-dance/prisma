@@ -12,9 +12,8 @@ const schema = z.object({
 const { country, city, style } = schema.parse(useRoute().params);
 
 const { data } = await $client.events.list.useQuery({
-  country,
   city,
-  style,
+  country,
 });
 
 const view = "parties";
@@ -60,8 +59,8 @@ useHead({
         }}
       </div>
     </div>
-    <div class="w-full">
-      <ProfileList :profiles="data.venues" />
+    <div v-if="data.events" class="w-full">
+      <EventListByVenue :events="data.events" />
     </div>
   </div>
 </template>

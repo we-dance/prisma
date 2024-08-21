@@ -14,7 +14,7 @@ export default {
     v-for="profile in profiles"
     :key="profile.id"
     :to="localePath(`/${profile.username}`)"
-    class="border-b p-4 flex gap-2 items-center group whitespace-nowrap w-full"
+    class="border-b p-4 flex gap-2 items-start group whitespace-nowrap w-full"
     @click.native="
       $track('search_profile', {
         name: profile.name,
@@ -53,6 +53,7 @@ export default {
       <div class="block text-xs text-gray-500 leading-tight">
         {{ profile.followersCount || 0 }} followers
       </div>
+      <EventList v-if="profile.eventsHosted" :events="profile.eventsHosted" />
     </div>
   </NuxtLink>
 </template>

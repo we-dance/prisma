@@ -25,7 +25,9 @@ const props = withDefaults(
   }
 );
 
+const currentYear = format(new Date(), "yyyy");
 const startDate = new Date(props.event.startDate);
+const eventYear = computed(() => format(startDate, "yyyy"));
 const eventDay = computed(() => format(startDate, "d"));
 const eventMonth = computed(() => format(startDate, "MMM"));
 const dayOfWeek = computed(() => format(startDate, "EEE"));
@@ -54,15 +56,19 @@ const cover = computed(() => {
     :target="isEmbed ? '_blank' : '_self'"
     class="flex border-b p-4 leading-none gap-2 whitespace-nowrap"
   >
-    <div class="flex-shrink-0">
-      <div class="text-center text-xs bg-gray-100 p-2 rounded">
-        <div v-if="side === 'date'" class="font-bold leading-none">
-          <div class="text-primary">
-            {{ eventDay }}
-          </div>
-          <div class="text-xs">
-            {{ eventMonth }}
-          </div>
+    <div class="flex flex-shrink-0 items-center">
+      <div class="w-14 text-center">
+        <div v-if="side === 'date'" class="text-xl font-bold leading-none">
+          {{ eventDay }}
+        </div>
+        <div v-if="side === 'date'" class="text-xs uppercase">
+          {{ eventMonth }}
+        </div>
+        <div
+          v-if="side === 'date' && currentYear !== eventYear"
+          class="text-xs text-muted-foreground"
+        >
+          {{ eventYear }}
         </div>
         <div v-if="side === 'time'" class="font-bold leading-none">
           <div class="text-primary">

@@ -195,7 +195,6 @@ export const eventsRouter = router({
       return {
         cityProfile,
         lng,
-        venues,
         events,
       };
     }),

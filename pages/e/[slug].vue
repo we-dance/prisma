@@ -6,7 +6,11 @@ const { data, error } = await $client.events.get.useQuery({ shortId });
 </script>
 
 <template>
-  <EventView :event="data" v-if="data" />
+  <div v-if="data">
+    <EventView :event="data" />
+    <pre>{{ data }}</pre>
+  </div>
+
   <div v-else>
     {{ error }}
   </div>

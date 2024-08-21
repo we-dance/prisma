@@ -63,4 +63,58 @@ export const profilesRouter = router({
         },
       });
     }),
+  list: publicProcedure
+    .input(z.object({ city: z.string(), country: z.string() }))
+    .query(async ({ input }) => {
+      const { city, country } = input;
+
+      const cityProfile = await prisma.city.findFirst({
+        where: {
+          slug: city,
+          countryCode: country,
+        },
+      });
+
+      const venues = await prisma.profile.findMany({
+        where: {
+          // id: {
+          //   equals: "ChIJW8LuYO51nkcRZqoW2f9yn8c",
+          // },
+          // city: {
+          //   slug: city,
+          // },
+        },
+        include: {
+          eventsHosted: {
+            take: 1,
+            include: {
+              venue: true,
+              organizer: true,
+              styles: true,
+            },
+            where: {
+              startDate: {
+                gte: new Date(),
+              },
+            },
+            orderBy: [
+              {
+                startDate: "asc",
+              },
+            ],
+          },
+        },
+        orderBy: {
+          eventsHosted: {
+            _count: "desc",
+          },
+        },
+        take: 5,
+      });
+
+      return {
+        cityProfile,
+        venues,
+      };
+    }),
 });
