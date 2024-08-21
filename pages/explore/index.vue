@@ -1,18 +1,19 @@
 <script setup>
 const query = ref("");
-const results = ref([]);
-
+const cities = ref([]);
+const countries = ref([]);
 const { $client } = useNuxtApp();
 
 const search = async () => {
   const { data } = await $client.cities.search.useQuery({
-    query: query.value,
+    countryCode: useRoute().query.country,
   });
 
-  results.value = data.value;
+  countries.value = data.value.countries;
+  cities.value = data.value.cities;
 };
 
-onMounted(() => {
+watchEffect(() => {
   search();
 });
 </script>
@@ -21,13 +22,22 @@ onMounted(() => {
   <div class="w-full">
     <Input v-model="query" placeholder="Search city" @input="search" />
 
-    <div v-for="city in results" :key="city.slug" class="border-b flex">
+    <div v-for="city in cities" :key="city.slug" class="border-b flex">
       <NuxtLink
         :to="`/explore/${city.countryCode}/${city.slug}`"
         class="flex-grow text-lg p-4 cursor-pointer hover:bg-red-100"
         @click="$track('explore_result', { label: city.label, query })"
       >
         {{ city.name }}, {{ city.country.name }}
+      </NuxtLink>
+    </div>
+    <div v-for="country in countries" :key="country.slug" class="border-b flex">
+      <NuxtLink
+        :to="`/explore?country=${country.code}`"
+        class="flex-grow text-lg p-4 cursor-pointer hover:bg-red-100"
+        @click="$track('explore_result', { label: city.label, query })"
+      >
+        {{ country.name }}
       </NuxtLink>
     </div>
   </div>

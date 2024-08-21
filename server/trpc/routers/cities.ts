@@ -4,28 +4,37 @@ import { prisma } from "../../prisma";
 
 export const citiesRouter = router({
   search: publicProcedure
-    .input(z.object({ query: z.string().optional() }))
+    .input(z.object({ countryCode: z.string().optional() }))
     .query(async ({ input }) => {
-      const { query } = input;
+      const { countryCode } = input;
 
-      return await prisma.city.findMany({
+      if (!countryCode) {
+        const countries = await prisma.country.findMany();
+
+        return {
+          countries,
+          cities: [],
+        };
+      }
+
+      const cities = await prisma.city.findMany({
         include: {
           country: true,
         },
         where: {
-          OR: [
-            {
-              name: {
-                contains: query,
-                mode: "insensitive",
-              },
-            },
-          ],
+          countryCode: {
+            equals: countryCode,
+          },
         },
         orderBy: {
           subscribersCount: "desc",
         },
         take: 5,
       });
+
+      return {
+        countries: [],
+        cities,
+      };
     }),
 });
