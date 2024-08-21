@@ -56,19 +56,12 @@ export const citiesRouter = router({
       const cities = await prisma.city.findMany({
         include: {
           country: true,
-          _count: {
-            select: {
-              profiles: true,
-            },
-          },
         },
 
         where,
 
         orderBy: {
-          profiles: {
-            _count: "desc",
-          },
+          membersCount: "desc",
         },
         take: 5,
       });

@@ -92,6 +92,7 @@ model City {
   slug             String @unique
   lat              Float
   lng              Float
+  membersCount     Int    @default(0)
   subscribersCount Int    @default(0)
   viewsCount       Int    @default(0)
 

@@ -170,7 +170,7 @@ export const eventsRouter = router({
         lat = Number(reqLat);
       }
 
-      if (!lng || !lat) {
+      if (!lng || !lat || !cityProfile) {
         throw new Error("Missing city or coordinates");
       }
 

@@ -9,7 +9,7 @@ import {
 import { getUniqueUsername } from "./importer/profile";
 import { logger } from "./utils/logger";
 import * as cliProgress from "cli-progress";
-import { exportAccounts } from "./importer/account";
+import { exportAccounts, reindex } from "./importer/account";
 
 function getLogLevel(verbosity: number) {
   switch (verbosity) {
@@ -42,6 +42,11 @@ program.command("username <name>").action(async (name) => {
 
 program.command("export").action(async (name) => {
   const result = await exportAccounts();
+  console.log(result);
+});
+
+program.command("reindex").action(async (name) => {
+  const result = await reindex();
   console.log(result);
 });
 

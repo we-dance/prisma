@@ -32,7 +32,7 @@ Based on [sidebase merino](https://sidebase.io/)
 
 5. Import data
     ```
-    cd cli && bun i && bun cli import
+    cd cli && bun i && bun cli import --all
     ```
 
 ## Usage

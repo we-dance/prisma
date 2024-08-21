@@ -47,7 +47,7 @@ export default {
         {{ city.region }}, {{ city.country.name }}
       </div>
       <div class="block text-xs text-gray-500 leading-tight">
-        {{ city._count.profiles }} members •
+        {{ city.membersCount }} members •
         {{ city.subscribersCount }} subscribers
       </div>
     </div>

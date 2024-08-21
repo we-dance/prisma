@@ -1,7 +1,26 @@
-import { PrismaClient } from "./../../node_modules/.prisma/client";
+import { PrismaClient } from "./../../node_modules/.pnpm/@prisma+client@5.17.0_prisma@5.17.0/node_modules/@prisma/client";
 import { getDateOrNow, getDateOrNull } from "../utils/date";
 
 const prisma = new PrismaClient();
+
+export async function reindex() {
+  const cities = await prisma.city.findMany({
+    include: {
+      profiles: true,
+    },
+  });
+
+  for (const city of cities) {
+    await prisma.city.update({
+      where: { id: city.id },
+      data: {
+        membersCount: city.profiles.length,
+      },
+    });
+  }
+
+  return `Reindexed ${cities.length} cities`;
+}
 
 export async function exportAccounts() {
   const users = await prisma.user.findMany({

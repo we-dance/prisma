@@ -11,10 +11,17 @@ const schema = z.object({
 
 const { country, city, style } = schema.parse(useRoute().params);
 
-const { data } = await $client.events.list.useQuery({
+const { data, error } = await $client.events.list.useQuery({
   city,
   country,
 });
+
+if (!data.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: error.value.message,
+  });
+}
 
 const view = "parties";
 
