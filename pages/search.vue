@@ -2,73 +2,88 @@
 const { $client } = useNuxtApp();
 
 const query = ref("");
-const results = ref([]);
+const profiles = ref([]);
+const cities = ref([]);
+const events = ref([]);
+
+const tab = computed(() => useRoute().query.type || "profiles");
+const tabs = computed(() => [
+  {
+    name: "Profiles",
+    value: "profiles",
+    to: "/search",
+  },
+  {
+    name: "Cities",
+    value: "cities",
+    to: "/search?type=cities",
+  },
+  {
+    name: "Events",
+    value: "events",
+    to: "/search?type=events",
+  },
+]);
 
 const search = async () => {
-  const { data } = await $client.profiles.search.useQuery({
-    query: query.value,
-  });
+  if (tab.value === "profiles") {
+    const data = await $client.profiles.search.query({
+      query: query.value,
+    });
 
-  results.value = data.value;
+    profiles.value = data;
+  }
+  if (tab.value === "cities") {
+    const data = await $client.cities.search.query({
+      query: query.value,
+    });
+
+    cities.value = data.cities;
+  }
+  if (tab.value === "events") {
+    const data = await $client.events.search.query({
+      query: query.value,
+    });
+
+    events.value = data;
+  }
 };
 
-onMounted(() => {
+watchEffect(() => {
+  search();
+});
+
+watch(tab, () => {
   search();
 });
 </script>
 
 <template>
   <div class="w-full">
-    <Input
-      v-model="query"
-      auto-focus
-      placeholder="Search profiles and events"
-      @input="search"
-    />
-
-    <div class="text-xs p-4 border-b">
-      Searching a city?
-      <NuxtLink
-        class="underline hover:no-underline font-bold"
-        :to="`/explore?q=${query}`"
-        @click.native="$track('search_city', { label: query })"
-        >Choose City</NuxtLink
+    <div class="relative px-4 py-2">
+      <Input
+        id="search"
+        type="search"
+        v-model="query"
+        placeholder="Search"
+        class="pl-10 rounded-full"
+        @input="search"
+      />
+      <span
+        class="absolute start-0 inset-y-0 flex items-center justify-center px-2 pl-8"
       >
+        <Icon
+          name="heroicons:magnifying-glass"
+          size="20px"
+          class="text-gray-500"
+        />
+      </span>
     </div>
 
-    <NuxtLink
-      v-for="item in results"
-      :key="item.id"
-      :to="
-        $route.query.debug || item.username.includes('/')
-          ? localePath(`/id@${item.id}`)
-          : localePath(`/${item.username}`)
-      "
-      class="border-b p-4 flex gap-2 items-center hover:bg-blue-200"
-      @click.native="
-        $track('search_profile', {
-          name: item.name,
-          username: item.username,
-          query,
-        })
-      "
-    >
-      <div class="w-12 flex-shrink-0">
-        <NuxtImg
-          width="68"
-          height="68"
-          fit="fill"
-          :placeholder="[68, 68]"
-          loading="lazy"
-          :src="item.photo"
-        />
-      </div>
-      <div class="flex-grow">
-        <div class="block leading-tight">{{ item.name }}</div>
-        <div class="block text-xs leading-tight">
-          {{ item.type }} • @{{ item.username }}
-        </div>
-      </div>
-    </NuxtLink>
+    <TabsLinks :tabs="tabs" :value="tab" />
+
+    <ProfileList v-if="tab === 'profiles'" :profiles="profiles" />
+    <CityList v-if="tab === 'cities'" :cities="cities" />
+    <EventList v-if="tab === 'events'" :events="events" />
   </div>
 </template>

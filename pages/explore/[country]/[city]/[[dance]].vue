@@ -60,6 +60,6 @@ useHead({
         }}
       </div>
     </div>
-    <EventList :items="data.events" />
+    <EventList :events="data.events" />
   </div>
 </template>

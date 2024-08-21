@@ -231,4 +231,34 @@ export const eventsRouter = router({
         events,
       };
     }),
+  search: publicProcedure
+    .input(z.object({ query: z.string().optional() }))
+    .query(async ({ input }) => {
+      const { query } = input;
+
+      return await prisma.event.findMany({
+        include: {
+          venue: true,
+          organizer: true,
+          styles: true,
+        },
+        where: {
+          OR: [
+            {
+              name: {
+                contains: query || "",
+                mode: "insensitive",
+              },
+            },
+            {
+              description: {
+                contains: query || "",
+                mode: "insensitive",
+              },
+            },
+          ],
+        },
+        take: 5,
+      });
+    }),
 });

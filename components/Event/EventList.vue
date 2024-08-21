@@ -1,27 +1,27 @@
 <script setup>
-import { getDate, getDay, getYmd } from '~/utils'
+import { getDate, getDay, getYmd } from "~/utils";
 
 const props = defineProps({
-  items: Array
-})
+  events: Array,
+});
 
-const items = computed(() => props.items)
+const items = computed(() => props.events);
 
 const itemsByDate = computed(() => {
-  const result = {}
+  const result = {};
 
   items.value.forEach((item) => {
-    const date = getYmd(item.startDate)
-    result[date] = result[date] || []
-    result[date].push(item)
-  })
+    const date = getYmd(item.startDate);
+    result[date] = result[date] || [];
+    result[date].push(item);
+  });
 
-  return result
-})
+  return result;
+});
 
 const $i18n = {
-  locale: 'en'
-}
+  locale: "en",
+};
 </script>
 
 <template>
@@ -32,11 +32,7 @@ const $i18n = {
         {{ getDate(date, $i18n.locale) }}
       </h2>
       <div v-for="item in items" :key="item.id">
-        <EventCard
-          :key="item.id"
-          :event="item"
-          side="time"
-        />
+        <EventCard :key="item.id" :event="item" side="time" />
       </div>
     </div>
   </div>

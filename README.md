@@ -21,7 +21,7 @@ Based on [sidebase merino](https://sidebase.io/)
     ```
     PGPASSWORD=password psql -U user -d db -h 127.0.0.1
     CREATE EXTENSION cube CASCADE;
-    CREATE EXTENSION earthdistance CASCADE;;
+    CREATE EXTENSION earthdistance CASCADE;
     ```
 
 4. Generate the Prisma client

@@ -211,7 +211,7 @@ function isAdmin(force = false) {
   </nav>
 </template>
 
-<style>
+<style scoped>
 nav .router-link-exact-active {
   @apply text-accent border-accent;
 }
