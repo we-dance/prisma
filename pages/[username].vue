@@ -1,6 +1,12 @@
 <script setup lang="ts">
-const { username } = useRoute().params;
+import { z } from "zod";
 const { $client } = useNuxtApp();
+
+const schema = z.object({
+  username: z.string(),
+});
+
+const { username } = schema.parse(useRoute().params);
 
 const { data: profile, error } = await $client.profiles.get.useQuery({
   username,

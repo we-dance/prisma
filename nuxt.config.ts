@@ -2,6 +2,9 @@ import svgLoader from "vite-svg-loader";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  // debug: true,
+  // ssr: false,
+
   modules: [
     "@nuxtjs/tailwindcss",
     "@sidebase/nuxt-auth",
@@ -66,7 +69,7 @@ export default defineNuxtConfig({
       posthogPublicKey: "phc_N7rtjDNLzyAGTOkhwhPBrEPybpxBwLlMpfPI9j1xZWB",
       posthogHost: "https://eu.i.posthog.com",
       posthogDisabled: true,
-      posthogDebug: false
+      posthogDebug: false,
     },
   },
 
