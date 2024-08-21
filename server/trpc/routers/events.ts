@@ -243,20 +243,16 @@ export const eventsRouter = router({
           styles: true,
         },
         where: {
-          OR: [
-            {
-              name: {
-                contains: query || "",
-                mode: "insensitive",
-              },
-            },
-            {
-              description: {
-                contains: query || "",
-                mode: "insensitive",
-              },
-            },
-          ],
+          startDate: {
+            gte: new Date(),
+          },
+        },
+        orderBy: {
+          _relevance: {
+            fields: ["name", "description"],
+            search: query || "",
+            sort: "desc",
+          },
         },
         take: 5,
       });
