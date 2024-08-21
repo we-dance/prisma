@@ -246,13 +246,18 @@ export const eventsRouter = router({
             gte: new Date(),
           },
         },
-        orderBy: {
-          _relevance: {
-            fields: ["name", "description"],
-            search: query || "",
-            sort: "desc",
+        orderBy: [
+          {
+            _relevance: {
+              fields: ["name", "description"],
+              search: query || "",
+              sort: "desc",
+            },
           },
-        },
+          {
+            startDate: "asc",
+          },
+        ],
         take: 5,
       });
     }),

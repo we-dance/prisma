@@ -54,9 +54,9 @@ const cover = computed(() => {
   <NuxtLink
     :to="`/e/${event.slug}-${event.shortId}`"
     :target="isEmbed ? '_blank' : '_self'"
-    class="flex border-b p-4 leading-none gap-2 whitespace-nowrap"
+    class="grid grid-cols-[auto,1fr,auto] border-b p-4 gap-2 overflow-hidden whitespace-nowrap"
   >
-    <div class="flex flex-shrink-0 items-center">
+    <div class="flex items-center">
       <div class="w-14 text-center">
         <div v-if="side === 'date'" class="text-xl font-bold leading-none">
           {{ eventDay }}
@@ -77,13 +77,13 @@ const cover = computed(() => {
         </div>
       </div>
     </div>
-    <div class="flex-grow overflow-hidden">
+    <div class="overflow-hidden">
       <div
         class="font-bold text-xs hover:underline hover:text-primary overflow-hidden text-ellipsis"
       >
         {{ event.name }}
       </div>
-      <div>
+      <div class="overflow-hidden">
         <div class="text-xs text-gray-600">
           <div v-if="side === 'date' && eventTime" class="flex items-center">
             <Icon name="heroicons-outline:clock" class="h-3 w-3 mr-1" />
@@ -115,7 +115,7 @@ const cover = computed(() => {
         </span>
       </div>
     </div>
-    <div class="flex-shrink-0">
+    <div>
       <NuxtImg
         v-if="cover"
         class="w-20 rounded"
