@@ -25,9 +25,9 @@ const $i18n = {
 </script>
 
 <template>
-  <div>
+  <div class="border-t">
     <div v-for="(items, date) in itemsByDate" :key="date">
-      <h2 class="font-bold p-4 border-b">
+      <h2 class="font-bold p-4 border-b bg-gray-100">
         <span class="text-primary">{{ getDay(date, $i18n.locale) }}</span> ·
         {{ getDate(date, $i18n.locale) }}
       </h2>
