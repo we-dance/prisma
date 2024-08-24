@@ -178,6 +178,10 @@ export const eventsRouter = router({
       const where = getWhere(start, false, venues, type, style);
 
       const events = await prisma.event.findMany({
+        cacheStrategy: {
+          ttl: 60 * 5,
+          swr: 60,
+        },
         where,
         include: {
           venue: true,
@@ -211,6 +215,10 @@ export const eventsRouter = router({
       const where = getWhere(start, true, [], type, style);
 
       const events = await prisma.event.findMany({
+        cacheStrategy: {
+          ttl: 60 * 5,
+          swr: 60,
+        },
         where,
         include: {
           venue: true,

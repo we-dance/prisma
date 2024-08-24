@@ -153,6 +153,9 @@ importers:
       '@nuxtjs/tailwindcss':
         specifier: ^6.12.0
         version: 6.12.1(magicast@0.3.4)(rollup@4.21.0)(ts-node@10.9.2(@types/node@18.19.45)(typescript@5.5.4))
+      '@prisma/extension-accelerate':
+        specifier: ^1.1.0
+        version: 1.1.0(@prisma/client@5.18.0(prisma@5.18.0))
       '@sidebase/nuxt-auth':
         specifier: ^0.5.0
         version: 0.5.0(magicast@0.3.4)(next-auth@4.21.1(next@13.5.6(@babel/core@7.25.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(rollup@4.21.0)
@@ -1320,6 +1323,12 @@ packages:
 
   '@prisma/engines@5.18.0':
     resolution: {integrity: sha512-ofmpGLeJ2q2P0wa/XaEgTnX/IsLnvSp/gZts0zjgLNdBhfuj2lowOOPmDcfKljLQUXMvAek3lw5T01kHmCG8rg==}
+
+  '@prisma/extension-accelerate@1.1.0':
+    resolution: {integrity: sha512-sESjhBZ4ywQjAVpKzsfhxyNu+9txIM5I6M1MPBaJBq/xDlqmniIAhlwIEt9KLtO80zqPxqbZYes18zrkgYqNiQ==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      '@prisma/client': '>=4.16.1'
 
   '@prisma/fetch-engine@5.18.0':
     resolution: {integrity: sha512-I/3u0x2n31rGaAuBRx2YK4eB7R/1zCuayo2DGwSpGyrJWsZesrV7QVw7ND0/Suxeo/vLkJ5OwuBqHoCxvTHpOg==}
@@ -6897,6 +6906,10 @@ snapshots:
       '@prisma/engines-version': 5.18.0-25.4c784e32044a8a016d99474bd02a3b6123742169
       '@prisma/fetch-engine': 5.18.0
       '@prisma/get-platform': 5.18.0
+
+  '@prisma/extension-accelerate@1.1.0(@prisma/client@5.18.0(prisma@5.18.0))':
+    dependencies:
+      '@prisma/client': 5.18.0(prisma@5.18.0)
 
   '@prisma/fetch-engine@5.18.0':
     dependencies:

@@ -1,17 +1,7 @@
-import { env } from "./env";
 import { PrismaClient } from "@prisma/client";
+import { withAccelerate } from "@prisma/extension-accelerate";
 
-const prismaGlobal = global as typeof global & {
-  prisma?: PrismaClient;
-};
-
-export const prisma: PrismaClient =
-  prismaGlobal.prisma ??
-  new PrismaClient({
-    log:
-      env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
-  });
-
-if (env.NODE_ENV !== "production") {
-  prismaGlobal.prisma = prisma;
-}
+export const prisma = new PrismaClient({
+  // log: ["query", "error", "warn"]
+  log: ["error"],
+}).$extends(withAccelerate());
