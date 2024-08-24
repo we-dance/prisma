@@ -45,7 +45,7 @@ export const profilesRouter = router({
       return await prisma.profile.findFirst({
         where: {
           username: {
-            contains: username,
+            equals: username,
             mode: "insensitive",
           },
         },
