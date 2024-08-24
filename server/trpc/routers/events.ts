@@ -189,7 +189,6 @@ export const eventsRouter = router({
             startDate: "asc",
           },
         ],
-        take: 10,
       });
 
       return {
@@ -223,7 +222,6 @@ export const eventsRouter = router({
             startDate: "asc",
           },
         ],
-        take: 10,
       });
 
       return {
