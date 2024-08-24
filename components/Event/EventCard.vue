@@ -54,7 +54,7 @@ const cover = computed(() => {
   <NuxtLink
     :to="`/e/${event.slug}-${event.shortId}`"
     :target="isEmbed ? '_blank' : '_self'"
-    class="grid grid-cols-[auto,1fr,auto] border-b p-4 gap-2 overflow-hidden whitespace-nowrap"
+    class="grid grid-cols-layout border-b p-4 gap-2 overflow-hidden whitespace-nowrap"
   >
     <div class="flex items-center">
       <div class="w-14 text-center">

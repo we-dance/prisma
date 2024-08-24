@@ -16,6 +16,9 @@ module.exports = {
       },
     },
     extend: {
+      gridTemplateColumns: {
+        layout: "auto 1fr auto",
+      },
       fontFamily: {
         lato: "Lato",
         noto: "Noto Sans",
