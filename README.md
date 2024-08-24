@@ -4,40 +4,14 @@ Based on [sidebase merino](https://sidebase.io/)
 
 ## Setup
 
-1. Install dependencies
-
     ```
-    pnpm install
-    ```
-
-2. Reset database
-
-    ```
-    pnpm exec prisma db push --force-reset
-    ```
-
-3. Install db extensions
-
-    ```
-    PGPASSWORD=password psql -U user -d db -h 127.0.0.1
-    CREATE EXTENSION cube CASCADE;
-    CREATE EXTENSION earthdistance CASCADE;
-    ```
-
-4. Generate the Prisma client
-
-    ```
-    pnpm exec prisma generate
-    ```
-
-5. Import data
-    ```
-    cd cli && bun i && bun cli import --all
+    make build
     ```
 
 ## Usage
 
-1. Start development server
+Start development server
+
     ```
     pnpm dev
     ```

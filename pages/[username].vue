@@ -165,5 +165,9 @@ const tabs = computed(() => [
     </div>
 
     <TabsLinks id="tabs" track="profile" :tabs="tabs" :value="view" />
+
+    <div class="min-h-screen">
+      <TProfileDetails v-if="view === 'about'" :profile="profile" />
+    </div>
   </div>
 </template>

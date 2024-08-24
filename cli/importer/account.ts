@@ -1,4 +1,4 @@
-import { PrismaClient } from "./../../node_modules/.pnpm/@prisma+client@5.17.0_prisma@5.17.0/node_modules/@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { getDateOrNow, getDateOrNull } from "../utils/date";
 
 const prisma = new PrismaClient();

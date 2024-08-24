@@ -1,4 +1,4 @@
-import { PrismaClient } from "./../../node_modules/.prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { getDateOrNow, getDateOrNull } from "../utils/date";
 import * as lookup from "country-code-lookup";
 import { getLogger } from "../utils/logger";
@@ -339,6 +339,7 @@ export async function addProfile(profile: any) {
     firebaseUsername: profile.username || "",
     pronounce,
     bio: profile.bio || "",
+    story: profile.story || "",
     firebaseId: profile.id,
     createdAt: getDateOrNow(profile.createdAt),
     updatedAt: getDateOrNow(profile.updatedAt),
