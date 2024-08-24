@@ -1,5 +1,9 @@
 <script setup>
+import { useFocus } from "@vueuse/core";
 const { $client } = useNuxtApp();
+
+const searchInput = ref();
+useFocus(searchInput, { initialValue: true });
 
 const query = ref("");
 const profiles = ref([]);
@@ -67,6 +71,7 @@ watch(tab, () => {
         v-model="query"
         placeholder="Search"
         class="pl-10 rounded-full"
+        ref="searchInput"
         @input="search"
       />
       <span

@@ -4,7 +4,6 @@ import MarkdownContainer from "markdown-it-container";
 import MarkdownAttrs from "markdown-it-attrs";
 import excerptHtml from "excerpt-html";
 import mila from "markdown-it-link-attributes";
-import mentions from "~/utils/markdown-it-mentions";
 
 const md = new MarkdownIt({
   html: true,
@@ -54,8 +53,6 @@ md.use(MarkdownContainer, "hero", {
   },
 });
 
-md.use(mentions);
-
 export default {
   props: {
     content: {
@@ -66,32 +63,21 @@ export default {
       type: Boolean,
       default: false,
     },
-    noTypo: {
-      type: Boolean,
-      default: false,
-    },
   },
   computed: {
     raw() {
       let html = md.render(this.content);
-      const classes = [];
 
       if (this.excerpt) {
         html = excerptHtml(html);
       }
 
-      if (!this.noTypo) {
-        classes.push("typo");
-      } else {
-        classes.push("preview");
-      }
-
-      return `<div class="${classes.join(" ")}">${html}</div>`;
+      return html;
     },
   },
 };
 </script>
 
 <template>
-  <div v-html="raw" />
+  <div class="prose" v-html="raw" />
 </template>
