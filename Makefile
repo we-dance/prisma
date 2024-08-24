@@ -23,7 +23,7 @@ build:
 	pnpm cli reindex
 
 export:
-	@echo "Resetting the prod database ${DATABASE_URL}"
+	@echo "Resetting the prod database"
 	prisma db push --force-reset
 	@echo "Exporting the data"
 	PGPASSWORD=password pg_dump db -U user -h 127.0.0.1 --data-only > db.sql
