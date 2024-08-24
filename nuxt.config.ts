@@ -2,7 +2,7 @@ import svgLoader from "vite-svg-loader";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  // debug: true,
+  debug: true,
   // ssr: false,
 
   modules: [
@@ -81,17 +81,17 @@ export default defineNuxtConfig({
 
   i18n: {
     locales: [
-      { code: "en", iso: "en-US", name: "English", file: "en.yml" },
-      { code: "es", iso: "es-ES", name: "Español", file: "es.yml" },
-      { code: "de", iso: "de-DE", name: "Deutsch", file: "de.yml" },
-      { code: "fr", iso: "fr-FR", name: "Français", file: "fr.yml" },
-      { code: "it", iso: "it-IT", name: "Italiano", file: "it.yml" },
-      { code: "pl", iso: "pl-PL", name: "Polski", file: "pl.yml" },
-      { code: "pt", iso: "pt-PT", name: "Português", file: "pt.yml" },
-      { code: "ro", iso: "ro-RO", name: "Română", file: "ro.yml" },
-      { code: "tr", iso: "tr-TR", name: "Türkçe", file: "tr.yml" },
-      { code: "ru", iso: "ru-RU", name: "Русский", file: "ru.yml" },
-      { code: "sr", iso: "sr-RS", name: "Српски", file: "sr.yml" },
+      { code: "en", language: "en-US", name: "English", file: "en.yml" },
+      { code: "es", language: "es-ES", name: "Español", file: "es.yml" },
+      { code: "de", language: "de-DE", name: "Deutsch", file: "de.yml" },
+      { code: "fr", language: "fr-FR", name: "Français", file: "fr.yml" },
+      { code: "it", language: "it-IT", name: "Italiano", file: "it.yml" },
+      { code: "pl", language: "pl-PL", name: "Polski", file: "pl.yml" },
+      { code: "pt", language: "pt-PT", name: "Português", file: "pt.yml" },
+      { code: "ro", language: "ro-RO", name: "Română", file: "ro.yml" },
+      { code: "tr", language: "tr-TR", name: "Türkçe", file: "tr.yml" },
+      { code: "ru", language: "ru-RU", name: "Русский", file: "ru.yml" },
+      { code: "sr", language: "sr-RS", name: "Српски", file: "sr.yml" },
     ],
     defaultLocale: "en",
     langDir: "locales",
