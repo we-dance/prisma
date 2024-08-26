@@ -174,7 +174,12 @@ export const eventsRouter = router({
         throw new Error("Missing city or coordinates");
       }
 
-      const venues = await getVenues(lat, lng, distance);
+      let venues = [];
+      try {
+        venues = await getVenues(lat, lng, distance);
+      } catch (e: any) {
+        throw new Error("Failed to get venues: " + e.message);
+      }
       const where = getWhere(start, false, venues, type, style);
 
       const events = await prisma.event.findMany({
