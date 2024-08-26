@@ -49,7 +49,7 @@ async function getVenues(
   return await prisma.$queryRaw`
     SELECT
       ROUND(earth_distance(ll_to_earth(${lat}, ${lng}), ll_to_earth(lat, lng))::NUMERIC, 2) AS distance,
-      idx,
+      id,
       name,
       photo,
       username
