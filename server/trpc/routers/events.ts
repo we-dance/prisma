@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../trpc";
 import { prisma } from "../../prisma";
+import { TRPCError } from "@trpc/server";
 
 function getWhere(
   start: string | Date,
@@ -48,7 +49,7 @@ async function getVenues(
   return await prisma.$queryRaw`
     SELECT
       ROUND(earth_distance(ll_to_earth(${lat}, ${lng}), ll_to_earth(lat, lng))::NUMERIC, 2) AS distance,
-      id,
+      idx,
       name,
       photo,
       username
@@ -171,14 +172,21 @@ export const eventsRouter = router({
       }
 
       if (!lng || !lat || !cityProfile) {
-        throw new Error("Missing city or coordinates");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "City not found",
+        });
       }
 
       let venues = [];
       try {
         venues = await getVenues(lat, lng, distance);
       } catch (e: any) {
-        throw new Error("Failed to get venues: " + e.message);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to get venues",
+          cause: e,
+        });
       }
       const where = getWhere(start, false, venues, type, style);
 
@@ -198,6 +206,7 @@ export const eventsRouter = router({
             startDate: "asc",
           },
         ],
+        take: 5,
       });
 
       return {
@@ -235,6 +244,7 @@ export const eventsRouter = router({
             startDate: "asc",
           },
         ],
+        take: 5,
       });
 
       return {
