@@ -81,7 +81,7 @@
     "react-dom": "^18.3.1",
     "rollup": "^4.20.0",
     "superjson": "^1.12.2",
-    "trpc-nuxt": "^0.7.0",
+    "trpc-nuxt": "^0.10.22",
     "unhead": "^1.9.16",
     "vee-validate": "^4.12.8",
     "vite": "^5.3.5",
