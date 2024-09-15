@@ -1,5 +1,5 @@
-titleTemplate:
-  calendar: "%s • Dance Calendar • WeDance"
+seo:
+  title: "%s • WeDance"
 common:
   yes: "Yes"
   no: "No"
@@ -825,44 +825,30 @@ explore:
     header: Dance Blog
     subheader: Explore more about your favorite dance styles
   dance:
-    title: List of Dance Styles | WeDance
-    description: Discover history, culture, and dance styles from around the world. Browse through a curated list of dance styles.
     keywords: dance styles, dance genres, dance history, dance culture
     header: Dance Styles
     subheader: Discover history, culture, and dance styles from around the world. Browse through a curated list of dance styles.
   global:
-    title: "{style} Dance Festivals Worldwide | Dance Calendar | WeDance"
-    description: "{style} Dance Calendar for Travelers. Plan your holidays and weekends to dance Salsa, Bachata, Kizomba, Zouk and 130 other dances around the world."
     keywords: "{style} dance festivals, {style} dance congresses, {style} dance holidays, {style} dance weekends, {style} dance trips, {style} dance travel"
     header: "{style} Festivals Worldwide"
     subheader: "{style} Dance Calendar for Travelers. Plan your holidays and weekends to dance Salsa, Bachata, Kizomba, Zouk and 130 other dances around the world."
   parties:
-    title: "{style} Dance Party in {city} Today"
-    description: Explore a variety of {style} dance events happening in {city}. From {referenceStyle} nights to bachata workshops, find your next dance adventure here.
     keywords: "Where can I dance {style} in {city}, {style} dance parties {city}, {style} dance socials {city}, {style} dance nights {city}, {style} dance events {city}, {style} dance meetups {city}"
     header: "{style} Parties in {city}"
     subheader: Discover {style} parties in {city}, and get notified of new events before they sell out.
   classes:
-    title: Dance {style} Classes in {city} | Dance Calendar | WeDance
-    description: Explore a variety of {style} dance events happening in {city}. From {referenceStyle} nights to bachata workshops, find your next dance adventure here.
     keywords: "{style} dance classes {city}, {style} dance courses {city}, {style} dance workshops {city}, {style} dance bootcamps {city}, {style} dance lessons {city}"
     header: "{style} Classes in {city}"
     subheader: Discover {style} classes in {city}, and get notified of new events before they sell out.
   onlineclass:
-    title: "{style} Online Dance Classes | Dance Calendar | WeDance"
-    description: Can't make it in person? Take your {style} moves to the next level with our online class selection.
     keywords: "{style} online dance classes, online dance courses, online dance workshops, online dance bootcamps, online dance lessons"
     header: "{style} Online Classes"
     subheader: Can't make it in person? Take your {style} moves to the next level with our online class selection.
   overview:
-    title: Dance in {city} | WeDance
-    description: Discover {style} in {city}, and get notified of new events before they sell out.
     keywords: dance groups {city}, dance influencers {city}, dance communities {city}, dance networks {city}, dance collectives {city}
     header: Dance in {city}
     subheader: Discover {style} in {city}, and get notified of new events before they sell out.
   tips:
-    title: Ask Dancers in {city} | WeDance
-    description: Find real-time recommendations and get local insights directly from dancers from {city}. Choose your preferred dance style for tailored tips, or ask the community for personalized recommendations. Expect responses typically within 48 hours.
     keywords: dance tips {city}, dance recommendations {city}, dance insights {city}, dance advice {city}, dance suggestions {city}
     header: Ask {city}
     subheader: Find real-time recommendations and get local insights directly from dancers from {city}. Choose your preferred dance style for tailored tips, or ask the community for personalized recommendations. Expect responses typically within 48 hours.

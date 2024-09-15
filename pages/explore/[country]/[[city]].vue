@@ -16,26 +16,25 @@ const { data, error } = await $client.events.list.useQuery({
   country,
 });
 
-if (!data.value) {
+if (!data.value || error.value) {
   throw createError({
     statusCode: 404,
-    statusMessage: error.value.message,
+    statusMessage: error.value?.message,
   });
 }
 
 const view = "parties";
 
 useHead({
-  title: t(`explore.${view}.title`, {
+  title: t(`explore.${view}.header`, {
     city: data.value.cityProfile.name,
     style,
   }),
-  titleTemplate: t("titleTemplate.calendar"),
   meta: [
     {
       hid: "description",
       name: "description",
-      content: t(`explore.${view}.description`, {
+      content: t(`explore.${view}.subheader`, {
         city: data.value.cityProfile.name,
         style,
         referenceStyle: style || "Salsa",

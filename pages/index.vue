@@ -17,15 +17,14 @@ const { data } = await $client.events.listAll.useQuery({
 const view = "global";
 
 useHead({
-  title: t(`explore.${view}.title`, {
+  title: t(`explore.${view}.header`, {
     style,
   }),
-  titleTemplate: t("titleTemplate.calendar"),
   meta: [
     {
       hid: "description",
       name: "description",
-      content: t(`explore.${view}.description`, {
+      content: t(`explore.${view}.subheader`, {
         style,
         referenceStyle: style || "Salsa",
       }),
