@@ -18,6 +18,7 @@ module.exports = {
     extend: {
       gridTemplateColumns: {
         layout: "auto 1fr auto",
+        event: "1fr auto",
       },
       fontFamily: {
         lato: "Lato",
