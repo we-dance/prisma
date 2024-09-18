@@ -2,7 +2,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "cli": "ts-node ./cli.ts"
+    "cli": "ts-node ./cli.ts",
+    "prisma": "prisma generate"
   },
   "devDependencies": {
     "@types/cli-progress": "^3.11.5",

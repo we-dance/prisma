@@ -12,15 +12,14 @@ build:
 	echo "CREATE EXTENSION cube CASCADE;" | PGPASSWORD=password psql -U user -d db -h 127.0.0.1
 	echo "CREATE EXTENSION earthdistance CASCADE;" | PGPASSWORD=password psql -U user -d db -h 127.0.0.1
 	@echo "Generating the Prisma Client"
-	prisma generate
-	cd cli
-	cp -r ../prisma ./prisma
+	pnpm prisma
+	cd cli && cp -r ../prisma/schema.prisma ./prisma/schema.prisma
 	@echo "Importing the data"
-	pnpm i
-	prisma generate
-	pnpm cli import --all
+	cd cli && pnpm i
+	cd cli && pnpm prisma
+	cd cli && pnpm cli import --all
 	@echo "Indexing the data"
-	pnpm cli reindex
+	cd cli && pnpm cli reindex
 
 export:
 	@echo "Resetting the prod database"
