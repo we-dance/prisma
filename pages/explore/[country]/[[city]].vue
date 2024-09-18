@@ -68,15 +68,47 @@ useHead({
         }}
       </div>
     </div>
-    <div v-if="events" class="w-full">
-      <div class="border-t">
-        <EventCard2Cols
-          v-for="event in events"
-          :key="event.id"
-          :event="event"
-          side="time"
-        />
-      </div>
+    <div v-if="events" class="grid p-4 border-t">
+      <h2 class="text-xl font-bold">Festivals</h2>
+      <div class="text-sm">Plan your year and explore the world</div>
+      <ScrollArea class="mt-2 whitespace-nowrap">
+        <div class="flex space-x-4 w-max">
+          <EventCardImage
+            v-for="event in events"
+            :key="event.id"
+            :event="event"
+          />
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+    </div>
+    <div v-if="events" class="grid p-4 border-t">
+      <h2 class="text-xl font-bold">Classes</h2>
+      <div class="text-sm">Plan your month and improve your skills</div>
+      <ScrollArea class="mt-2 whitespace-nowrap">
+        <div class="flex space-x-4 w-max">
+          <EventCardImage
+            v-for="event in events"
+            :key="event.id"
+            :event="event"
+          />
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+    </div>
+    <div v-if="events" class="grid p-4 border-t">
+      <h2 class="text-xl font-bold">Parties</h2>
+      <div class="text-sm">Plan your week and dance</div>
+      <ScrollArea class="mt-2 whitespace-nowrap">
+        <div class="flex space-x-4 w-max">
+          <EventCardImage
+            v-for="event in events"
+            :key="event.id"
+            :event="event"
+          />
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </div>
   </div>
 </template>

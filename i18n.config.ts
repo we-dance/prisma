@@ -2,12 +2,9 @@ export default defineI18nConfig(() => ({
   datetimeFormats: {
     en: {
       short: {
-        year: "numeric",
+        weekday: "short",
         month: "short",
         day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        hour12: false,
       },
       long: {
         weekday: "short",
