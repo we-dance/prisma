@@ -14,9 +14,12 @@ const { country, city, style } = schema.parse(useRoute().params);
 const { data, error } = await $client.events.list.useQuery({
   city,
   country,
+  start: "2024-07-01T00:00:00Z",
 });
 
-if (!data.value || error.value) {
+const events = computed(() => data.value?.events);
+
+if (!data?.value || error.value) {
   throw createError({
     statusCode: 404,
     statusMessage: error.value?.message,
@@ -65,8 +68,15 @@ useHead({
         }}
       </div>
     </div>
-    <div v-if="data.events" class="w-full">
-      <EventListByDate :events="data.events" />
+    <div v-if="events" class="w-full">
+      <div class="border-t">
+        <EventCard2Cols
+          v-for="event in events"
+          :key="event.id"
+          :event="event"
+          side="time"
+        />
+      </div>
     </div>
   </div>
 </template>

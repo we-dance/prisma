@@ -60,7 +60,7 @@ const cover = computed(() => {
         <div class="text-xs text-gray-600">
           <div class="flex items-center">
             <Icon name="heroicons-outline:clock" class="h-3 w-3 mr-1" />
-            <span class="truncate">{{ d(event.startDate, "short") }}</span>
+            <span class="truncate">{{ d(event.startDate, "long") }}</span>
           </div>
           <div class="flex items-center">
             <Icon name="heroicons:map-pin" class="h-3 w-3 mr-1" />

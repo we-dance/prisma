@@ -4,7 +4,7 @@ import { prisma } from "../../prisma";
 import { TRPCError } from "@trpc/server";
 
 function getWhere(
-  start: string | Date,
+  start: string,
   anywhere = false,
   venues: any[],
   type?: string,
@@ -130,12 +130,12 @@ export const eventsRouter = router({
       z.object({
         city: z.string(),
         country: z.string(),
+        start: z.string(),
         style: z.string().optional(),
         distance: z.number().optional(),
         lat: z.number().optional(),
         lng: z.number().optional(),
         type: z.string().optional(),
-        start: z.string().optional(),
       })
     )
     .query(async ({ input }) => {
@@ -148,8 +148,8 @@ export const eventsRouter = router({
         country,
         lng: reqLng,
         lat: reqLat,
+        start,
         distance = 10000,
-        start = new Date(),
       } = input;
 
       let cityProfile;
