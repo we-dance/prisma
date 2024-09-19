@@ -89,6 +89,10 @@ program
       format: ` {bar} | {collection} | {eta_formatted} | {value}/{total} | {failed} failed, {created} created, {ignored} ignored, {updated} updated`,
     });
 
+    if (all || danceStyles) {
+      await importDanceStyles(multibar);
+    }
+
     if (all || accounts) {
       await importAccounts(multibar);
     }
@@ -107,10 +111,6 @@ program
 
     if (all || subscribers) {
       await importSubscribers(multibar);
-    }
-
-    if (all || danceStyles) {
-      await importDanceStyles(multibar);
     }
 
     multibar.stop();

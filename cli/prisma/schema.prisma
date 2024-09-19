@@ -84,7 +84,7 @@ model Country {
 }
 
 model City {
-  id               String @id @default(nanoid())
+  id               String @id
   name             String
   region           String @default("")
   countryCode      String
@@ -95,7 +95,6 @@ model City {
   membersCount     Int    @default(0)
   subscribersCount Int    @default(0)
   viewsCount       Int    @default(0)
-  placeId          String @unique
 
   profiles Profile[] @relation("profile_city")
   country  Country   @relation("country_cities", fields: [countryCode], references: [code])

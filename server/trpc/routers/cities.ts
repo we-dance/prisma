@@ -1,7 +1,11 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../trpc";
 import { prisma } from "../../prisma";
-import { Client, AddressType } from "@googlemaps/google-maps-services-js";
+import {
+  Client,
+  AddressType,
+  Language,
+} from "@googlemaps/google-maps-services-js";
 
 async function getSlug(locality: string, region?: string): Promise<string> {
   let slug = locality
@@ -118,7 +122,7 @@ export const citiesRouter = router({
       const { placeId, label } = input;
 
       let city = await prisma.city.findUnique({
-        where: { placeId },
+        where: { id: placeId },
         select: { slug: true },
       });
 
@@ -132,7 +136,7 @@ export const citiesRouter = router({
           params: {
             place_id: placeId,
             key: useRuntimeConfig().googleMapsApiKeyBackend,
-            language: "en" as const,
+            language: Language.en,
           },
           timeout: 5000,
         });
@@ -161,7 +165,7 @@ export const citiesRouter = router({
 
         city = await prisma.city.create({
           data: {
-            placeId,
+            id: placeId,
             name: cityName,
             region,
             slug,
