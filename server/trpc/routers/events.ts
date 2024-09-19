@@ -3,11 +3,75 @@ import { publicProcedure, router } from "../trpc";
 import { prisma } from "../../prisma";
 import { TRPCError } from "@trpc/server";
 
+async function loadCity(
+  cityCode?: string,
+  countryCode?: string,
+  reqLng?: number,
+  reqLat?: number,
+  distance?: number
+) {
+  let venues = [];
+
+  const { lng, lat, city } = await getCoordinates(
+    cityCode,
+    countryCode,
+    reqLng,
+    reqLat
+  );
+
+  if (lng && lat && distance) {
+    venues = await getVenues(lat, lng, distance);
+  }
+
+  return {
+    city,
+    lng,
+    lat,
+    venues,
+  };
+}
+
+async function getCoordinates(
+  cityCode?: string,
+  countryCode?: string,
+  reqLng?: number,
+  reqLat?: number
+) {
+  let city;
+  let lng;
+  let lat;
+
+  if (cityCode && countryCode) {
+    city = await prisma.city.findFirst({
+      where: {
+        slug: cityCode,
+        countryCode,
+      },
+    });
+
+    if (city) {
+      lng = city.lng;
+      lat = city.lat;
+    }
+  }
+
+  if (reqLng && reqLat && !lng) {
+    lng = reqLng;
+    lat = reqLat;
+  }
+
+  return {
+    city,
+    lng,
+    lat,
+  };
+}
+
 function getWhere(
   start: string,
   anywhere = false,
   venues: any[],
-  type?: string,
+  type?: string[],
   style?: string
 ) {
   const where: any = {
@@ -27,7 +91,9 @@ function getWhere(
   }
 
   if (type) {
-    where.type = type;
+    where.type = {
+      in: type,
+    };
   }
 
   if (style) {
@@ -125,11 +191,118 @@ export const eventsRouter = router({
         },
       });
     }),
+  overview: publicProcedure
+    .input(
+      z.object({
+        city: z.string().optional(),
+        country: z.string().optional(),
+        start: z.string(),
+        style: z.string().optional(),
+        distance: z.number().optional(),
+        lat: z.number().optional(),
+        lng: z.number().optional(),
+        type: z.string().optional(),
+      })
+    )
+    .query(async ({ input }) => {
+      const {
+        type,
+        style,
+        city: cityCode,
+        country,
+        lng: reqLng,
+        lat: reqLat,
+        start,
+        distance = 10000,
+      } = input;
+
+      const { lng, lat, city, venues } = await loadCity(
+        cityCode,
+        country,
+        reqLng,
+        reqLat,
+        distance
+      );
+
+      const festivalTypes = ["Festival"];
+      const courseTypes = ["Course"];
+      const partyTypes = ["Party"];
+
+      const parties = await prisma.event.findMany({
+        cacheStrategy: {
+          ttl: 60 * 5,
+          swr: 60,
+        },
+        where: getWhere(start, !city, venues, partyTypes, style),
+        include: {
+          venue: true,
+          organizer: true,
+          styles: true,
+        },
+        orderBy: [
+          {
+            startDate: "asc",
+          },
+        ],
+        take: 5,
+      });
+
+      const classes = await prisma.event.findMany({
+        cacheStrategy: {
+          ttl: 60 * 5,
+          swr: 60,
+        },
+        where: getWhere(start, !city, venues, courseTypes, style),
+        include: {
+          venue: true,
+          organizer: true,
+          styles: true,
+        },
+        orderBy: [
+          {
+            startDate: "asc",
+          },
+        ],
+        take: 5,
+      });
+
+      const festivals = await prisma.event.findMany({
+        cacheStrategy: {
+          ttl: 60 * 5,
+          swr: 60,
+        },
+        where: getWhere(start, true, [], festivalTypes, style),
+        include: {
+          venue: {
+            include: {
+              city: true,
+            },
+          },
+          organizer: true,
+          styles: true,
+        },
+        orderBy: [
+          {
+            startDate: "asc",
+          },
+        ],
+        take: 5,
+      });
+
+      return {
+        city,
+        lat,
+        lng,
+        festivals,
+        parties,
+        classes,
+      };
+    }),
   list: publicProcedure
     .input(
       z.object({
-        city: z.string(),
-        country: z.string(),
+        city: z.string().optional(),
+        country: z.string().optional(),
         start: z.string(),
         style: z.string().optional(),
         distance: z.number().optional(),
@@ -188,14 +361,13 @@ export const eventsRouter = router({
           cause: e,
         });
       }
-      const where = getWhere(start, false, venues, type, style);
 
       const events = await prisma.event.findMany({
         cacheStrategy: {
           ttl: 60 * 5,
           swr: 60,
         },
-        where,
+        where: getWhere(start, false, venues, type, style),
         include: {
           venue: true,
           organizer: true,

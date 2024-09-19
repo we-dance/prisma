@@ -1,9 +1,22 @@
 import svgLoader from "vite-svg-loader";
+import { z } from "zod";
+
+const envSchema = z.object({
+  BASE_URL: z.string().url(),
+  GOOGLE_MAPS_API_KEY: z.string().min(1),
+  GOOGLE_MAPS_API_KEY_BACKEND: z.string().min(1),
+  POSTHOG_PUBLIC_KEY: z.string().min(1),
+  POSTHOG_HOST: z.string().min(1),
+  POSTHOG_DISABLED: z.preprocess((val) => val === "true", z.boolean()),
+  POSTHOG_DEBUG: z.preprocess((val) => val === "true", z.boolean()),
+});
+
+const env = envSchema.parse(process.env);
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  // debug: true,
-  // ssr: false,
+  debug: true,
+  ssr: false,
 
   modules: [
     "@nuxtjs/tailwindcss",
@@ -63,13 +76,14 @@ export default defineNuxtConfig({
   ],
 
   runtimeConfig: {
+    googleMapsApiKeyBackend: env.GOOGLE_MAPS_API_KEY_BACKEND,
     public: {
-      baseUrl: process.env.BASE_URL,
-      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-      posthogPublicKey: "phc_N7rtjDNLzyAGTOkhwhPBrEPybpxBwLlMpfPI9j1xZWB",
-      posthogHost: "https://eu.i.posthog.com",
-      posthogDisabled: true,
-      posthogDebug: false,
+      baseUrl: env.BASE_URL,
+      googleMapsApiKey: env.GOOGLE_MAPS_API_KEY,
+      posthogPublicKey: env.POSTHOG_PUBLIC_KEY,
+      posthogHost: env.POSTHOG_HOST,
+      posthogDisabled: env.POSTHOG_DISABLED,
+      posthogDebug: env.POSTHOG_DEBUG,
     },
   },
 

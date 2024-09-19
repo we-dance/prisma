@@ -33,7 +33,7 @@ const baseUrl = runtimeConfig.public.baseUrl;
           />
         </template>
       </Head>
-      <Body>
+      <Body class="bg-gray-100">
         <TBanner
           name="competition"
           desktop="Join WeDance Competition and Win 300€!"
@@ -43,7 +43,7 @@ const baseUrl = runtimeConfig.public.baseUrl;
         />
 
         <div
-          class="font-sans leading-normal tracking-normal antialiased min-h-screen mx-auto max-w-2xl border-r"
+          class="bg-white leading-normal tracking-normal min-h-screen mx-auto max-w-2xl"
         >
           <div
             v-if="isMenuOpen"
@@ -53,21 +53,19 @@ const baseUrl = runtimeConfig.public.baseUrl;
           <transition name="slide">
             <div
               v-if="isMenuOpen"
-              class="bg-white fixed left-0 w-56 bottom-0 top-0 z-50 shadow-lg md:hidden"
+              class="bg-white fixed left-0 w-56 bottom-0 top-0 z-50 shadow-lg"
             >
               <MainNav />
             </div>
           </transition>
 
-          <header
-            class="md:hidden flex p-2 gap-2 justify-start items-center border-b"
-          >
+          <header class="flex p-2 gap-2 justify-start items-center border-b">
             <button
               class="mt-2"
               title="Open Menu"
               @click="isMenuOpen = !isMenuOpen"
             >
-              <Icon name="heroicons-outline:menu" class="w-6 h-6" />
+              <Icon name="heroicons:bars-3" class="w-6 h-6" />
             </button>
 
             <router-link title="Homepage" to="/">
@@ -77,10 +75,7 @@ const baseUrl = runtimeConfig.public.baseUrl;
             <TQrCodeButton label="Share" />
           </header>
 
-          <div class="flex">
-            <MainNav class="hidden md:block w-52 shrink-0" />
-            <slot />
-          </div>
+          <slot />
         </div>
       </Body>
     </Html>

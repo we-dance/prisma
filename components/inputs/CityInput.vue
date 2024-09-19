@@ -1,23 +1,23 @@
-<script setup>
-import { ref } from "vue";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxButton,
-  ComboboxOptions,
-  ComboboxOption,
-  TransitionRoot,
-} from "@headlessui/vue";
+<script setup lang="ts">
+import { ref, watch } from "vue";
 import { loadGoogleMapsApi } from "~/lib/googleMapsApi";
 
 defineOptions({
   inheritAttrs: false,
 });
 
-const model = defineModel();
+const props = defineProps({
+  placeholder: {
+    type: String,
+    default: "Select city",
+  },
+});
 
+const model = defineModel<{ placeId: string; label: string } | null>();
+
+const open = ref(false);
 const query = ref("");
-const results = ref([]);
+const results = ref<Array<{ placeId: string; label: string }>>([]);
 
 const getPlacePredictions = () => {
   loadGoogleMapsApi().then((google) => {
@@ -27,8 +27,8 @@ const getPlacePredictions = () => {
         input: query.value,
         types: ["(cities)"],
       },
-      (predictions) => {
-        results.value = predictions.map((prediction) => ({
+      (predictions: any) => {
+        results.value = predictions.map((prediction: any) => ({
           placeId: prediction.place_id,
           label: prediction.description,
         }));
@@ -37,8 +37,13 @@ const getPlacePredictions = () => {
   });
 };
 
+const onSelect = (city: { placeId: string; label: string }) => {
+  model.value = city;
+  open.value = false;
+};
+
 watch(query, () => {
-  if (query.value.length > 1) {
+  if (query.value.length >= 2) {
     getPlacePredictions();
   } else {
     results.value = [];
@@ -47,80 +52,42 @@ watch(query, () => {
 </script>
 
 <template>
-  <div>
-    <Combobox v-model="model" by="placeId">
-      <div class="relative mt-1">
-        <div
-          class="relative w-full cursor-default rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm"
-        >
-          <ComboboxInput
-            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            :displayValue="(city) => (city ? city.label : '')"
-            @change="query = $event.target.value"
-          />
-          <ComboboxButton
-            class="absolute inset-y-0 right-0 flex items-center pr-2"
-          >
-            <Icon
-              name="heroicons-outline:chevron-down"
-              class="h-5 w-5 text-gray-400"
-            />
-          </ComboboxButton>
+  <Popover v-model:open="open">
+    <PopoverTrigger as-child>
+      <Button
+        variant="outline"
+        role="combobox"
+        :aria-expanded="open"
+        class="w-full justify-between font-normal overflow-ellipsis"
+      >
+        <Icon
+          name="heroicons:map-pin"
+          class="mr-2 h-4 w-4 shrink-0 opacity-50"
+        />
+        <div class="flex-1 text-left">
+          <template v-if="model?.label">
+            {{ model.label }}
+          </template>
+          <template v-else>
+            <span class="text-muted-foreground">{{ props.placeholder }}</span>
+          </template>
         </div>
-        <TransitionRoot
-          leave="transition ease-in duration-100"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-          @after-leave="query = ''"
-        >
-          <ComboboxOptions
-            class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
-          >
-            <div
-              v-if="query.length < 2"
-              class="relative cursor-default select-none px-4 py-2 text-gray-700"
-            >
-              Type at least 2 characters to search.
-            </div>
-            <div
-              v-else-if="results.length === 0 && query !== ''"
-              class="relative cursor-default select-none px-4 py-2 text-gray-700"
-            >
-              Nothing found.
-            </div>
-
-            <ComboboxOption
-              v-for="city in results"
-              as="template"
-              :key="city.placeId"
-              :value="city"
-              v-slot="{ selected, active }"
-            >
-              <li
-                class="relative cursor-default select-none py-2 pl-10 pr-4"
-                :class="{
-                  'bg-primary text-primary-foreground': active,
-                  'text-primary': !active,
-                }"
-              >
-                <span
-                  class="block truncate"
-                  :class="{ 'font-medium': selected, 'font-normal': !selected }"
-                >
-                  {{ city.label }}
-                </span>
-                <span
-                  v-if="selected"
-                  class="absolute inset-y-0 left-0 flex items-center pl-3"
-                  :class="{ 'text-white': active, 'text-teal-600': !active }"
-                >
-                  <Icon name="heroicons-outline:check" class="h-5 w-5" />
-                </span>
-              </li>
-            </ComboboxOption>
-          </ComboboxOptions>
-        </TransitionRoot>
-      </div>
-    </Combobox>
-  </div>
+        <Icon
+          name="heroicons:chevron-down"
+          class="ml-2 h-4 w-4 shrink-0 opacity-50"
+        />
+      </Button>
+    </PopoverTrigger>
+    <PopoverContent class="w-[300px] p-0">
+      <SearchableDropdown
+        :items="results"
+        v-model="model"
+        v-model:searchQuery="query"
+        placeholder="Search city..."
+        itemKey="placeId"
+        itemLabel="label"
+        @select="onSelect"
+      />
+    </PopoverContent>
+  </Popover>
 </template>
