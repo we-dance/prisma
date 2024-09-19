@@ -3,9 +3,21 @@ const { $client } = useNuxtApp();
 
 const { data: allDanceStyles } = await $client.styles.list.useQuery();
 
+const props = defineProps<{
+  modelValue: string;
+}>();
+
+const emit = defineEmits<{
+  (e: "update:modelValue", value: string): void;
+}>();
+
 const open = ref(false);
-const value = ref("");
 const searchQuery = ref("");
+
+const value = computed({
+  get: () => props.modelValue,
+  set: (newValue) => emit("update:modelValue", newValue),
+});
 
 const onSelect = (newValue: any) => {
   value.value = newValue.hashtag;
@@ -38,7 +50,7 @@ const onSelect = (newValue: any) => {
     </PopoverTrigger>
     <PopoverContent class="p-0">
       <SearchableDropdown
-        :items="allDanceStyles"
+        :items="allDanceStyles ?? []"
         v-model="value"
         v-model:searchQuery="searchQuery"
         placeholder="Search dance style..."

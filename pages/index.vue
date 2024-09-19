@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { z } from "zod";
 import { toast } from "vue-sonner";
-import { today, getLocalTimeZone } from "@internationalized/date";
+import { today, getLocalTimeZone, CalendarDate } from "@internationalized/date";
 const { $client } = useNuxtApp();
 const { t, d } = useI18n();
 const route = useRoute();
@@ -16,16 +16,11 @@ const schema = z.object({
 });
 
 const {
-  country,
   city: cityParam,
   style,
   start: startParam,
   end: endParam,
 } = schema.parse(route.query);
-
-const selectedCity = ref<{ placeId: string; label: string } | null>(
-  cityParam ? { placeId: cityParam, label: cityParam } : null
-);
 
 const citySlug = ref<string | null>(null);
 
@@ -41,7 +36,8 @@ async function getCitySlug(city: any): Promise<string> {
 
 const selectedStyle = ref(style);
 
-const todayDate = today(getLocalTimeZone());
+// const todayDate = today(getLocalTimeZone());
+const todayDate = new CalendarDate(2024, 7, 1);
 const sixDaysLater = todayDate.add({ days: 6 });
 
 const formatDate = (date: any) => date.toString().split("T")[0];
@@ -50,6 +46,21 @@ const selectedDateRange = ref({
   start: startParam || formatDate(todayDate),
   end: endParam || formatDate(sixDaysLater),
 });
+
+const { data, error } = await $client.events.overview.useQuery({
+  city: citySlug.value || cityParam,
+  style: selectedStyle.value,
+  start: `${selectedDateRange.value.start}T00:00:00Z`,
+});
+
+const view = "parties";
+const city = data.value?.city?.name;
+const selectedCity = ref<{ placeId: string; label: string } | null>(
+  cityParam ? { placeId: cityParam, label: city || cityParam } : null
+);
+const festivals = computed(() => data.value?.festivals);
+const classes = computed(() => data.value?.classes);
+const parties = computed(() => data.value?.parties);
 
 watch(
   [selectedCity, selectedStyle, selectedDateRange],
@@ -69,21 +80,11 @@ watch(
         end: dateRange.end,
       },
     });
+
+    refresh();
   },
   { deep: true }
 );
-
-const { data, error } = await $client.events.overview.useQuery({
-  city: citySlug.value ?? undefined,
-  country,
-  start: `${selectedDateRange.value.start}T00:00:00Z`,
-});
-
-const view = "parties";
-const city = data.value?.city?.name;
-const festivals = computed(() => data.value?.festivals);
-const classes = computed(() => data.value?.classes);
-const parties = computed(() => data.value?.parties);
 
 useHead({
   title: t(`explore.${view}.header`, {
@@ -116,7 +117,7 @@ useHead({
       <div class="grid md:grid-cols-3 shadow rounded border mt-4 p-2 gap-2">
         <CityInput v-model="selectedCity" placeholder="Where" />
         <DateRangeInput v-model="selectedDateRange" />
-        <DanceStyleInput v-model="selectedStyle" class="flex-grow" />
+        <DanceStyleInput v-model="selectedStyle" />
       </div>
     </div>
     <div v-if="festivals" class="grid p-4 border-t">

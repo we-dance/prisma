@@ -402,11 +402,16 @@ export async function addProfile(profile: any) {
   if (!exists && profile.styles) {
     const hashtags = Object.keys(profile.styles);
     for (const hashtag of hashtags) {
-      const style = await prisma.danceStyle.upsert({
+      const style = await prisma.danceStyle.findUnique({
         where: { hashtag },
-        create: { name: hashtag, hashtag },
-        update: { name: hashtag },
       });
+
+      if (!style) {
+        console.warn(
+          `Dance style with hashtag '${hashtag}' not found. Skipping.`
+        );
+        continue;
+      }
 
       await prisma.experience.create({
         data: {

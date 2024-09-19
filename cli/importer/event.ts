@@ -140,13 +140,13 @@ export async function addEvent(event: any) {
   if (event.styles) {
     const hashtags = Object.keys(event.styles);
     for (const hashtag of hashtags) {
-      const style = await prisma.danceStyle.upsert({
+      const style = await prisma.danceStyle.findUnique({
         where: { hashtag },
-        create: { name: hashtag, hashtag },
-        update: { name: hashtag },
       });
 
-      connectStyles.push({ id: style.id });
+      if (style) {
+        connectStyles.push({ id: style.id });
+      }
     }
   }
 

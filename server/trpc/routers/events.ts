@@ -5,19 +5,15 @@ import { TRPCError } from "@trpc/server";
 
 async function loadCity(
   cityCode?: string,
-  countryCode?: string,
   reqLng?: number,
   reqLat?: number,
   distance?: number
 ) {
   let venues = [];
 
-  const { lng, lat, city } = await getCoordinates(
-    cityCode,
-    countryCode,
-    reqLng,
-    reqLat
-  );
+  const { lng, lat, city } = await getCoordinates(cityCode, reqLng, reqLat);
+
+  console.log(city);
 
   if (lng && lat && distance) {
     venues = await getVenues(lat, lng, distance);
@@ -33,7 +29,6 @@ async function loadCity(
 
 async function getCoordinates(
   cityCode?: string,
-  countryCode?: string,
   reqLng?: number,
   reqLat?: number
 ) {
@@ -41,11 +36,11 @@ async function getCoordinates(
   let lng;
   let lat;
 
-  if (cityCode && countryCode) {
+  if (cityCode) {
+    console.log("cityCode", cityCode);
     city = await prisma.city.findFirst({
       where: {
         slug: cityCode,
-        countryCode,
       },
     });
 
@@ -209,24 +204,38 @@ export const eventsRouter = router({
         type,
         style,
         city: cityCode,
-        country,
         lng: reqLng,
         lat: reqLat,
         start,
         distance = 10000,
       } = input;
 
+      console.log("input", { cityCode, style, start });
+
       const { lng, lat, city, venues } = await loadCity(
         cityCode,
-        country,
         reqLng,
         reqLat,
         distance
       );
 
-      const festivalTypes = ["Festival"];
-      const courseTypes = ["Course"];
-      const partyTypes = ["Party"];
+      const festivalTypes = ["Festival", "Congress", "Weekender"];
+      const courseTypes = [
+        "Course",
+        "Workshop",
+        "Festival",
+        "Congress",
+        "Weekender",
+      ];
+      const partyTypes = [
+        "Party",
+        "Other",
+        "Show",
+        "Concert",
+        "Festival",
+        "Congress",
+        "Weekender",
+      ];
 
       const parties = await prisma.event.findMany({
         cacheStrategy: {
