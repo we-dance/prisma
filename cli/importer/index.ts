@@ -1,6 +1,7 @@
 import { sortBy } from "lodash";
 import { getProfiles } from "../provider/profiles";
 import { getAccounts, getUsers, getSuspended } from "../provider/accounts";
+import { getDanceStyles } from "../provider/styles";
 import { getEvents } from "../provider/events";
 import { addEvent } from "./event";
 import {
@@ -10,8 +11,58 @@ import {
   addCitySubscribers,
 } from "./profile";
 import { addAccount } from "./account";
+import { addDanceStyle } from "./style";
 import * as cliProgress from "cli-progress";
 import { getLogger } from "../utils/logger";
+
+export async function importDanceStyles(multibar: cliProgress.MultiBar) {
+  let collection = "styles";
+  const logger = getLogger(collection);
+  logger.info("Importing dance styles");
+
+  const danceStyles = await getDanceStyles();
+
+  let created = 0;
+  let ignored = 0;
+  let failed = 0;
+  let updated = 0;
+
+  const bar = multibar.create(danceStyles.length, 0, {
+    collection,
+    created,
+    ignored,
+    failed,
+    updated,
+  });
+
+  for (const danceStyle of danceStyles) {
+    logger.debug("importing", danceStyle.id);
+
+    const result = await addDanceStyle(danceStyle);
+
+    if (result.state === "created") {
+      created++;
+    } else if (result.state === "ignored") {
+      ignored++;
+    } else if (result.state === "failed") {
+      failed++;
+    } else if (result.state === "updated") {
+      updated++;
+    }
+
+    bar.increment({ created, ignored, failed, updated });
+  }
+
+  bar.stop();
+
+  logger.info("Finished importing dance styles", {
+    total: danceStyles.length,
+    created,
+    ignored,
+    failed,
+    updated,
+  });
+}
 
 export async function importAccounts(multibar: cliProgress.MultiBar) {
   let collection = "accounts";

@@ -5,6 +5,7 @@ import {
   importProfiles,
   importCities,
   importSubscribers,
+  importDanceStyles,
 } from "./importer";
 import { getUniqueUsername } from "./importer/profile";
 import { logger } from "./utils/logger";
@@ -58,8 +59,17 @@ program
   .option("-p, --profiles", "Import profiles")
   .option("-e, --events", "Import events")
   .option("-s, --subscribers", "Import subscribers")
+  .option("-d, --dance-styles", "Import dance styles")
   .action(async (options) => {
-    const { all, accounts, profiles, events, cities, subscribers } = options;
+    const {
+      all,
+      accounts,
+      profiles,
+      events,
+      cities,
+      subscribers,
+      danceStyles,
+    } = options;
     logger.level = getLogLevel(program.opts().verbose);
 
     logger.info("Starting import", {
@@ -70,6 +80,7 @@ program
       events,
       cities,
       subscribers,
+      danceStyles,
     });
 
     const multibar = new cliProgress.MultiBar({
@@ -96,6 +107,10 @@ program
 
     if (all || subscribers) {
       await importSubscribers(multibar);
+    }
+
+    if (all || danceStyles) {
+      await importDanceStyles(multibar);
     }
 
     multibar.stop();

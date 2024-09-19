@@ -30,3 +30,9 @@ export:
 	echo "CREATE EXTENSION cube CASCADE;" | psql -U "postgres.pzxllzbtbdbplfpajnlf" -h "aws-0-eu-central-1.pooler.supabase.com" -p 6543 -d postgres
 	echo "CREATE EXTENSION earthdistance CASCADE;" | psql -U "postgres.pzxllzbtbdbplfpajnlf" -h "aws-0-eu-central-1.pooler.supabase.com" -p 6543 -d postgres
 	psql -U "postgres.pzxllzbtbdbplfpajnlf" -h "aws-0-eu-central-1.pooler.supabase.com" -p 6543 postgres < db.sql
+
+deploy:
+	npx prisma migrate deploy
+	pnpm prisma
+	cd cli && cp -r ../prisma/schema.prisma ./prisma/schema.prisma
+	cd cli && pnpm prisma

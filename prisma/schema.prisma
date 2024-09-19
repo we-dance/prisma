@@ -209,9 +209,36 @@ model Event {
 }
 
 model DanceStyle {
-  id      Int    @id @default(autoincrement())
-  name    String
-  hashtag String @unique
+  id           Int      @id @default(autoincrement())
+  name         String
+  hashtag      String   @unique
+  synonyms     String?
+  regexp       String?
+  popular      Boolean  @default(false)
+  popularity   Int?
+  familyOnly   Boolean  @default(false)
+  description  String?
+  history      String?
+  origins      String?
+  adjectives   String?
+  type         String?
+  holding      String?
+  year         String?
+  predecessors String?
+  parent       String?
+  influence    String?
+  family       String?
+  region       String?
+  country      String?
+  genres       String?
+  source       String?
+  root         String?
+  partner      Boolean?
+  group        Boolean?
+  related      String?
+  music        String?
+  timing       String?
+  active       Boolean?
 
   events      Event[]
   experiences Experience[] @relation("experience_style")
