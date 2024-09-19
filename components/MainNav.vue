@@ -213,6 +213,6 @@ function isAdmin(force = false) {
 
 <style scoped>
 nav .router-link-exact-active {
-  @apply text-accent border-accent;
+  @apply text-brand;
 }
 </style>
