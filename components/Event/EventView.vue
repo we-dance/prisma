@@ -25,7 +25,7 @@ defineProps({
     </div>
     <div class="p-4 flex gap-2 border-b border-t">
       <div class="text-center pt-2">
-        <div class="text-xl font-bold leading-none text-accent">
+        <div class="text-xl font-bold leading-none text-primary">
           {{ formatDate(event.startDate, "d") }}
         </div>
         <div class="w-12 text-sm">
@@ -78,11 +78,11 @@ defineProps({
         <Icon name="heroicons-outline:location-marker" class="mr-4 h-4 w-4" />
         <div>
           <h4 class="font-bold">
-            {{ event.venue.name
-            }}<span v-if="event.venue.room"> • {{ event.venue.room }}</span>
+            {{ event.venue?.name
+            }}<span v-if="event.venue?.room"> • {{ event.venue.room }}</span>
           </h4>
           <div class="text-gray-700">
-            {{ event.venue.formatted_address }}
+            {{ event.venue?.formatted_address }}
           </div>
         </div>
       </div>

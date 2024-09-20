@@ -1,6 +1,6 @@
 <template>
-  <Button variant="outline" size="icon">
-    <Icon name="heroicons:share" class="h-4 w-4" />
+  <Button variant="ghost" size="sm">
+    <Icon name="heroicons:share" />
     <span class="sr-only">Share</span>
   </Button>
 </template>

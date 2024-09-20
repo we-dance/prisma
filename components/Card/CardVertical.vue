@@ -18,6 +18,9 @@ defineProps({
   subtitle: {
     type: String,
   },
+  bottom: {
+    type: String,
+  },
 });
 </script>
 
@@ -48,6 +51,9 @@ defineProps({
         <div class="text-xs text-gray-600">
           <div class="flex items-center">
             <span class="truncate">{{ subtitle }}</span>
+          </div>
+          <div class="flex items-center">
+            <span class="truncate">{{ bottom }}</span>
           </div>
         </div>
       </div>

@@ -107,22 +107,46 @@ useHead({
 
 <template>
   <div>
-    <div class="p-4">
-      <h1 class="text-2xl font-bold">Plan your dance adventure</h1>
-
-      <div class="text-sm">
-        Find events and people who would like to meet and show you around
-      </div>
-
-      <div class="grid md:grid-cols-3 shadow rounded border mt-4 p-2 gap-2">
+    <section
+      class="mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20 page-header pb-8 page-header"
+    >
+      <h1
+        class="text-center text-3xl font-bold tracking-tighter md:text-5xl leading-tight"
+      >
+        Prepare for your dance journey
+      </h1>
+      <span
+        class="max-w-[750px] text-center text-lg font-light text-foreground"
+      >
+        Explore events and meet people who can guide you
+      </span>
+      <section
+        class="w-full grid md:grid-cols-3 md:shadow md:rounded-full border gap-2 py-2 px-4"
+      >
+        <DanceStyleInput v-model="selectedStyle" />
         <CityInput v-model="selectedCity" placeholder="Where" />
         <DateRangeInput v-model="selectedDateRange" />
-        <DanceStyleInput v-model="selectedStyle" />
-      </div>
+      </section>
+    </section>
+
+    <div class="flex justify-center">
+      <Tabs default-value="music" class="space-y-6">
+        <TabsList>
+          <TabsTrigger value="music"> Beginner </TabsTrigger>
+          <TabsTrigger value="podcasts"> Intermediate </TabsTrigger>
+          <TabsTrigger value="live"> Advance </TabsTrigger>
+        </TabsList>
+      </Tabs>
     </div>
-    <div v-if="festivals" class="grid p-4 border-t">
-      <h2 class="text-xl font-bold">Festivals</h2>
-      <div class="text-sm">Plan your year and explore the world</div>
+
+    <div v-if="festivals" class="grid p-4">
+      <div class="flex justify-between">
+        <div>
+          <h2 class="text-xl font-bold">Festivals</h2>
+          <div class="text-sm">Plan your year and explore the world</div>
+        </div>
+        <Button variant="outline">See all</Button>
+      </div>
       <ScrollArea class="mt-2 whitespace-nowrap">
         <div class="flex space-x-2 w-max">
           <CardVertical
@@ -132,14 +156,20 @@ useHead({
             :image="event.cover"
             :title="event.name"
             :subtitle="d(event.startDate, 'short')"
+            :bottom="event.venue?.city?.name || ''"
           />
         </div>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </div>
-    <div v-if="classes" class="grid p-4 border-t">
-      <h2 class="text-xl font-bold">Classes</h2>
-      <div class="text-sm">Plan your month and improve your skills</div>
+    <div v-if="classes" class="grid p-4">
+      <div class="flex justify-between">
+        <div>
+          <h2 class="text-xl font-bold">Classes</h2>
+          <div class="text-sm">Plan your month and improve your skills</div>
+        </div>
+        <Button variant="outline">See all</Button>
+      </div>
       <ScrollArea class="mt-2 whitespace-nowrap">
         <div class="flex space-x-2 w-max">
           <CardVertical
@@ -154,9 +184,14 @@ useHead({
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </div>
-    <div v-if="parties" class="grid p-4 border-t">
-      <h2 class="text-xl font-bold">Parties</h2>
-      <div class="text-sm">Plan your week and dance</div>
+    <div v-if="parties" class="grid p-4">
+      <div class="flex justify-between">
+        <div>
+          <h2 class="text-xl font-bold">Parties</h2>
+          <div class="text-sm">Plan your week and dance</div>
+        </div>
+        <Button variant="outline">See all</Button>
+      </div>
       <ScrollArea class="mt-2 whitespace-nowrap">
         <div class="flex space-x-2 w-max">
           <CardVertical
