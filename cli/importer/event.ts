@@ -4,6 +4,24 @@ import { getNormalizedString, getSlug } from "../utils/slug";
 
 const prisma = new PrismaClient();
 
+async function getCity(lat: number, lng: number) {
+  const distance = 50000;
+  const results: { distance: number; id: string }[] = await prisma.$queryRaw`
+    SELECT
+      ROUND(earth_distance(ll_to_earth(${lat}, ${lng}), ll_to_earth(lat, lng))::NUMERIC, 2) AS distance,
+      id
+    FROM "City"
+    WHERE ROUND(earth_distance(ll_to_earth(${lat}, ${lng}), ll_to_earth(lat, lng))::NUMERIC, 2) < ${distance}
+    ORDER BY distance
+    LIMIT 1;`;
+
+  if (results && results.length < 1) {
+    return null;
+  }
+
+  return results[0];
+}
+
 async function addVenue(venue: any, cityId: string, creatorProfileId: string) {
   if (!venue?.place_id) {
     return {
@@ -37,9 +55,19 @@ async function addVenue(venue: any, cityId: string, creatorProfileId: string) {
     type: "Venue",
   };
 
-  const city = await prisma.profile.findFirst({
-    where: { placeId: cityId, type: "City" },
+  let city: any;
+
+  city = await prisma.city.findFirst({
+    where: { id: cityId },
   });
+
+  if (!city) {
+    city = await getCity(
+      venue.geometry?.location?.lat,
+      venue.geometry?.location?.lng
+    );
+  }
+
   if (city) {
     data.cityId = city.id;
   }
@@ -47,6 +75,7 @@ async function addVenue(venue: any, cityId: string, creatorProfileId: string) {
   const creator = await prisma.user.findFirst({
     where: { id: creatorProfileId },
   });
+
   if (creator) {
     data.createdById = creator.id;
   }

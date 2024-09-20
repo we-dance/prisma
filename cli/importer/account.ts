@@ -19,7 +19,24 @@ export async function reindex() {
     });
   }
 
-  return `Reindexed ${cities.length} cities`;
+  const danceStyles = await prisma.danceStyle.findMany({
+    include: {
+      events: true,
+      experiences: true,
+    },
+  });
+
+  for (const danceStyle of danceStyles) {
+    await prisma.danceStyle.update({
+      where: { id: danceStyle.id },
+      data: {
+        membersCount: danceStyle.experiences.length,
+        eventsCount: danceStyle.events.length,
+      },
+    });
+  }
+
+  return `Reindexed ${cities.length} cities and ${danceStyles.length} dance styles`;
 }
 
 export async function exportAccounts() {

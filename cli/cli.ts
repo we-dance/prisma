@@ -54,12 +54,12 @@ program.command("reindex").action(async (name) => {
 program
   .command("import")
   .option("--all", "Import everything")
+  .option("-d, --dance-styles", "Import dance styles")
   .option("-a, --accounts", "Import accounts")
   .option("-c, --cities", "Import cities")
   .option("-p, --profiles", "Import profiles")
   .option("-e, --events", "Import events")
   .option("-s, --subscribers", "Import subscribers")
-  .option("-d, --dance-styles", "Import dance styles")
   .action(async (options) => {
     const {
       all,

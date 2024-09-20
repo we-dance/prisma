@@ -239,6 +239,9 @@ model DanceStyle {
   timing       String?
   active       Boolean?
 
+  membersCount Int @default(0)
+  eventsCount  Int @default(0)
+
   events      Event[]
   experiences Experience[] @relation("experience_style")
 }

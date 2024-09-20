@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "DanceStyle" ADD COLUMN     "eventsCount" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "membersCount" INTEGER NOT NULL DEFAULT 0;
