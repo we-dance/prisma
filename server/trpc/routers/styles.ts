@@ -4,7 +4,7 @@ import { prisma } from "../../prisma";
 export const stylesRouter = router({
   list: publicProcedure.query(async () => {
     return await prisma.danceStyle.findMany({
-      orderBy: { popularity: "asc" },
+      orderBy: { membersCount: "desc" },
     });
   }),
 });

@@ -231,13 +231,15 @@ model DanceStyle {
   country      String?
   genres       String?
   source       String?
-  root         String?
+  root         Boolean?
   partner      Boolean?
   group        Boolean?
   related      String?
   music        String?
   timing       String?
   active       Boolean?
+  video        String?
+  intro        String?
 
   membersCount Int @default(0)
   eventsCount  Int @default(0)

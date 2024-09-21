@@ -21,6 +21,7 @@ export async function addDanceStyle(danceStyle: any) {
     group: danceStyle.group === "yes",
     familyOnly: danceStyle.family === "yes",
     active: danceStyle.active === "yes",
+    root: danceStyle.root === "yes",
   };
 
   delete data.id;

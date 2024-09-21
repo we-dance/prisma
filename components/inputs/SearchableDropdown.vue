@@ -36,7 +36,7 @@ const onSelect = (item: Item) => {
 
 <template>
   <div class="flex flex-col">
-    <div class="flex items-center border-b px-3" cmdk-input-wrapper="">
+    <div class="flex items-center border-b px-3">
       <Icon name="lucide:search" class="mr-2 h-4 w-4 shrink-0 opacity-50" />
       <input
         :value="searchQuery"
