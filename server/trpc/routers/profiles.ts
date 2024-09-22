@@ -42,24 +42,87 @@ export const profilesRouter = router({
     .query(async ({ input }) => {
       const { username } = input;
 
-      return await prisma.profile.findFirst({
+      const profile = await prisma.profile.findFirst({
         where: {
           username: {
             equals: username,
             mode: "insensitive",
           },
         },
-        include: {
-          eventsCreated: {
-            take: 5,
-            orderBy: [
-              {
-                startDate: "desc",
-              },
-            ],
+      });
+
+      if (!profile) {
+        return null;
+      }
+
+      const eventsAttended = await prisma.event.findMany({
+        where: {
+          guests: {
+            some: {
+              profileId: profile.id,
+            },
+          },
+        },
+        select: {
+          id: true,
+          guests: {
+            select: {
+              role: true,
+              profileId: true,
+            },
           },
         },
       });
+
+      const events = await prisma.event.findMany({
+        where: {
+          OR: [
+            { organizerId: profile?.id },
+            { venueId: profile?.id },
+            { id: { in: eventsAttended.map((event) => event.id) } },
+          ],
+        },
+        include: {
+          venue: {
+            include: {
+              city: true,
+            },
+          },
+          organizer: true,
+          styles: true,
+        },
+        orderBy: {
+          startDate: "desc",
+        },
+        take: 10,
+      });
+
+      const enrichedEvents = events.map((event) => {
+        const isHosted = event.organizerId === profile.id;
+        const isVenue = event.venueId === profile.id;
+        const guestInfo = eventsAttended
+          .find((event) => event.id === event.id)
+          ?.guests.find((guest) => guest.profileId === profile.id);
+
+        let role = null;
+        if (isHosted) {
+          role = "host";
+        } else if (isVenue) {
+          role = "venue";
+        } else if (guestInfo) {
+          role = guestInfo.role;
+        }
+
+        return {
+          ...event,
+          role,
+        };
+      });
+
+      return {
+        profile,
+        events: enrichedEvents,
+      };
     }),
   list: publicProcedure
     .input(z.object({ city: z.string(), country: z.string() }))

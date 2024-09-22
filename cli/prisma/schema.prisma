@@ -134,19 +134,20 @@ model Profile {
   followingCount   Int       @default(0)
   viewsCount       Int       @default(0)
 
-  userId          String?           @unique
-  user            User?             @relation("owned_by", fields: [userId], references: [id])
-  cityId          String?
-  city            City?             @relation("profile_city", fields: [cityId], references: [id])
-  posts           Post[]
-  eventsCreated   Event[]           @relation("event_created_by")
-  eventsOrganized Event[]           @relation("event_organized_by")
-  eventsHosted    Event[]           @relation("event_hosted_by")
-  createdBy       User?             @relation("profile_created_by", fields: [createdById], references: [id])
-  styles          Experience[]      @relation("profile_experience")
-  followers       ProfileFollower[] @relation("followers")
-  following       ProfileFollower[] @relation("following")
-  cities          CitySubscriber[]  @relation("cities")
+  userId             String?           @unique
+  user               User?             @relation("owned_by", fields: [userId], references: [id])
+  cityId             String?
+  city               City?             @relation("profile_city", fields: [cityId], references: [id])
+  posts              Post[]
+  eventsCreated      Event[]           @relation("event_created_by")
+  eventsOrganized    Event[]           @relation("event_organized_by")
+  eventsHosted       Event[]           @relation("event_hosted_by")
+  createdBy          User?             @relation("profile_created_by", fields: [createdById], references: [id])
+  styles             Experience[]      @relation("profile_experience")
+  followers          ProfileFollower[] @relation("followers")
+  following          ProfileFollower[] @relation("following")
+  cities             CitySubscriber[]  @relation("cities")
+  eventsParticipated Guest[]           @relation("guest_profile")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -205,6 +206,7 @@ model Event {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  guests    Guest[]  @relation("event_guests")
 }
 
 model DanceStyle {
@@ -287,4 +289,26 @@ model Redirect {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Guest {
+  id        String  @id @default(nanoid())
+  profileId String
+  profile   Profile @relation("guest_profile", fields: [profileId], references: [id])
+  eventId   String
+  event     Event   @relation("event_guests", fields: [eventId], references: [id])
+
+  role   String // "artist", "attendee", "VIP", "organizer", "staff", "sponsor", "media"
+  status String // "invited", "confirmed", "waitlisted", "cancelled", "registered", "checked_in", "declined", "no_show"
+
+  invitedAt    DateTime?
+  confirmedAt  DateTime?
+  cancelledAt  DateTime?
+  registeredAt DateTime?
+  waitlistedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([profileId, eventId]) // Ensure a profile can only be linked to an event once
 }

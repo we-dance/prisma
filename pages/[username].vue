@@ -8,16 +8,19 @@ const schema = z.object({
 
 const { username } = schema.parse(useRoute().params);
 
-const { data: profile, error } = await $client.profiles.get.useQuery({
+const { data, error } = await $client.profiles.get.useQuery({
   username,
 });
 
-if (!profile.value) {
+if (!data.value?.profile) {
   throw createError({
     statusCode: 404,
     statusMessage: error.message,
   });
 }
+
+const profile = computed(() => data.value?.profile);
+const events = computed(() => data.value?.events);
 
 const localePath = useLocalePath();
 
@@ -168,6 +171,7 @@ const tabs = computed(() => [
 
     <div class="min-h-screen">
       <TProfileDetails v-if="view === 'about'" :profile="profile" />
+      <EventListByDate v-if="view === 'events'" :events="events" />
     </div>
   </div>
 </template>

@@ -208,6 +208,37 @@ export async function addEvent(event: any) {
       data,
     });
 
+    if (event.artists) {
+      for (const artist of event.artists) {
+        await prisma.guest.create({
+          data: {
+            role: "artist",
+            profileId: artist.id,
+            eventId: result.id,
+            status: "confirmed",
+          },
+        });
+      }
+    }
+
+    if (event.star?.usernames) {
+      for (const firebaseUsername of event.star.usernames) {
+        const profile = await prisma.profile.findFirst({
+          where: { firebaseUsername },
+        });
+        if (profile) {
+          await prisma.guest.create({
+            data: {
+              role: "attendee",
+              profileId: profile.id,
+              eventId: result.id,
+              status: "registered",
+            },
+          });
+        }
+      }
+    }
+
     return {
       state: "created",
       id: result.id,

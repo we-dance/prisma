@@ -129,9 +129,14 @@ export const eventsRouter = router({
           shortId: input.shortId,
         },
         include: {
-          venue: true,
+          venue: {
+            include: {
+              city: true,
+            },
+          },
           organizer: true,
           styles: true,
+          guests: true,
         },
       });
     }),

@@ -32,7 +32,7 @@ const eventDay = computed(() => format(startDate, "d"));
 const eventMonth = computed(() => format(startDate, "MMM"));
 const dayOfWeek = computed(() => format(startDate, "EEE"));
 const eventTime = computed(() => format(startDate, "HH:mm"));
-const role = "";
+const role = computed(() => props.event.role || "");
 
 const cover = computed(() => {
   if (!props.event.cover) {
@@ -113,6 +113,13 @@ const cover = computed(() => {
         >
           {{ style.name }}
         </span>
+      </div>
+      <div class="overflow-hidden">
+        <div class="text-xs text-gray-600">
+          <div class="flex items-center">
+            <span class="truncate">{{ role }}</span>
+          </div>
+        </div>
       </div>
     </div>
     <div>
