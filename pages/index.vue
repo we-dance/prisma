@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { z } from "zod";
 import { toast } from "vue-sonner";
-import { today, getLocalTimeZone, CalendarDate } from "@internationalized/date";
+import { CalendarDate } from "@internationalized/date";
 const { $client } = useNuxtApp();
 const { t, d } = useI18n();
 const route = useRoute();
@@ -15,12 +15,15 @@ const schema = z.object({
   end: z.string().optional(),
 });
 
-const {
-  city: cityParam,
-  style,
-  start: startParam,
-  end: endParam,
-} = schema.parse(route.query);
+const query = schema.safeParse(route.query);
+if (query.error) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: "Wrong query",
+  });
+}
+
+const { city: cityParam, style, start: startParam, end: endParam } = query.data;
 
 const citySlug = ref<string | null>(null);
 
@@ -47,16 +50,26 @@ const selectedDateRange = ref({
   end: endParam || formatDate(sixDaysLater),
 });
 
-const { data, error } = await $client.events.overview.useQuery({
-  city: citySlug.value || cityParam,
-  style: selectedStyle.value,
-  start: `${selectedDateRange.value.start}T00:00:00Z`,
-});
+const data = ref({} as any);
+const loading = ref(false);
+
+async function load() {
+  loading.value = true;
+  data.value = await $client.events.overview.query({
+    city: citySlug.value || cityParam,
+    style: selectedStyle.value,
+    start: `${selectedDateRange.value.start}T00:00:00Z`,
+  });
+  loading.value = false;
+}
+
+await load();
 
 const view = "parties";
-const city = data.value?.city?.name;
 const selectedCity = ref<{ placeId: string; label: string } | null>(
-  cityParam ? { placeId: cityParam, label: city || cityParam } : null
+  cityParam
+    ? { placeId: cityParam, label: data.value?.city?.name || cityParam }
+    : null
 );
 const festivals = computed(() => data.value?.festivals);
 const classes = computed(() => data.value?.classes);
@@ -74,21 +87,21 @@ watch(
     router.push({
       query: {
         ...route.query,
-        city: citySlug.value,
+        city: citySlug.value ?? undefined,
         style,
         start: dateRange.start,
         end: dateRange.end,
       },
     });
 
-    refresh();
+    load();
   },
   { deep: true }
 );
 
 useHead({
   title: t(`explore.${view}.header`, {
-    city,
+    city: data.value?.city?.name,
     style,
   }),
   meta: [
@@ -96,7 +109,7 @@ useHead({
       hid: "description",
       name: "description",
       content: t(`explore.${view}.subheader`, {
-        city,
+        city: data.value?.city?.name,
         style,
         referenceStyle: style || "Salsa",
       }),
@@ -138,8 +151,7 @@ useHead({
         </TabsList>
       </Tabs>
     </div>
-
-    <div v-if="festivals" class="grid p-4">
+    <div v-if="!loading" class="grid p-4">
       <div class="flex justify-between">
         <div>
           <h2 class="text-xl font-bold">Festivals</h2>
@@ -162,7 +174,7 @@ useHead({
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </div>
-    <div v-if="classes" class="grid p-4">
+    <div class="grid p-4">
       <div class="flex justify-between">
         <div>
           <h2 class="text-xl font-bold">Classes</h2>
@@ -184,7 +196,7 @@ useHead({
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </div>
-    <div v-if="parties" class="grid p-4">
+    <div class="grid p-4">
       <div class="flex justify-between">
         <div>
           <h2 class="text-xl font-bold">Parties</h2>
