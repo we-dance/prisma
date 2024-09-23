@@ -143,7 +143,7 @@ export async function addEvent(event: any) {
   }
 
   const organizer = await prisma.profile.findFirst({
-    where: { username: event.org?.username },
+    where: { firebaseUsername: event.org?.username },
   });
   if (!organizer) {
     return {

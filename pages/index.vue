@@ -119,104 +119,106 @@ useHead({
 </script>
 
 <template>
-  <div>
-    <section
-      class="mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20 page-header pb-8 page-header"
-    >
-      <h1
-        class="text-center text-3xl font-bold tracking-tighter md:text-5xl leading-tight"
-      >
-        Prepare for your dance journey
-      </h1>
-      <span
-        class="max-w-[750px] text-center text-lg font-light text-foreground"
-      >
-        Explore events and meet people who can guide you
-      </span>
+  <Body class="bg-white">
+    <div class="mx-auto max-w-4xl">
       <section
-        class="w-full grid md:grid-cols-3 md:shadow md:rounded-full border gap-2 py-2 px-4"
+        class="mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20 page-header pb-8 page-header"
       >
-        <DanceStyleInput v-model="selectedStyle" />
-        <CityInput v-model="selectedCity" placeholder="Where" />
-        <DateRangeInput v-model="selectedDateRange" />
+        <h1
+          class="text-center text-3xl font-bold tracking-tighter md:text-5xl leading-tight"
+        >
+          Prepare for your dance journey
+        </h1>
+        <span
+          class="max-w-[750px] text-center text-lg font-light text-foreground"
+        >
+          Explore events and meet people who can guide you
+        </span>
+        <section
+          class="w-full grid md:grid-cols-3 md:shadow md:rounded-full border gap-2 py-2 px-4"
+        >
+          <DanceStyleInput v-model="selectedStyle" />
+          <CityInput v-model="selectedCity" placeholder="Where" />
+          <DateRangeInput v-model="selectedDateRange" />
+        </section>
       </section>
-    </section>
 
-    <div class="flex justify-center">
-      <Tabs default-value="music" class="space-y-6">
-        <TabsList>
-          <TabsTrigger value="music"> Beginner </TabsTrigger>
-          <TabsTrigger value="podcasts"> Intermediate </TabsTrigger>
-          <TabsTrigger value="live"> Advance </TabsTrigger>
-        </TabsList>
-      </Tabs>
-    </div>
-    <div v-if="!loading" class="grid p-4">
-      <div class="flex justify-between">
-        <div>
-          <h2 class="text-xl font-bold">Festivals</h2>
-          <div class="text-sm">Plan your year and explore the world</div>
-        </div>
-        <Button variant="outline">See all</Button>
+      <div class="flex justify-center">
+        <Tabs default-value="music" class="space-y-6">
+          <TabsList>
+            <TabsTrigger value="music"> Beginner </TabsTrigger>
+            <TabsTrigger value="podcasts"> Intermediate </TabsTrigger>
+            <TabsTrigger value="live"> Advance </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
-      <ScrollArea class="mt-2 whitespace-nowrap">
-        <div class="flex space-x-2 w-max">
-          <CardVertical
-            v-for="event in festivals"
-            :key="event.id"
-            :to="`/e/${event.slug}-${event.shortId}`"
-            :image="event.cover"
-            :title="event.name"
-            :subtitle="d(event.startDate, 'short')"
-            :bottom="event.venue?.city?.name || ''"
-          />
+      <div v-if="!loading" class="grid p-4">
+        <div class="flex justify-between">
+          <div>
+            <h2 class="text-xl font-bold">Festivals</h2>
+            <div class="text-sm">Plan your year and explore the world</div>
+          </div>
+          <Button variant="outline">See all</Button>
         </div>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
-    </div>
-    <div class="grid p-4">
-      <div class="flex justify-between">
-        <div>
-          <h2 class="text-xl font-bold">Classes</h2>
-          <div class="text-sm">Plan your month and improve your skills</div>
-        </div>
-        <Button variant="outline">See all</Button>
+        <ScrollArea class="mt-2 whitespace-nowrap">
+          <div class="flex space-x-2 w-max">
+            <CardVertical
+              v-for="event in festivals"
+              :key="event.id"
+              :to="`/e/${event.slug}-${event.shortId}`"
+              :image="event.cover"
+              :title="event.name"
+              :subtitle="d(event.startDate, 'short')"
+              :bottom="event.venue?.city?.name || ''"
+            />
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </div>
-      <ScrollArea class="mt-2 whitespace-nowrap">
-        <div class="flex space-x-2 w-max">
-          <CardVertical
-            v-for="event in classes"
-            :key="event.id"
-            :to="`/e/${event.slug}-${event.shortId}`"
-            :image="event.cover"
-            :title="event.name"
-            :subtitle="d(event.startDate, 'short')"
-          />
+      <div class="grid p-4">
+        <div class="flex justify-between">
+          <div>
+            <h2 class="text-xl font-bold">Classes</h2>
+            <div class="text-sm">Plan your month and improve your skills</div>
+          </div>
+          <Button variant="outline">See all</Button>
         </div>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
-    </div>
-    <div class="grid p-4">
-      <div class="flex justify-between">
-        <div>
-          <h2 class="text-xl font-bold">Parties</h2>
-          <div class="text-sm">Plan your week and dance</div>
-        </div>
-        <Button variant="outline">See all</Button>
+        <ScrollArea class="mt-2 whitespace-nowrap">
+          <div class="flex space-x-2 w-max">
+            <CardVertical
+              v-for="event in classes"
+              :key="event.id"
+              :to="`/e/${event.slug}-${event.shortId}`"
+              :image="event.cover"
+              :title="event.name"
+              :subtitle="d(event.startDate, 'short')"
+            />
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </div>
-      <ScrollArea class="mt-2 whitespace-nowrap">
-        <div class="flex space-x-2 w-max">
-          <CardVertical
-            v-for="event in parties"
-            :key="event.id"
-            :to="`/e/${event.slug}-${event.shortId}`"
-            :image="event.cover"
-            :title="event.name"
-            :subtitle="d(event.startDate, 'short')"
-          />
+      <div class="grid p-4">
+        <div class="flex justify-between">
+          <div>
+            <h2 class="text-xl font-bold">Parties</h2>
+            <div class="text-sm">Plan your week and dance</div>
+          </div>
+          <Button variant="outline">See all</Button>
         </div>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
+        <ScrollArea class="mt-2 whitespace-nowrap">
+          <div class="flex space-x-2 w-max">
+            <CardVertical
+              v-for="event in parties"
+              :key="event.id"
+              :to="`/e/${event.slug}-${event.shortId}`"
+              :image="event.cover"
+              :title="event.name"
+              :subtitle="d(event.startDate, 'short')"
+            />
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </div>
     </div>
-  </div>
+  </Body>
 </template>

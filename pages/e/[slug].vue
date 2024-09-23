@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: "default",
+});
+
 const { slug } = useRoute().params;
 const { $client } = useNuxtApp();
 const shortId = slug.slice(-5);

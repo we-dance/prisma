@@ -3,24 +3,33 @@ import { formatDate } from "~/utils/date";
 const { t, d } = useI18n();
 
 function can() {
-  return true;
+  return false;
 }
 
 function isAdmin() {
-  return true;
+  return false;
 }
 
-defineProps({
+const props = defineProps({
   event: {
     type: Object,
     required: true,
   },
 });
+
+const artists = computed(() =>
+  props.event.guests.filter((g) => g.role === "artist").map((g) => g.profile)
+);
+const guests = computed(() =>
+  props.event.guests.filter((g) => g.role === "attendee").map((g) => g.profile)
+);
 </script>
 
 <template>
-  <div>
-    <div v-if="event.cover" class="relative overflow-hidden rounded-t-md">
+  <div
+    class="mx-auto max-w-xl bg-white md:shadow md:rounded-md overflow-hidden md:mt-4"
+  >
+    <div v-if="event.cover" class="relative">
       <img :src="event.cover" :alt="event.name" class="w-full" />
     </div>
     <div class="p-4 flex gap-2 border-b border-t">
@@ -466,18 +475,8 @@ defineProps({
             </div>
           </div>
         </TPopup>
-        <div v-else-if="event.artists && event.artists.length">
-          <div
-            v-for="profile in event.artists"
-            :key="`artist-${profile.username}`"
-          >
-            <WProfile
-              v-if="profile"
-              :username="profile.username"
-              :fallback="profile"
-              hide-role
-            />
-          </div>
+        <div v-if="artists">
+          <ProfileList :profiles="artists" />
         </div>
       </div>
     </section>
@@ -504,60 +503,7 @@ defineProps({
           {{ t("event.guests") }}
         </h3>
 
-        <div v-if="event.star && event.star.usernames">
-          <div
-            v-if="guests.followersCount || guests.leadersCount"
-            class="text-xs pt-0"
-          >
-            <span>{{
-              t("followersCount", guests.followersCount, {
-                count: guests.followersCount,
-              })
-            }}</span>
-            <span>·</span>
-            <span>{{
-              t("leadersCount", guests.leadersCount, {
-                count: guests.leadersCount,
-              })
-            }}</span>
-            <span>·</span>
-            <span v-if="can('edit', 'events', doc) && event.checkin">
-              Present: {{ event.checkin.count || 0 }}
-            </span>
-          </div>
-          <div v-if="!uid" class="flex justify-center p-4">
-            <TButton
-              type="link"
-              allow-guests
-              :to="localePath(`/signin?target=${$route.path}`)"
-              >{{ t("event.guestsHidden") }}</TButton
-            >
-          </div>
-          <div v-else>
-            <div
-              v-for="username in event.star.usernames"
-              :key="`guest-${username}`"
-            >
-              <WProfile :username="username">
-                <div v-if="can('edit', 'events', doc)" slot="actions">
-                  <TReaction
-                    :username="username"
-                    type="primary"
-                    toggled-class="bg-green-500 hover:bg-green-800"
-                    icon="PlusIcon"
-                    toggled-icon="CheckIcon"
-                    field="checkin"
-                    class="rounded-full"
-                    hide-count
-                    :item="doc"
-                  />
-                </div>
-              </WProfile>
-            </div>
-            <div v-if="!event.star.count">There are no other guests yet.</div>
-          </div>
-        </div>
-        <div v-else class="text-xs text-center">There are no guests yet</div>
+        <ProfileList :profiles="guests" />
       </div>
     </section>
 

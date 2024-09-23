@@ -13,8 +13,6 @@ async function loadCity(
 
   const { lng, lat, city } = await getCoordinates(cityCode, reqLng, reqLat);
 
-  console.log(city);
-
   if (lng && lat && distance) {
     venues = await getVenues(lat, lng, distance);
   }
@@ -136,7 +134,11 @@ export const eventsRouter = router({
           },
           organizer: true,
           styles: true,
-          guests: true,
+          guests: {
+            include: {
+              profile: true,
+            },
+          },
         },
       });
     }),
@@ -214,8 +216,6 @@ export const eventsRouter = router({
         start,
         distance = 10000,
       } = input;
-
-      console.log("input", { cityCode, style, start });
 
       const { lng, lat, city, venues } = await loadCity(
         cityCode,
