@@ -19,7 +19,11 @@ const showMore = function () {
 <template>
   <div class="bg-white p-4 flex flex-col gap-4">
     <div class="flex">
-      <Input v-model="searchQuery" placeholder="Search dance style" />
+      <Input
+        v-model="searchQuery"
+        placeholder="Search dance style"
+        class="w-full md:w-auto"
+      />
       <div></div>
     </div>
     <section>
