@@ -3,17 +3,6 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function addDanceStyle(danceStyle: any) {
-  const existingDanceStyle = await prisma.danceStyle.findFirst({
-    where: { hashtag: danceStyle.id },
-  });
-
-  if (existingDanceStyle) {
-    return {
-      state: "ignored",
-      id: existingDanceStyle.hashtag,
-    };
-  }
-
   const data = {
     ...danceStyle,
     hashtag: danceStyle.id,
@@ -26,8 +15,10 @@ export async function addDanceStyle(danceStyle: any) {
 
   delete data.id;
 
-  const createdDanceStyle = await prisma.danceStyle.create({
-    data,
+  const createdDanceStyle = await prisma.danceStyle.upsert({
+    where: { hashtag: data.hashtag },
+    update: data,
+    create: data,
   });
 
   return {

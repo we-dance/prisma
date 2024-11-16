@@ -1,12 +1,12 @@
 <script setup lang="ts">
 const { $client } = useNuxtApp();
-const { data: allDanceStyles } = await $client.styles.list.useQuery();
+const { data: styles } = await $client.styles.list.useQuery();
 const searchQuery = ref("");
 const count = ref(10);
 
-const filteredItems = computed(() => {
+const visibleStyles = computed(() => {
   const query = searchQuery.value.toLowerCase();
-  return allDanceStyles.value
+  return styles.value
     .filter((item) => item.name.toLowerCase().includes(query))
     .slice(0, count.value);
 });
@@ -28,32 +28,27 @@ const showMore = function () {
     </div>
     <section>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div
-          v-for="danceStyle in filteredItems"
-          :key="danceStyle.id"
-          class="rounded-md"
-        >
+        <div v-for="style in visibleStyles" :key="style.id" class="rounded-md">
           <div class="aspect-video">
             <WYoutube
-              v-if="danceStyle.video"
-              :url="danceStyle.video"
+              v-if="style.video"
+              :url="style.video"
               class="rounded-md"
             />
             <div v-else class="bg-gray-200 rounded-md w-full h-full" />
           </div>
           <div class="p-2">
             <NuxtLink
-              :to="`/styles/${danceStyle.hashtag}`"
+              :to="`/styles/${style.hashtag}`"
               class="text-sm font-bold"
             >
-              {{ danceStyle.name }}
+              {{ style.name }}
             </NuxtLink>
             <div class="text-xs text-muted-foreground">
-              {{ danceStyle.region }}
+              {{ style.region }}
             </div>
             <div class="text-xs text-muted-foreground">
-              {{ danceStyle.membersCount }} members •
-              {{ danceStyle.eventsCount }} events
+              {{ style.membersCount }} members • {{ style.eventsCount }} events
             </div>
           </div>
         </div>
