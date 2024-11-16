@@ -25,9 +25,9 @@ const $i18n = {
 </script>
 
 <template>
-  <div class="border-t">
+  <section>
     <div v-for="(items, date) in itemsByDate" :key="date">
-      <h2 class="font-bold p-4 border-b bg-gray-100">
+      <h2 class="font-bold p-4 border-b">
         <span class="text-primary">{{ getDay(date, $i18n.locale) }}</span> ·
         {{ getDate(date, $i18n.locale) }}
       </h2>
@@ -35,5 +35,5 @@ const $i18n = {
         <EventCard :key="item.id" :event="item" side="time" />
       </div>
     </div>
-  </div>
+  </section>
 </template>

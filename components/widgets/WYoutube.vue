@@ -30,7 +30,6 @@ export default {
     :src="src"
     frameborder="0"
     allowfullscreen
-    width="560"
-    height="315"
+    class="w-full aspect-video"
   ></iframe>
 </template>

@@ -14,7 +14,7 @@ const { objectivesList } = useProfile();
 </script>
 
 <template>
-  <div>
+  <div v-if="profile">
     <div
       v-if="profile.offers && profile.offers.length"
       class="max-w-md mx-auto flex flex-col gap-4 p-4"
@@ -32,7 +32,7 @@ const { objectivesList } = useProfile();
     <TPreview
       v-if="profile.story"
       :content="profile.story"
-      class="p-4 border-t"
+      class="p-4 border-t mx-auto"
     />
 
     <div v-if="profile.amenities" class="space-y-2 p-4 border-t">
@@ -104,15 +104,15 @@ const { objectivesList } = useProfile();
 
       <dl class="mt-4 md:flex text-xs">
         <dt class="font-bold mr-1">{{ t("profile.joined") }}:</dt>
-        <dd v-if="profile.joinedAt">{{ d(profile.joinedAt, "short") }}</dd>
-        <dd v-else>{{ d(profile.createdAt, "short") }}</dd>
+        <dd v-if="profile.joinedAt">{{ d(profile.joinedAt, "long") }}</dd>
+        <dd v-if="profile.createdAt">{{ d(profile.createdAt, "long") }}</dd>
       </dl>
 
       <dl v-if="profile.lastLoginAt" class="mt-4 md:flex text-xs">
         <dt class="font-bold mr-1">
           {{ t("profile.profileSorts.lastSeen") }}:
         </dt>
-        <dd>{{ d(profile.lastLoginAt, "short") }}</dd>
+        <dd>{{ d(profile.lastLoginAt, "long") }}</dd>
       </dl>
 
       <dl v-if="false" class="mt-4 md:flex">
