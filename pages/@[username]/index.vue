@@ -3,7 +3,6 @@ definePageMeta({
   layout: false,
 });
 
-const { d } = useI18n();
 const { profile, events } = useProfilePage();
 </script>
 
