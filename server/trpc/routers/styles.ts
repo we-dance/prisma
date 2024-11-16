@@ -3,8 +3,10 @@ import { prisma } from "../../prisma";
 
 export const stylesRouter = router({
   list: publicProcedure.query(async () => {
-    return await prisma.danceStyle.findMany({
+    const styles = await prisma.danceStyle.findMany({
       orderBy: { membersCount: "desc" },
     });
+
+    return styles.filter((dance) => dance.family !== dance.hashtag);
   }),
 });
