@@ -5,6 +5,10 @@ html {
   font-size: 19px;
 }
 
+h1 strong {
+  @apply text-primary;
+}
+
 .typo {
   @apply leading-normal break-words text-black;
 }
