@@ -101,73 +101,67 @@ const videos = ref([
 ]);
 
 const votes = ref([]);
+const resolved = ref(new Map());
 
-const rankedVideos = computed(() => {
-  const calculateRankings = () => {
-    const videoIds = videos.value.map((v) => v.id);
+const updateResolvedGraph = () => {
+  resolved.value = new Map(videos.value.map((v) => [v.id, new Set()]));
+  votes.value.forEach(({ winner, loser }) => {
+    resolved.value.get(winner)?.add(loser);
+  });
 
-    // Initialize pairwise comparison matrix
-    const wins = new Map();
-    videoIds.forEach((id) => wins.set(id, new Set()));
+  const propagate = (winner) => {
+    const losers = resolved.value.get(winner);
+    if (!losers) return;
 
-    // Populate the wins map
-    votes.value.forEach(({ winner, loser }) => {
-      wins.get(winner).add(loser);
+    losers.forEach((loser) => {
+      const winnerSet = resolved.value.get(winner);
+      const loserSet = resolved.value.get(loser);
+      if (winnerSet && loserSet) {
+        loserSet.forEach((l) => winnerSet.add(l));
+      }
     });
-
-    // Sort videos using a recursive dominance approach
-    const calculateScore = (videoId, visited = new Set()) => {
-      if (visited.has(videoId)) return 0; // Avoid cycles
-      visited.add(videoId);
-
-      // Count direct wins + recursive wins
-      return Array.from(wins.get(videoId) || []).reduce(
-        (score, opponent) => score + 1 + calculateScore(opponent, visited),
-        0
-      );
-    };
-
-    // Compute scores for all videos
-    const scores = videoIds.map((id) => ({
-      id,
-      score: calculateScore(id),
-    }));
-
-    // Sort by score in descending order
-    const rankedIds = scores
-      .sort((a, b) => b.score - a.score)
-      .map((item) => item.id);
-
-    return rankedIds.map((id) => videos.value.find((v) => v.id === id));
   };
 
-  return calculateRankings();
-});
-
-const getLastShownVideos = () => {
-  if (votes.value.length === 0) return [];
-  const lastVote = votes.value[votes.value.length - 1];
-  return [lastVote.winner, lastVote.loser];
+  videos.value.forEach((v) => propagate(v.id));
 };
 
+const rankedVideos = computed(() => {
+  const scores = new Map(videos.value.map((v) => [v.id, 0]));
+
+  // Calculate scores based on wins (direct + transitive)
+  resolved.value.forEach((losers, winner) => {
+    scores.set(winner, losers.size);
+  });
+
+  // Sort by score
+  return [...scores.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([id]) => id)
+    .map((id) => videos.value.find((v) => v.id === id));
+});
+
 const generateNextPair = () => {
-  const videoIds = videos.value.map((v) => v.id);
-  const pairs = [];
+  const unresolvedPairs = [];
 
-  for (let i = 0; i < videoIds.length; i++) {
-    for (let j = i + 1; j < videoIds.length; j++) {
-      const isAlreadyShown = votes.value.some(
-        (vote) =>
-          (vote.winner === videoIds[i] && vote.loser === videoIds[j]) ||
-          (vote.winner === videoIds[j] && vote.loser === videoIds[i])
-      );
-      if (!isAlreadyShown) pairs.push([videoIds[i], videoIds[j]]);
-    }
-  }
+  // Generate pairs for unresolved relationships
+  videos.value.forEach((v1) => {
+    videos.value.forEach((v2) => {
+      if (
+        v1.id !== v2.id &&
+        !resolved.value.get(v1.id)?.has(v2.id) &&
+        !resolved.value.get(v2.id)?.has(v1.id)
+      ) {
+        unresolvedPairs.push([v1.id, v2.id]);
+      }
+    });
+  });
 
-  const lastShownVideos = getLastShownVideos();
+  // Get the last two shown videos
+  const lastVote = votes.value[votes.value.length - 1] || {};
+  const lastShownVideos = [lastVote.winner, lastVote.loser];
 
-  const filteredPairs = pairs.filter(
+  // Filter pairs to avoid the last two shown videos
+  const filteredPairs = unresolvedPairs.filter(
     (pair) =>
       !lastShownVideos.includes(pair[0]) && !lastShownVideos.includes(pair[1])
   );
@@ -182,19 +176,23 @@ const generateNextPair = () => {
 const currentPair = ref(generateNextPair());
 
 const vote = (winner) => {
-  const [video1, video2] = currentPair.value.map((v) => v.id);
-  const loser = video1 === winner ? video2 : video1;
+  const [left, right] = currentPair.value.map((v) => v.id);
+  const loser = left === winner ? right : left;
 
   votes.value.push({ winner, loser });
-
-  // Generate the next pair
+  updateResolvedGraph();
   currentPair.value = generateNextPair();
 };
+
+// Initialize resolved map when component loads
+onMounted(() => {
+  updateResolvedGraph();
+});
 </script>
 
 <template>
   <div class="mx-auto max-w-xl p-4 flex flex-col gap-4">
-    <section class="bg-white p-4 rounded-md">
+    <section v-if="style" class="bg-white p-4 rounded-md">
       <h1 class="text-2xl font-bold">{{ style.name }}</h1>
       <TPreview :content="style.description" excerpt class="text-xs" />
       <NuxtLink
