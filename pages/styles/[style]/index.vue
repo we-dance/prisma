@@ -19,6 +19,6 @@ const { data: style } = await $client.styles.get.useQuery({
       </NuxtLink>
     </section>
 
-    <VideoBattleStage />
+    <VideoBattleStage :videos="style.videos" />
   </div>
 </template>

@@ -148,6 +148,7 @@ model Profile {
   following          ProfileFollower[] @relation("following")
   cities             CitySubscriber[]  @relation("cities")
   eventsParticipated Guest[]           @relation("guest_profile")
+  videosAdded        Video[]           @relation("video_created_by")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -248,6 +249,7 @@ model DanceStyle {
 
   events      Event[]
   experiences Experience[] @relation("experience_style")
+  videos      Video[]      @relation("video_style")
 }
 
 model Category {
@@ -311,4 +313,16 @@ model Guest {
   updatedAt DateTime @updatedAt
 
   @@unique([profileId, eventId]) // Ensure a profile can only be linked to an event once
+}
+
+model Video {
+  id      String     @id @default(nanoid())
+  url     String     @unique
+  styleId Int
+  style   DanceStyle @relation("video_style", fields: [styleId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   Profile? @relation("video_created_by", fields: [createdById], references: [id])
+  createdById String?
 }

@@ -13,6 +13,7 @@ export async function addDanceStyle(danceStyle: any) {
     root: danceStyle.root === "yes",
   };
 
+  delete data.videos;
   delete data.id;
 
   const createdDanceStyle = await prisma.danceStyle.upsert({
@@ -20,6 +21,23 @@ export async function addDanceStyle(danceStyle: any) {
     update: data,
     create: data,
   });
+
+  if (danceStyle.videos) {
+    for (const dataVideo of danceStyle.videos) {
+      const video = {
+        url: dataVideo.url,
+        styleId: createdDanceStyle.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      await prisma.video.upsert({
+        where: { url: video.url },
+        update: video,
+        create: video,
+      });
+    }
+  }
 
   return {
     state: "created",
