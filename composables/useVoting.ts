@@ -1,4 +1,5 @@
 export default function useVoting(videos: Ref<Video[]>, votes: Ref<Vote[]>) {
+  const voteCount = ref(0);
   const resolved = ref(new Map());
 
   const updateResolvedGraph = () => {
@@ -73,6 +74,7 @@ export default function useVoting(videos: Ref<Video[]>, votes: Ref<Vote[]>) {
     const loser = left === winner ? right : left;
 
     votes.value.push({ winner, loser });
+    voteCount.value++;
     updateResolvedGraph();
     currentPair.value = generateNextPair();
   };
@@ -81,5 +83,6 @@ export default function useVoting(videos: Ref<Video[]>, votes: Ref<Vote[]>) {
     currentPair,
     rankedVideos,
     vote,
+    voteCount,
   };
 }

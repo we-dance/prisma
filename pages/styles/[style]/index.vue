@@ -77,31 +77,45 @@ const videos = ref([
   },
   {
     id: 4,
-    url: "https://www.youtube.com/watch?v=8Iu8YEAiDMw",
+    url: "https://www.youtube.com/watch?v=j3sJ0D-1lnA",
     artists: [
       {
-        username: "4",
-        name: "Artist 4",
+        username: "osbanis_deakocan",
+        name: "Osbanis",
         role: "Leader",
+      },
+      {
+        username: "anneta_deakocan",
+        name: "Anneta",
+        role: "Follower",
       },
     ],
   },
-
   {
     id: 5,
-    url: "https://www.youtube.com/watch?v=8Iu8YEAiDMw",
+    url: "https://www.youtube.com/watch?v=O_r4WGC4GEw",
     artists: [
       {
-        username: "5",
-        name: "Artist 5",
-        role: "Leader",
+        username: "wilmerymariaofficial",
+        name: "Wilmer y Maria",
+        role: "Couple",
       },
     ],
   },
 ]);
 
+const BATTLE_PROPOSAL_ROUND = 3;
+const BATTLE_ROUNDS = 5;
+
 const votes = ref([]);
-const { currentPair, rankedVideos, vote } = useVoting(videos, votes);
+const { currentPair, vote, voteCount } = useVoting(videos, votes);
+const proposalFinished = ref(false);
+const proposalTime = computed(
+  () => voteCount.value === BATTLE_PROPOSAL_ROUND && !proposalFinished.value
+);
+const showBattle = computed(
+  () => currentPair.value && voteCount.value < BATTLE_ROUNDS
+);
 </script>
 
 <template>
@@ -117,34 +131,9 @@ const { currentPair, rankedVideos, vote } = useVoting(videos, votes);
       </NuxtLink>
     </section>
 
-    <section>
-      <h2 class="text-xs uppercase font-bold text-center">VS</h2>
-      <div class="flex justify-between w-full">
-        <div
-          v-for="video in currentPair"
-          :key="video.id"
-          class="rounded-md m-1 flex flex-col"
-        >
-          <div class="aspect-video">
-            <WYoutube v-if="video.url" :url="video.url" class="rounded-md" />
-            <div v-else class="bg-gray-200 rounded-md w-full h-full" />
-          </div>
-          <div class="text-xs px-1 my-2 text-center">
-            <template
-              v-for="(artist, index) in video.artists"
-              :key="artist.username"
-            >
-              <NuxtLink :to="`/@${artist.username}`">
-                {{ artist.name }}
-              </NuxtLink>
-              <span class="p-1" v-if="index < video.artists.length - 1">&</span>
-            </template>
-          </div>
-          <div class="flex justify-center">
-            <Button @click="vote(video.id)">Vote</Button>
-          </div>
-        </div>
-      </div>
+    <section v-if="showBattle">
+      <VideoProposal v-if="proposalTime" v-model="proposalFinished" />
+      <VideoBattle v-else :videos="currentPair" @vote="vote" />
     </section>
   </div>
 </template>
