@@ -96,17 +96,20 @@ const videos = ref([
   },
 ]);
 
-const BATTLE_PROPOSAL_ROUND = 3;
+const BATTLE_PROPOSAL_ROUND = 1;
 const BATTLE_ROUNDS = 5;
 
 const votes = ref([]);
 const { currentPair, vote, voteCount } = useVoting(videos, votes);
 const proposalFinished = ref(false);
 const proposalTime = computed(
-  () => voteCount.value === BATTLE_PROPOSAL_ROUND && !proposalFinished.value
+  () =>
+    !currentPair.value ||
+    (voteCount.value === BATTLE_PROPOSAL_ROUND && !proposalFinished.value)
 );
 const showBattle = computed(
-  () => currentPair.value && voteCount.value < BATTLE_ROUNDS
+  () =>
+    (!voteCount.value || currentPair.value) && voteCount.value < BATTLE_ROUNDS
 );
 </script>
 <template>

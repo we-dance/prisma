@@ -19,7 +19,7 @@ export default {
 
       const videoId = getYoutubeId(this.url);
 
-      return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&vq=hd720`;
     },
   },
 };

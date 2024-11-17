@@ -43,19 +43,17 @@ defineProps({
       <div
         v-for="video in videos"
         :key="video.id"
-        class="rounded-md m-1 w-full"
+        class="rounded-md w-full gap-2 flex flex-col"
       >
-        <div>
-          <Dialog>
-            <DialogTrigger class="w-full aspect-video">
-              <WYoutubeThumb :url="video.url" />
-            </DialogTrigger>
-            <DialogFullscreen>
-              <WYoutube :url="video.url" />
-            </DialogFullscreen>
-          </Dialog>
-        </div>
-        <div class="text-xs px-1 my-2 text-center">
+        <Dialog>
+          <DialogTrigger class="w-full aspect-video">
+            <WYoutubeThumb :url="video.url" />
+          </DialogTrigger>
+          <DialogFullscreen>
+            <WYoutube :url="video.url" />
+          </DialogFullscreen>
+        </Dialog>
+        <div class="text-xs px-1 text-center">
           <template
             v-for="(artist, index) in video.artists"
             :key="artist.username"
