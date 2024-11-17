@@ -28,9 +28,14 @@ const showMore = function () {
     </div>
     <section>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div v-for="style in visibleStyles" :key="style.id" class="rounded-md">
+        <NuxtLink
+          v-for="style in visibleStyles"
+          :key="style.id"
+          :to="`/styles/${style.hashtag}`"
+          class="rounded-md"
+        >
           <div class="aspect-video">
-            <WYoutube
+            <WYoutubeThumb
               v-if="style.video"
               :url="style.video"
               class="rounded-md"
@@ -38,12 +43,9 @@ const showMore = function () {
             <div v-else class="bg-gray-200 rounded-md w-full h-full" />
           </div>
           <div class="p-2">
-            <NuxtLink
-              :to="`/styles/${style.hashtag}`"
-              class="text-sm font-bold"
-            >
+            <div class="text-sm font-bold">
               {{ style.name }}
-            </NuxtLink>
+            </div>
             <div class="text-xs text-muted-foreground">
               {{ style.region }}
             </div>
@@ -51,7 +53,7 @@ const showMore = function () {
               {{ style.membersCount }} members • {{ style.eventsCount }} events
             </div>
           </div>
-        </div>
+        </NuxtLink>
       </div>
     </section>
     <div class="container py-8">

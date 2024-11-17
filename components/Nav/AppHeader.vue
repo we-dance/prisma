@@ -19,10 +19,10 @@ const isMenuOpen = ref(false);
     </div>
   </transition>
 
-  <header class="flex p-2 gap-2 justify-start items-center border-b">
-    <button class="mt-2" title="Open Menu" @click="isMenuOpen = !isMenuOpen">
-      <Icon name="heroicons:bars-3" class="w-6 h-6" />
-    </button>
+  <header class="flex bg-white p-2 gap-2 justify-start items-center border-b">
+    <Button variant="ghost" title="Open Menu" @click="isMenuOpen = !isMenuOpen">
+      <Icon name="heroicons:bars-3" size="24" />
+    </Button>
 
     <router-link title="Homepage" to="/">
       <WeDanceLogo />

@@ -19,7 +19,7 @@ export default {
 
       const videoId = getYoutubeId(this.url);
 
-      return `https://www.youtube.com/embed/${videoId}`;
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
     },
   },
 };
@@ -30,6 +30,7 @@ export default {
     :src="src"
     frameborder="0"
     allowfullscreen
+    allow="autoplay"
     class="w-full aspect-video"
   ></iframe>
 </template>

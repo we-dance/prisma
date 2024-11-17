@@ -39,15 +39,21 @@ defineProps({
       </CardTitle>
       <CardDescription> Two videos. One winner. Your call! </CardDescription>
     </CardHeader>
-    <CardContent class="flex justify-between w-full">
+    <CardContent class="grid grid-cols-2 gap-2 w-full">
       <div
         v-for="video in videos"
         :key="video.id"
-        class="rounded-md m-1 flex flex-col"
+        class="rounded-md m-1 w-full"
       >
-        <div class="aspect-video">
-          <WYoutube v-if="video.url" :url="video.url" class="rounded-md" />
-          <div v-else class="bg-gray-200 rounded-md w-full h-full" />
+        <div>
+          <Dialog>
+            <DialogTrigger class="w-full aspect-video">
+              <WYoutubeThumb :url="video.url" />
+            </DialogTrigger>
+            <DialogFullscreen>
+              <WYoutube :url="video.url" />
+            </DialogFullscreen>
+          </Dialog>
         </div>
         <div class="text-xs px-1 my-2 text-center">
           <template
