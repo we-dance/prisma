@@ -22,6 +22,21 @@ export async function addDanceStyle(danceStyle: any) {
     create: data,
   });
 
+  if (danceStyle.video) {
+    const video = {
+      url: danceStyle.video,
+      styleId: createdDanceStyle.id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    await prisma.video.upsert({
+      where: { url: video.url },
+      update: video,
+      create: video,
+    });
+  }
+
   if (danceStyle.videos) {
     for (const dataVideo of danceStyle.videos) {
       const video = {

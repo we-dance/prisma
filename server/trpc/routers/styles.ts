@@ -6,15 +6,22 @@ export const stylesRouter = router({
   list: publicProcedure.query(async () => {
     const styles = await prisma.danceStyle.findMany({
       include: {
-        videos: true,
-      },
-      where: {
         videos: {
-          some: {},
+          select: {
+            id: true,
+          },
+        },
+        _count: {
+          select: {
+            videos: true,
+          },
         },
       },
-      orderBy: { name: "asc" },
-      // orderBy: { membersCount: "desc", },
+      orderBy: {
+        videos: {
+          _count: "desc",
+        },
+      },
     });
 
     return styles;

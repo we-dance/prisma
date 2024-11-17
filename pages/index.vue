@@ -2,18 +2,11 @@
 const { $client } = useNuxtApp();
 const { data: styles } = await $client.styles.list.useQuery();
 const searchQuery = ref("");
-const count = ref(10);
 
 const visibleStyles = computed(() => {
   const query = searchQuery.value.toLowerCase();
-  return styles.value
-    .filter((item) => item.name.toLowerCase().includes(query))
-    .slice(0, count.value);
+  return styles.value.filter((item) => item.name.toLowerCase().includes(query));
 });
-
-const showMore = function () {
-  count.value += 10;
-};
 </script>
 
 <template>
@@ -56,10 +49,5 @@ const showMore = function () {
         </NuxtLink>
       </div>
     </section>
-    <div class="container py-8">
-      <div class="flex justify-center">
-        <Button variant="outline" @click="showMore">Show more</Button>
-      </div>
-    </div>
   </div>
 </template>
