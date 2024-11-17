@@ -183,11 +183,6 @@ const vote = (winner) => {
   updateResolvedGraph();
   currentPair.value = generateNextPair();
 };
-
-// Initialize resolved map when component loads
-onMounted(() => {
-  updateResolvedGraph();
-});
 </script>
 
 <template>
@@ -216,7 +211,15 @@ onMounted(() => {
             <div v-else class="bg-gray-200 rounded-md w-full h-full" />
           </div>
           <div class="text-xs px-1 my-2 text-center">
-            {{ video.id }}
+            <template
+              v-for="(artist, index) in video.artists"
+              :key="artist.username"
+            >
+              <NuxtLink :to="`/@${artist.username}`">
+                {{ artist.name }}
+              </NuxtLink>
+              <span class="p-1" v-if="index < video.artists.length - 1">&</span>
+            </template>
           </div>
           <div class="flex justify-center">
             <Button @click="vote(video.id)">Vote</Button>
@@ -227,15 +230,8 @@ onMounted(() => {
 
     <section class="flex gap-4">
       <div class="prose">
-        <h2>Videos</h2>
-        <li v-for="video in videos" :key="video.id">
-          {{ video.id }}
-        </li>
-      </div>
-      <div class="prose">
-        <h2>Ranked</h2>
         <li v-for="video in rankedVideos" :key="video.id + `ranked`">
-          {{ video.id }}
+          {{ video.artists.map((a) => a.name).join(", ") }}
         </li>
       </div>
     </section>
