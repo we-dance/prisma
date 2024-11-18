@@ -12,43 +12,48 @@ const videos = computed(() =>
     }))
 );
 
-const { currentPair, vote, rankedVideos, voteCount } = useVoting(videos, votes);
-const EXPECTED_COUNT = 5;
-const progress = computed(() => (voteCount.value / EXPECTED_COUNT) * 100);
+const { currentPair, vote, rankedVideos, voteCount, uniqueVideos } = useVoting(
+  videos,
+  votes
+);
 
-const map = [
-  {
-    title: "Let’s Find Your Dance!",
-    description:
-      "Watch and compare videos of different dance styles. Pay attention to the music, the moves, and the vibe—choose the ones that make you want to dance!",
-  },
-  {
-    title: "Keep Going!",
-    description:
-      "You’re just getting started! Compare more styles to find the one that moves you.",
-  },
-  {
-    title: "You’re Getting Closer!",
-    description:
-      "Your choices are shaping up. Keep voting to discover the perfect dance for you!",
-  },
-  {
-    title: "Almost There!",
-    description:
-      "You’re starting to groove! A few more comparisons, and we’ll find your match.",
-  },
-  {
-    title: "One Step Away!",
-    description:
-      "You’ve got an eye for great moves! Just a couple more to reveal your ideal style.",
-  },
-  {
-    title: "Not sure yet?",
-    description: "Let’s keep exploring!",
-  },
-];
+const progress = computed(
+  () => (uniqueVideos.value.length / videos.value.length) * 100
+);
 
 const card = computed(() => {
+  const map = [
+    {
+      title: "Let’s Find Your Dance!",
+      description:
+        "Watch and compare videos of different dance styles. Pay attention to the music, the moves, and the vibe—choose the ones that make you want to dance!",
+    },
+    {
+      title: "Keep Going!",
+      description:
+        "You’re just getting started! Compare more styles to find the one that moves you.",
+    },
+    {
+      title: "You’re Getting Closer!",
+      description:
+        "Your choices are shaping up. Keep voting to discover the perfect dance for you!",
+    },
+    {
+      title: "Almost There!",
+      description:
+        "You’re starting to groove! A few more comparisons, and we’ll find your match.",
+    },
+    {
+      title: "One Step Away!",
+      description:
+        "You’ve got an eye for great moves! Just a couple more to reveal your ideal style.",
+    },
+    {
+      title: "Not sure yet?",
+      description: `Let’s keep exploring! You've seen ${uniqueVideos.value.length} of ${videos.value.length} dance styles.`,
+    },
+  ];
+
   let current = voteCount.value;
   if (current >= map.length) {
     current = map.length - 1;
@@ -74,6 +79,11 @@ const card = computed(() => {
           <ul>
             <li v-for="video in rankedVideos" :key="video.id">
               <NuxtLink :to="`/styles/${video.id}`">{{ video.name }}</NuxtLink>
+              <span
+                v-if="!uniqueVideos.includes(video.id)"
+                class="text-gray-500 text-xs"
+                >(not watched yet)</span
+              >
             </li>
           </ul>
         </div>
@@ -88,7 +98,7 @@ const card = computed(() => {
       <CardContent>
         <VideoBattle :videos="currentPair" @vote="vote" />
       </CardContent>
-      <CardFooter v-if="voteCount < 5">
+      <CardFooter>
         <Progress :model-value="progress" />
       </CardFooter>
     </Card>

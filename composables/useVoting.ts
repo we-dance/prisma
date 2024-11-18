@@ -37,6 +37,15 @@ export default function useVoting(videos: Ref, votes: Ref) {
       .map((id) => videos.value.find((v) => v.id === id));
   });
 
+  const uniqueVideos = computed(() => {
+    const uniqueIds = new Set();
+    votes.value.forEach(({ winnerId, loserId }) => {
+      uniqueIds.add(winnerId);
+      uniqueIds.add(loserId);
+    });
+    return [...uniqueIds];
+  });
+
   const generateNextPair = () => {
     const unresolvedPairs: [string, string][] = [];
 
@@ -65,14 +74,16 @@ export default function useVoting(videos: Ref, votes: Ref) {
 
     if (unresolvedPairs.length > 0) {
       const sortedUnresolvedPairs = unresolvedPairs.sort(
-        ([v1a, v1b], [v2a, v2b]) => {
-          const v1HasLastShown =
-            lastShownVideos.includes(v1a) || lastShownVideos.includes(v1b);
-          const v2HasLastShown =
-            lastShownVideos.includes(v2a) || lastShownVideos.includes(v2b);
-          if (v1HasLastShown && !v2HasLastShown) return 1;
-          if (!v1HasLastShown && v2HasLastShown) return -1;
-          return 0;
+        ([a1, a2], [b1, b2]) => {
+          const a1Watched = uniqueVideos.value.includes(a1);
+          const a2Watched = uniqueVideos.value.includes(a2);
+          const b1Watched = uniqueVideos.value.includes(b1);
+          const b2Watched = uniqueVideos.value.includes(b2);
+
+          const aUnwatched = (a1Watched ? 0 : 1) + (a2Watched ? 0 : 1);
+          const bUnwatched = (b1Watched ? 0 : 1) + (b2Watched ? 0 : 1);
+
+          return bUnwatched - aUnwatched;
         }
       );
 
@@ -106,5 +117,6 @@ export default function useVoting(videos: Ref, votes: Ref) {
     rankedVideos,
     vote,
     voteCount,
+    uniqueVideos,
   };
 }
