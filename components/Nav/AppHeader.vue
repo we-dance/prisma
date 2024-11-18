@@ -4,6 +4,13 @@ import WeDanceLogo from "~/public/svg/logo-horizontal-dark.svg?component";
 const isMenuOpen = ref(false);
 
 const searchQuery = ref("");
+watch(searchQuery, () => {
+  if (useRoute().path !== "/search") {
+    useRouter().push(`/search?q=${searchQuery.value}`);
+  } else {
+    useRouter().replace(`/search?q=${searchQuery.value}`);
+  }
+});
 </script>
 
 <template>

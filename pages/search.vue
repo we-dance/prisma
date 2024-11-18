@@ -1,33 +1,12 @@
 <script setup>
-import { useFocus } from "@vueuse/core";
 const { $client } = useNuxtApp();
 
-const searchInput = ref();
-useFocus(searchInput, { initialValue: true });
-
-const query = ref("");
+const query = computed(() => useRoute().query.q);
 const profiles = ref([]);
 const cities = ref([]);
 const events = ref([]);
 
-const tab = computed(() => useRoute().query.type || "profiles");
-const tabs = computed(() => [
-  {
-    name: "Profiles",
-    value: "profiles",
-    to: "/search",
-  },
-  {
-    name: "Cities",
-    value: "cities",
-    to: "/search?type=cities",
-  },
-  {
-    name: "Events",
-    value: "events",
-    to: "/search?type=events",
-  },
-]);
+const tab = ref("profiles");
 
 const search = async () => {
   if (tab.value === "profiles") {
@@ -64,31 +43,18 @@ watch(tab, () => {
 
 <template>
   <div class="w-full">
-    <div class="relative px-4 py-2">
-      <Input
-        id="search"
-        type="search"
-        v-model="query"
-        placeholder="Search"
-        class="pl-10 rounded-full"
-        ref="searchInput"
-        @input="search"
-      />
-      <span
-        class="absolute start-0 inset-y-0 flex items-center justify-center px-2 pl-8"
-      >
-        <Icon
-          name="heroicons:magnifying-glass"
-          size="20px"
-          class="text-gray-500"
-        />
-      </span>
+    <Tabs default-value="profiles" v-model="tab">
+      <TabsList class="w-full">
+        <TabsTrigger value="profiles"> Profiles </TabsTrigger>
+        <TabsTrigger value="cities"> Cities </TabsTrigger>
+        <TabsTrigger value="events"> Events </TabsTrigger>
+      </TabsList>
+    </Tabs>
+
+    <div class="bg-white">
+      <ProfileList v-if="tab === 'profiles'" :profiles="profiles" />
+      <CityList v-if="tab === 'cities'" :cities="cities" />
+      <EventList v-if="tab === 'events'" :events="events" />
     </div>
-
-    <TabsLinks :tabs="tabs" :value="tab" />
-
-    <ProfileList v-if="tab === 'profiles'" :profiles="profiles" />
-    <CityList v-if="tab === 'cities'" :cities="cities" />
-    <EventList v-if="tab === 'events'" :events="events" />
   </div>
 </template>
