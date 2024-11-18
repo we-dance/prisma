@@ -1,7 +1,7 @@
 import { toast } from "vue-sonner";
 
 export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.config.errorHandler = (error, instance, info) => {
+  nuxtApp.hook("vue:error", (error) => {
     toast.error(error.message);
-  };
+  });
 });

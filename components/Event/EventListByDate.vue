@@ -5,16 +5,16 @@ const props = defineProps({
   events: Array,
 });
 
-const items = computed(() => props.events);
+const items = computed(() => props.events || []);
 
 const itemsByDate = computed(() => {
   const result = {};
 
-  items.value.forEach((item) => {
+  for (const item of items.value) {
     const date = getYmd(item.startDate);
     result[date] = result[date] || [];
     result[date].push(item);
-  });
+  }
 
   return result;
 });
