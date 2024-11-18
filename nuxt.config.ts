@@ -16,7 +16,7 @@ const env = envSchema.parse(process.env);
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // debug: true,
-  // ssr: false,
+  ssr: false,
 
   modules: [
     "@nuxtjs/tailwindcss",

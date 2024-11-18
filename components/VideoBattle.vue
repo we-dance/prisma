@@ -8,6 +8,15 @@ defineProps({
     type: Function,
     required: true,
   },
+  title: {
+    type: String,
+  },
+  description: {
+    type: String,
+  },
+  help: {
+    type: String,
+  },
 });
 </script>
 
@@ -15,29 +24,19 @@ defineProps({
   <Card class="w-full">
     <CardHeader>
       <CardTitle class="relative">
-        Video Battle
-        <Popover>
+        {{ title }}
+        <Popover v-if="help">
           <PopoverTrigger as-child>
             <Button variant="ghost" class="absolute top-0 right-0">
               <Icon name="heroicons:question-mark-circle" size="24" />
             </Button>
           </PopoverTrigger>
           <PopoverContent class="prose text-xs">
-            <p>
-              VideoBattle is your chance to help us find the ultimate dance
-              videos. We show you two amazing clips—your job is simple: pick
-              your favorite!
-            </p>
-            <p>
-              Every vote helps us rank the best videos in the community and
-              shapes your personal recommendations. The more you vote, the
-              better we understand your style, and the more spot-on your
-              suggestions will be. Let’s find the beats that move you!
-            </p>
+            {{ help }}
           </PopoverContent>
         </Popover>
       </CardTitle>
-      <CardDescription> Two videos. One winner. Your call! </CardDescription>
+      <CardDescription>{{ description }}</CardDescription>
     </CardHeader>
     <CardContent class="grid grid-cols-2 gap-2 w-full">
       <div
@@ -47,22 +46,14 @@ defineProps({
       >
         <Dialog>
           <DialogTrigger class="w-full aspect-video">
-            <WYoutubeThumb :url="video.url" />
+            <WYoutubeThumb :url="video.url" show-play />
           </DialogTrigger>
           <DialogFullscreen>
             <WYoutube :url="video.url" autoplay />
           </DialogFullscreen>
         </Dialog>
         <div class="text-xs px-1 text-center">
-          <template
-            v-for="(artist, index) in video.artists"
-            :key="artist.username"
-          >
-            <NuxtLink :to="`/@${artist.username}`">
-              {{ artist.name.split(" ").slice(0, 1).join() }}
-            </NuxtLink>
-            <span class="p-1" v-if="index < video.artists.length - 1">&</span>
-          </template>
+          {{ video.name }}
         </div>
         <div class="flex justify-center">
           <Button @click="onVote(video.id)">Vote</Button>

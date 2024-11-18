@@ -13,24 +13,26 @@ export const useAppAuth = () => {
     }
 
     return new Promise((resolve, reject) => {
-      const unwatch = watch(data, (newData) => {
-        if (newData) {
-          console.log("newData", newData);
-          unwatch();
-          authQuery.value = "";
-          resolve(newData);
+      const unwatch = watch(
+        [data, authQueryLoading],
+        ([newData, inProgress]) => {
+          if (newData) {
+            unwatch();
+            authQuery.value = "";
+            resolve(newData);
+          }
+
+          if (!inProgress) {
+            const query = authQuery.value;
+            authQuery.value = "";
+            unwatch();
+            reject(new Error(`Can't ${query} without signing in.`));
+          }
         }
-      });
+      );
 
       authQuery.value = query;
       authQueryLoading.value = true;
-
-      // Optional: Add timeout
-      setTimeout(() => {
-        unwatch();
-        authQuery.value = "";
-        reject(new Error("Authentication timeout"));
-      }, 300000); // 5 minute timeout
     });
   };
 
@@ -75,5 +77,6 @@ export const useAppAuth = () => {
     signInErrors,
     uid,
     authQuery,
+    authQueryLoading,
   };
 };

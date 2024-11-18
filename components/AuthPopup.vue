@@ -1,10 +1,13 @@
 <script setup lang="ts">
-const { authQuery } = useAppAuth();
+const { authQuery, authQueryLoading } = useAppAuth();
 const open = computed(() => authQuery.value !== "");
+const onChange = (open: boolean) => {
+  authQueryLoading.value = open;
+};
 </script>
 
 <template>
-  <Dialog :open="open">
+  <Dialog :open="open" @update:open="onChange">
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
         <DialogTitle>Sign in to {{ authQuery }}</DialogTitle>

@@ -9,6 +9,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  showPlay: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const youtubeId = computed(() => {
@@ -35,6 +39,7 @@ const imageUrl = computed(() => {
       class="w-full h-full object-cover"
     />
     <Icon
+      v-if="showPlay"
       name="material-symbols:play-circle"
       size="64"
       class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-primary"

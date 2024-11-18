@@ -4,19 +4,6 @@ import WeDanceLogo from "~/public/svg/logo-horizontal-dark.svg?component";
 const isMenuOpen = ref(false);
 
 const searchQuery = ref("");
-
-const route = useRoute();
-const router = useRouter();
-
-watch(searchQuery, (query) => {
-  router.replace({ query: { q: query || undefined } });
-});
-
-onMounted(() => {
-  if (route.query.q) {
-    searchQuery.value = route.query.q?.toString() || "";
-  }
-});
 </script>
 
 <template>
