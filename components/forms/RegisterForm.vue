@@ -137,7 +137,7 @@ const onSubmit = form.handleSubmit(
       <FormItem>
         <FormLabel>Password</FormLabel>
         <FormControl>
-          <Input v-bind="componentField" />
+          <Input v-bind="componentField" type="password" />
         </FormControl>
         <FormDescription />
         <FormMessage />

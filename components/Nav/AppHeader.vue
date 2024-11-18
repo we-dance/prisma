@@ -2,6 +2,21 @@
 import WeDanceLogo from "~/public/svg/logo-horizontal-dark.svg?component";
 
 const isMenuOpen = ref(false);
+
+const searchQuery = ref("");
+
+const route = useRoute();
+const router = useRouter();
+
+watch(searchQuery, (query) => {
+  router.replace({ query: { q: query || undefined } });
+});
+
+onMounted(() => {
+  if (route.query.q) {
+    searchQuery.value = route.query.q?.toString() || "";
+  }
+});
 </script>
 
 <template>
@@ -27,7 +42,25 @@ const isMenuOpen = ref(false);
     <router-link title="Homepage" to="/">
       <WeDanceLogo />
     </router-link>
-    <div class="flex-grow"></div>
+    <div class="flex-grow flex justify-center">
+      <div class="relative w-full max-w-md items-center">
+        <Input
+          type="text"
+          v-model="searchQuery"
+          placeholder="Search"
+          class="pl-10"
+        />
+        <span
+          class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
+        >
+          <Icon
+            name="heroicons:magnifying-glass"
+            class="text-muted-foreground"
+            size="24"
+          />
+        </span>
+      </div>
+    </div>
     <TQrCodeButton label="Share" />
   </header>
 </template>

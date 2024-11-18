@@ -38,6 +38,7 @@ const baseUrl = runtimeConfig.public.baseUrl;
       </Head>
       <Body class="bg-gray-100">
         <Toaster richColors />
+        <AuthPopup />
         <NuxtPage />
       </Body>
     </Html>

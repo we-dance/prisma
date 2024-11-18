@@ -50,7 +50,7 @@ defineProps({
             <WYoutubeThumb :url="video.url" />
           </DialogTrigger>
           <DialogFullscreen>
-            <WYoutube :url="video.url" />
+            <WYoutube :url="video.url" autoplay />
           </DialogFullscreen>
         </Dialog>
         <div class="text-xs px-1 text-center">

@@ -149,6 +149,7 @@ model Profile {
   cities             CitySubscriber[]  @relation("cities")
   eventsParticipated Guest[]           @relation("guest_profile")
   videosAdded        Video[]           @relation("video_created_by")
+  votes              Vote[]            @relation("vote_created_by")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -325,4 +326,14 @@ model Video {
   updatedAt   DateTime @updatedAt
   createdBy   Profile? @relation("video_created_by", fields: [createdById], references: [id])
   createdById String?
+}
+
+model Vote {
+  id          String   @id @default(nanoid())
+  winnerId    String
+  loserId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   Profile  @relation("vote_created_by", fields: [createdById], references: [id])
+  createdById String
 }

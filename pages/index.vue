@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { $client } = useNuxtApp();
 const { data: styles } = await $client.styles.list.useQuery();
-const searchQuery = ref("");
+const searchQuery = computed(() => useRoute().query.q?.toString() || "");
 
 const visibleStyles = computed(() => {
   const query = searchQuery.value.toLowerCase();
@@ -11,14 +11,6 @@ const visibleStyles = computed(() => {
 
 <template>
   <div class="bg-white p-4 flex flex-col gap-4">
-    <div class="flex">
-      <Input
-        v-model="searchQuery"
-        placeholder="Search dance style"
-        class="w-full md:w-auto"
-      />
-      <div></div>
-    </div>
     <section>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <NuxtLink

@@ -3,9 +3,11 @@ import type { addAbortListener } from "events";
 
 const route = useRoute();
 const { $client } = useNuxtApp();
-const { data: style } = await $client.styles.get.useQuery({
+const { data } = await $client.styles.get.useQuery({
   hashtag: route.params.style as string,
 });
+
+const style = data?.value?.style;
 </script>
 
 <template>

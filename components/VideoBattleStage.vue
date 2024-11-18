@@ -1,7 +1,19 @@
 <script setup lang="ts">
+import { toast } from "vue-sonner";
+const { $client } = useNuxtApp();
+const { auth } = useAppAuth();
+
 const props = defineProps({
   videos: {
     type: Array,
+    required: true,
+  },
+  votes: {
+    type: Array,
+    required: true,
+  },
+  styleId: {
+    type: Number,
     required: true,
   },
 });
@@ -11,22 +23,33 @@ const videos = ref(props.videos);
 const BATTLE_PROPOSAL_ROUND = 1;
 const BATTLE_ROUNDS = 5;
 
-const votes = ref([]);
+const votes = ref(props.votes);
 const { currentPair, vote, voteCount } = useVoting(videos, votes);
-const proposalFinished = ref(false);
-const proposalTime = computed(
-  () =>
-    !currentPair.value ||
-    (voteCount.value === BATTLE_PROPOSAL_ROUND && !proposalFinished.value)
+const { skipProposal } = useProposal();
+
+const showProposal = computed(
+  () => !skipProposal.value && voteCount.value >= BATTLE_ROUNDS
 );
 const showBattle = computed(
-  () =>
-    (!voteCount.value || currentPair.value) && voteCount.value < BATTLE_ROUNDS
+  () => currentPair.value && voteCount.value < BATTLE_ROUNDS
 );
+
+async function onVote(winner: string) {
+  const { profileId } = await auth("vote");
+
+  const loser = currentPair.value?.find((v) => v.id !== winner)?.id;
+
+  await $client.videos.vote.mutate({
+    winnerId: winner,
+    loserId: loser,
+    createdById: profileId,
+  });
+
+  vote(winner);
+  toast.success("Vote submitted");
+}
 </script>
 <template>
-  <section v-if="showBattle">
-    <VideoProposal v-if="proposalTime" v-model="proposalFinished" />
-    <VideoBattle v-else :videos="currentPair" @vote="vote" />
-  </section>
+  <VideoBattle v-if="showBattle" :videos="currentPair" @vote="onVote" />
+  <VideoProposal v-if="showProposal" :style-id="styleId" />
 </template>

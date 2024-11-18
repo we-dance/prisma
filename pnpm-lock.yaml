@@ -18,7 +18,7 @@ importers:
         specifier: ^1.1.11
         version: 1.2.0
       '@prisma/client':
-        specifier: ^5.14.0
+        specifier: ^5.22.0
         version: 5.22.0(prisma@5.22.0)
       '@trpc/client':
         specifier: ^10.40.0
@@ -116,9 +116,6 @@ importers:
       vue-sonner:
         specifier: ^1.1.2
         version: 1.2.5
-      vue3-youtube:
-        specifier: ^0.1.9
-        version: 0.1.9(typescript@5.6.3)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -205,7 +202,7 @@ importers:
         specifier: ^8.4.40
         version: 8.4.49
       prisma:
-        specifier: ^5.14.0
+        specifier: ^5.22.0
         version: 5.22.0
       shadcn-nuxt:
         specifier: ^0.10.4
@@ -1499,9 +1496,6 @@ packages:
   '@types/ws@8.5.13':
     resolution: {integrity: sha512-osM/gWBTPKgHV8XkTunnegTRIsvF6owmf5w+JtAfOw472dptdm0dlGv4xCt6GwQRcC2XVOvvRE/0bAoQcL2QkA==}
 
-  '@types/youtube@0.0.39':
-    resolution: {integrity: sha512-naVjyTZT/CoNwEQW3+mf9E/x6sgB7QIPbRDtVlPUpHlmuQTk+j6gQBy0T5CRkV8oC0GYQjMgfr3VdueTSVLTjw==}
-
   '@typescript-eslint/eslint-plugin@6.21.0':
     resolution: {integrity: sha512-oy9+hTPCUFpngkEZUSzbf9MxI65wbKFoQYsgPdILTfbUldp5ovUuphZVe4i30emU9M/kP+T64Di0mxl7dSw3MA==}
     engines: {node: ^16.0.0 || >=18.0.0}
@@ -2223,9 +2217,6 @@ packages:
   core-js@2.6.12:
     resolution: {integrity: sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==}
     deprecated: core-js@<3.23.3 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Some versions have web compatibility issues. Please, upgrade your dependencies to the actual version of core-js.
-
-  core-js@3.39.0:
-    resolution: {integrity: sha512-raM0ew0/jJUqkJ0E6e8UDtl+y/7ktFivgWvqw8dNSQeNWoSDLvQ1H/RN3aPXB9tBd4/FhyR4RDPGhsNIMsAn7g==}
 
   core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
@@ -3030,9 +3021,6 @@ packages:
 
   get-tsconfig@4.8.1:
     resolution: {integrity: sha512-k9PN+cFBmaLWtVz29SkUoqU5O0slLuHJXt/2P+tMVFT+phsSGXGkp9t3rQIqdz0e+06EHNGs3oM6ZX1s2zHxRg==}
-
-  get-youtube-id@1.0.1:
-    resolution: {integrity: sha512-5yidLzoLXbtw82a/Wb7LrajkGn29BM6JuLWeHyNfzOGp1weGyW4+7eMz6cP23+etqj27VlOFtq8fFFDMLq/FXQ==}
 
   giget@1.2.3:
     resolution: {integrity: sha512-8EHPljDvs7qKykr6uw8b+lqLiUc/vUg+KVTI0uND4s63TdsZM2Xus3mflvF0DDG9SiM4RlCkFGL+7aAjRmV7KA==}
@@ -5583,9 +5571,6 @@ packages:
     peerDependencies:
       typescript: '>=5.0.0'
 
-  vue3-youtube@0.1.9:
-    resolution: {integrity: sha512-DhEbLsXDRHF7Cf5eB8vuoAbK+WiFuOHa65vlHU3XE5xky058ZK5/jAtHGr+JGhW0Xy2bSl8Eezz6/cR8GmNzgw==}
-
   vue@3.5.13:
     resolution: {integrity: sha512-wmeiSMxkZCSc+PM2w2VRsOYAZC8GdipNFRTsLSfodVqI9mbejKeXEGr8SckuLnrQPGe3oJN5c3K0vpoU9q/wCQ==}
     peerDependencies:
@@ -7223,8 +7208,6 @@ snapshots:
     dependencies:
       '@types/node': 18.19.64
 
-  '@types/youtube@0.0.39': {}
-
   '@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3)':
     dependencies:
       '@eslint-community/regexpp': 4.12.1
@@ -8138,8 +8121,6 @@ snapshots:
       is-what: 4.1.16
 
   core-js@2.6.12: {}
-
-  core-js@3.39.0: {}
 
   core-util-is@1.0.3: {}
 
@@ -9077,8 +9058,6 @@ snapshots:
   get-tsconfig@4.8.1:
     dependencies:
       resolve-pkg-maps: 1.0.0
-
-  get-youtube-id@1.0.1: {}
 
   giget@1.2.3:
     dependencies:
@@ -12027,15 +12006,6 @@ snapshots:
       '@vue/language-core': 2.1.10(typescript@5.6.3)
       semver: 7.6.3
       typescript: 5.6.3
-
-  vue3-youtube@0.1.9(typescript@5.6.3):
-    dependencies:
-      '@types/youtube': 0.0.39
-      core-js: 3.39.0
-      get-youtube-id: 1.0.1
-      vue: 3.5.13(typescript@5.6.3)
-    transitivePeerDependencies:
-      - typescript
 
   vue@3.5.13(typescript@5.6.3):
     dependencies:

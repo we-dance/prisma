@@ -1,9 +1,11 @@
 <script setup lang="ts">
 const route = useRoute();
 const { $client } = useNuxtApp();
-const { data: style } = await $client.styles.get.useQuery({
+const { data } = await $client.styles.get.useQuery({
   hashtag: route.params.style as string,
 });
+const votes = data?.value?.votes;
+const style = data?.value?.style;
 </script>
 
 <template>
@@ -19,6 +21,10 @@ const { data: style } = await $client.styles.get.useQuery({
       </NuxtLink>
     </section>
 
-    <VideoBattleStage :videos="style.videos" />
+    <VideoBattleStage
+      :videos="style.videos"
+      :votes="votes"
+      :style-id="style.id"
+    />
   </div>
 </template>

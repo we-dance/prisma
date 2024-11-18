@@ -1,31 +1,44 @@
 <script setup>
-import CardFooter from "./ui/card/CardFooter.vue";
-import CardTitle from "./ui/card/CardTitle.vue";
+import { toast } from "vue-sonner";
+import { useForm } from "vee-validate";
 
-defineProps({
-  modelValue: {
-    type: Boolean,
+const { $client } = useNuxtApp();
+const { data } = useAuth();
+const { skipProposal } = useProposal();
+
+const props = defineProps({
+  styleId: {
+    type: Number,
     required: true,
   },
 });
-const emit = defineEmits(["update:modelValue"]);
 
-function onSubmit(e) {
-  e.preventDefault();
-  emit("update:modelValue", true);
-}
+const form = useForm({});
+
+const onSubmit = form.handleSubmit(async (values) => {
+  try {
+    await $client.videos.add.mutate({
+      url: values.url,
+      createdById: data.value?.profileId,
+      styleId: props.styleId,
+    });
+    skipProposal.value = true;
+  } catch (error) {
+    toast.error("This video has already been added.");
+  }
+});
 </script>
 
 <template>
-  <Card class="w-full">
-    <CardHeader>
-      <CardTitle>Make Us Dance!</CardTitle>
-      <CardDescription
-        >Know a video that’s too good to skip? Share it with the crew!
-      </CardDescription>
-    </CardHeader>
-    <CardContent>
-      <form @submit="onSubmit">
+  <form @submit="onSubmit">
+    <Card class="w-full">
+      <CardHeader>
+        <CardTitle>Make Us Dance!</CardTitle>
+        <CardDescription
+          >Know a video that’s too good to skip? Share it with the crew!
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
         <FormField v-slot="{ componentField }" name="url">
           <FormItem>
             <FormLabel>Youtube URL</FormLabel>
@@ -36,13 +49,13 @@ function onSubmit(e) {
             <FormMessage />
           </FormItem>
         </FormField>
-      </form>
-    </CardContent>
-    <CardFooter class="gap-4 justify-end">
-      <Button variant="outline" @click="emit('update:modelValue', true)">
-        Skip
-      </Button>
-      <Button type="submit">Submit</Button>
-    </CardFooter>
-  </Card>
+      </CardContent>
+      <CardFooter class="gap-4 justify-end">
+        <Button type="button" variant="outline" @click="skipProposal = true">
+          Skip
+        </Button>
+        <Button type="submit">Submit</Button>
+      </CardFooter>
+    </Card>
+  </form>
 </template>

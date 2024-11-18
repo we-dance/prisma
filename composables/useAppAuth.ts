@@ -1,11 +1,38 @@
 export const useAppAuth = () => {
   const uid = ref(null);
-  const showAuthPopup = ref(null);
-  const authTargetQuery = ref(null);
+  const authQuery = useState<string>("auth-query", () => "");
+  const authQueryLoading = useState<boolean>("auth-query-loading", () => false);
 
   const callbackUrl = "/";
 
-  const { signIn } = useAuth();
+  const { signIn, data, status } = useAuth();
+
+  const auth = async (query: string) => {
+    if (status.value === "authenticated") {
+      return data.value;
+    }
+
+    return new Promise((resolve, reject) => {
+      const unwatch = watch(data, (newData) => {
+        if (newData) {
+          console.log("newData", newData);
+          unwatch();
+          authQuery.value = "";
+          resolve(newData);
+        }
+      });
+
+      authQuery.value = query;
+      authQueryLoading.value = true;
+
+      // Optional: Add timeout
+      setTimeout(() => {
+        unwatch();
+        authQuery.value = "";
+        reject(new Error("Authentication timeout"));
+      }, 300000); // 5 minute timeout
+    });
+  };
 
   const login = async (provider: string, options?: any) => {
     const { error, url } = await signIn(provider, {
@@ -16,7 +43,12 @@ export const useAppAuth = () => {
     if (error) {
       return signInErrors[error] ? signInErrors[error] : error;
     } else {
-      navigateTo(url, { external: true });
+      if (authQueryLoading.value) {
+        authQueryLoading.value = false;
+      } else {
+        navigateTo(url, { external: true });
+      }
+
       return null;
     }
   };
@@ -37,5 +69,11 @@ export const useAppAuth = () => {
     SessionRequired: "Please sign in to access this page.",
   };
 
-  return { login, signInErrors, uid, showAuthPopup, authTargetQuery };
+  return {
+    auth,
+    login,
+    signInErrors,
+    uid,
+    authQuery,
+  };
 };

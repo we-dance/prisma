@@ -11,7 +11,7 @@ import {
   addCitySubscribers,
 } from "./profile";
 import { addAccount } from "./account";
-import { addDanceStyle } from "./style";
+import { addDanceStyle, clearVotes } from "./style";
 import * as cliProgress from "cli-progress";
 import { getLogger } from "../utils/logger";
 
@@ -34,6 +34,8 @@ export async function importDanceStyles(multibar: cliProgress.MultiBar) {
     failed,
     updated,
   });
+
+  await clearVotes();
 
   for (const danceStyle of danceStyles) {
     logger.debug("importing", danceStyle.id);

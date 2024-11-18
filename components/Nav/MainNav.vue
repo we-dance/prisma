@@ -2,7 +2,7 @@
 import WeDanceLogo from "~/public/svg/logo-horizontal-dark.svg?component";
 const localePath = useLocalePath();
 
-const { data, status } = useAuth();
+const { data, status, signOut } = useAuth();
 const featureFindPartner = false;
 const currentCity = "/de/munich";
 
@@ -130,7 +130,7 @@ function isAdmin(force = false) {
         :track="{ event: 'main_menu', action: 'settings' }"
       />
       <TButton
-        :to="localePath('/signout')"
+        @click="signOut()"
         type="nav"
         :label="$t('auth.signout')"
         :track="{ event: 'main_menu', action: 'sign_out' }"

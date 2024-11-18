@@ -2,6 +2,10 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+export async function clearVotes() {
+  await prisma.vote.deleteMany();
+}
+
 export async function addDanceStyle(danceStyle: any) {
   const data = {
     ...danceStyle,

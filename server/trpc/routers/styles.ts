@@ -27,7 +27,7 @@ export const stylesRouter = router({
     return styles;
   }),
   get: publicProcedure
-    .input(z.object({ hashtag: z.string() }))
+    .input(z.object({ hashtag: z.string(), userId: z.string().optional() }))
     .query(async ({ input }) => {
       const style = await prisma.danceStyle.findUnique({
         where: { hashtag: input.hashtag },
@@ -36,6 +36,16 @@ export const stylesRouter = router({
         },
       });
 
-      return style;
+      const votes = await prisma.vote.findMany({
+        where: {
+          createdById: input.userId,
+        },
+        select: {
+          winnerId: true,
+          loserId: true,
+        },
+      });
+
+      return { style, votes };
     }),
 });
