@@ -33,13 +33,13 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     />
     <DialogContent
       v-bind="forwarded"
-      :class="cn('absolute left-0 top-0 w-full h-full z-50', props.class)"
+      :class="cn('absolute left-0 top-0 w-full h-full z-50 grid', props.class)"
     >
-      <DialogClose
-        class="right-4 top-4 float-end text-white rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-white"
-      >
-        <X class="w-8 h-8" />
-        <span class="sr-only">Close</span>
+      <DialogClose>
+        <div class="text-white flex justify-center items-center">
+          <span class="text-xs uppercase">Close</span>
+          <Icon name="heroicons:x-mark" />
+        </div>
       </DialogClose>
       <slot />
     </DialogContent>

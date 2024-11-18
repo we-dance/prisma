@@ -12,24 +12,85 @@ const videos = computed(() =>
     }))
 );
 
-const { currentPair, vote, rankedVideos } = useVoting(videos, votes);
+const { currentPair, vote, rankedVideos, voteCount } = useVoting(videos, votes);
+const EXPECTED_COUNT = 5;
+const progress = computed(() => (voteCount.value / EXPECTED_COUNT) * 100);
+
+const map = [
+  {
+    title: "Let’s Find Your Dance!",
+    description:
+      "Watch and compare videos of different dance styles. Pay attention to the music, the moves, and the vibe—choose the ones that make you want to dance!",
+  },
+  {
+    title: "Keep Going!",
+    description:
+      "You’re just getting started! Compare more styles to find the one that moves you.",
+  },
+  {
+    title: "You’re Getting Closer!",
+    description:
+      "Your choices are shaping up. Keep voting to discover the perfect dance for you!",
+  },
+  {
+    title: "Almost There!",
+    description:
+      "You’re starting to groove! A few more comparisons, and we’ll find your match.",
+  },
+  {
+    title: "One Step Away!",
+    description:
+      "You’ve got an eye for great moves! Just a couple more to reveal your ideal style.",
+  },
+  {
+    title: "Not sure yet?",
+    description: "Let’s keep exploring!",
+  },
+];
+
+const card = computed(() => {
+  let current = voteCount.value;
+  if (current >= map.length) {
+    current = map.length - 1;
+  }
+
+  return map[current];
+});
 </script>
 
 <template>
   <div class="mx-auto max-w-xl p-4 flex flex-col gap-4">
-    <VideoBattle
-      title="Let’s Find Your Dance!"
-      description="Watch and compare videos of different dance styles. Pay attention to the music, the moves, and the vibe—choose the ones that make you want to dance!"
-      :videos="currentPair"
-      @vote="vote"
-    />
+    <Card v-if="voteCount > 4">
+      <CardHeader>
+        <CardTitle>Ready to Dance?</CardTitle>
+        <CardDescription
+          >Here’s how your choices stack up so far. Your top match is
+          {{ rankedVideos[0].name }}, but feel free to explore the others
+          too!</CardDescription
+        >
+      </CardHeader>
+      <CardContent>
+        <div class="prose">
+          <ul>
+            <li v-for="video in rankedVideos" :key="video.id">
+              <NuxtLink :to="`/styles/${video.id}`">{{ video.name }}</NuxtLink>
+            </li>
+          </ul>
+        </div>
+      </CardContent>
+    </Card>
 
-    <div class="prose">
-      <ul>
-        <li v-for="video in rankedVideos" :key="video.id">
-          {{ video.name }}
-        </li>
-      </ul>
-    </div>
+    <Card v-if="currentPair">
+      <CardHeader>
+        <CardTitle> {{ card.title }}</CardTitle>
+        <CardDescription>{{ card.description }}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <VideoBattle :videos="currentPair" @vote="vote" />
+      </CardContent>
+      <CardFooter v-if="voteCount < 5">
+        <Progress :model-value="progress" />
+      </CardFooter>
+    </Card>
   </div>
 </template>

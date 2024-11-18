@@ -26,7 +26,7 @@ const visibleStyles = computed(() => {
         dancers worldwide
       </span>
       <Button as-child>
-        <NuxtLink to="/start">Help me find my style</NuxtLink>
+        <NuxtLink to="/start">Discover Your Next Dance</NuxtLink>
       </Button>
     </section>
     <section>
