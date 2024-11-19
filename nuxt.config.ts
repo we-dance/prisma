@@ -16,7 +16,7 @@ const env = envSchema.parse(process.env);
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // debug: true,
-  // ssr: false,
+  ssr: false,
 
   modules: [
     "@nuxtjs/tailwindcss",
@@ -27,7 +27,6 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
     "@nuxtjs/robots",
     "nuxt-purgecss",
-    "@pinia/nuxt",
   ],
 
   robots: {
