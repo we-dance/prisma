@@ -13,7 +13,7 @@ export default {
   <NuxtLink
     v-for="profile in profiles"
     :key="profile.id"
-    :to="localePath(`/${profile.username}`)"
+    :to="localePath(`/@${profile.username}`)"
     class="border-b p-4 flex gap-2 items-start group whitespace-nowrap w-full"
     @click.native="
       $track('search_profile', {

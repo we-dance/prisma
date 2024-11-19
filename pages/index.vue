@@ -1,11 +1,13 @@
 <script setup lang="ts">
 const { $client } = useNuxtApp();
-const { data: styles } = await $client.styles.list.useQuery();
+const { data } = await $client.styles.list.useQuery();
 const searchQuery = ref("");
+
+const styles = data.value || [];
 
 const visibleStyles = computed(() => {
   const query = searchQuery.value.toLowerCase();
-  return styles.value.filter((item) => item.name.toLowerCase().includes(query));
+  return styles.filter((item) => item.name.toLowerCase().includes(query));
 });
 </script>
 

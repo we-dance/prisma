@@ -1,6 +1,7 @@
 <script setup>
 import WeDanceLogo from "~/public/svg/logo-horizontal-dark.svg?component";
 
+const { auth } = useAppAuth();
 const isMenuOpen = ref(false);
 
 const searchQuery = ref("");
@@ -55,6 +56,7 @@ watch(searchQuery, () => {
         </span>
       </div>
     </div>
+    <Button @click="auth('continue')">Sign in</Button>
     <TQrCodeButton label="Share" />
   </header>
 </template>
