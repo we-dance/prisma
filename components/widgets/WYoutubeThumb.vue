@@ -24,9 +24,7 @@ const imageUrl = computed(() => {
     return "";
   }
 
-  // return `http://img.youtube.com/vi/${youtubeId.value}/maxresdefault.jpg`;
-  return `http://img.youtube.com/vi/${youtubeId.value}/hqdefault.jpg`;
-  // return `https://i.ytimg.com/vi/${youtubeId.value}/hqdefault.jpg`;
+  return `https://img.youtube.com/vi/${youtubeId.value}/hqdefault.jpg`;
 });
 </script>
 
