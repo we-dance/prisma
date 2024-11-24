@@ -37,7 +37,7 @@ module.exports = {
         white: "#FFFFFF",
         brand: "rgb(241, 2, 61)",
         primary: {
-          DEFAULT: "hsla(var(--primary))",
+          DEFAULT: "hsl(var(--primary) / <alpha-value>)",
           foreground: "hsla(var(--primary-foreground))",
         },
         secondary: {

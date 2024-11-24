@@ -125,6 +125,18 @@ model Profile {
   instagram        String?
   facebook         String?
   phone            String?
+  youtube          String?
+  spotify          String?
+  tiktok           String?
+  linkedin         String?
+  whatsapp         String?
+  threads          String?
+  twitter          String?
+  vk               String?
+  telegram         String?
+  couchsurfing     String?
+  airbnb           String?
+  blablacar        String?
   createdById      String?
   lastLoginAt      DateTime?
   isDeleted        Boolean   @default(false)

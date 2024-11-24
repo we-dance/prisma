@@ -125,7 +125,9 @@ export const profilesRouter = router({
       };
     }),
   list: publicProcedure
-    .input(z.object({ city: z.string(), country: z.string() }))
+    .input(
+      z.object({ city: z.string().optional(), country: z.string().optional() })
+    )
     .query(async ({ input }) => {
       const { city, country } = input;
 
@@ -178,4 +180,22 @@ export const profilesRouter = router({
         venues,
       };
     }),
+  hosts: publicProcedure.query(async ({ input }) => {
+    return await prisma.profile.findMany({
+      where: {
+        type: "Organiser",
+      },
+      include: {
+        city: {
+          include: {
+            country: true,
+          },
+        },
+      },
+      orderBy: {
+        followersCount: "desc",
+      },
+      take: 5,
+    });
+  }),
 });

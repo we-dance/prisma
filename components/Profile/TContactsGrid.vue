@@ -67,46 +67,34 @@ export default {
 </script>
 
 <template>
-  <div class="flex gap-4">
-    <div class="grid grid-cols-3 border-l border-t flex-shrink-0">
-      <TButton
-        v-if="!hideWebsite && profile.website"
-        :href="profile.website"
-        allow-guests
-        :track="{ event: 'contact', action: 'website' }"
-        type="void"
-        class="cursor-pointer border-r border-b p-1"
-      >
-        <Icon :name="icons.website" class="text-xl" />
-      </TButton>
-      <TButton
-        v-if="profile.email"
-        :href="`mailto:${profile.email}`"
-        allow-guests
-        :track="{ event: 'contact', action: 'email' }"
-        type="void"
-        class="cursor-pointer border-r border-b p-1"
-      >
-        <Icon :name="icons.email" class="text-xl" />
-      </TButton>
-      <TButton
-        v-for="field in filledFields"
-        :key="field"
-        allow-guests
-        :href="profile[field]"
-        :track="{ event: 'contact', action: field }"
-        type="void"
-        class="cursor-pointer border-r border-b p-1"
-      >
-        <Icon :name="icons[field]" class="text-xl" />
-      </TButton>
-    </div>
-    <div v-if="title && filledFields.length" class="text-xs">{{ title }}</div>
+  <div>
+    <NuxtLink
+      v-if="!hideWebsite && profile.website"
+      :to="profile.website"
+      class="inline-block p-1"
+    >
+      <Icon :name="icons.website" class="text-xl" />
+    </NuxtLink>
+    <NuxtLink
+      v-if="profile.email"
+      :to="`mailto:${profile.email}`"
+      class="inline-block p-1"
+    >
+      <Icon :name="icons.email" size="24" />
+    </NuxtLink>
+    <NuxtLink
+      v-for="field in filledFields"
+      :key="field"
+      :to="profile[field]"
+      class="inline-block p-1"
+    >
+      <Icon :name="icons[field]" size="24" />
+    </NuxtLink>
   </div>
 </template>
 
 <style scoped>
 a:hover {
-  @apply text-accent;
+  @apply text-primary;
 }
 </style>
