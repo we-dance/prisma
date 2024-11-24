@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { addAbortListener } from "events";
+
 const route = useRoute();
 const { $client } = useNuxtApp();
 const { data } = await $client.styles.get.useQuery({
@@ -6,10 +8,23 @@ const { data } = await $client.styles.get.useQuery({
 });
 
 const style = data?.value?.style;
-const tab = ref("news");
 </script>
 
 <template>
+  <div class="px-4 mx-auto max-w-xl">
+    <Breadcrumb class="my-4">
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/"> WeDance </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>{{ style.name }}</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  </div>
+
   <div class="px-4 mx-auto max-w-xl flex flex-col gap-4">
     <LandingHero
       :header="style.name"
@@ -37,17 +52,27 @@ const tab = ref("news");
       <Button>Join Community</Button>
     </LandingHero>
 
-    <Tabs v-model="tab">
-      <TabsList>
-        <TabsTrigger value="news">News</TabsTrigger>
-        <TabsTrigger value="calendar">Calendar</TabsTrigger>
-        <TabsTrigger value="artists">Artists</TabsTrigger>
-        <TabsTrigger value="groups">Groups</TabsTrigger>
-        <TabsTrigger value="about">About</TabsTrigger>
-      </TabsList>
-    </Tabs>
+    <Card>
+      <CardHeader>
+        <CardTitle>What is {{ style.name }}?</CardTitle>
+        <CardDescription v-if="style.synonyms"
+          >Also known as {{ style.synonyms }}</CardDescription
+        >
+      </CardHeader>
+      <CardContent class="flex flex-col gap-4">
+        <WYoutube :url="style.video" class="rounded-md" />
 
-    <Post1 />
-    <Post2 />
+        <TPreview :content="style.description" />
+      </CardContent>
+    </Card>
+
+    <Card>
+      <CardHeader>
+        <CardTitle>History of {{ style.name }}</CardTitle>
+      </CardHeader>
+      <CardContent class="flex flex-col gap-4">
+        <TPreview :content="style.history" />
+      </CardContent>
+    </Card>
   </div>
 </template>

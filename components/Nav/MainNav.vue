@@ -35,7 +35,7 @@ function isAdmin(force = false) {
 
     <TButton
       allow-guests
-      :to="localePath('/')"
+      :to="localePath('/discover')"
       icon="heroicons:arrow-trending-up"
       :label="$t('nav.global')"
       type="nav"

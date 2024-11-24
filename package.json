@@ -57,6 +57,7 @@
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.4.0",
     "@headlessui/vue": "^1.7.22",
+    "@heroicons/vue": "^2.2.0",
     "@iconify-json/heroicons-outline": "^1.1.11",
     "@prisma/client": "^5.22.0",
     "@trpc/client": "^10.40.0",
