@@ -10,29 +10,30 @@ function isAdmin(force = false) {
 
 <template>
   <nav class="p-4 flex flex-col h-screen overflow-y-scroll border-r">
-    <Button :to="localePath('/discover')" variant="ghost" class="justify-start">
-      <Icon name="heroicons:arrow-trending-up" />
-      {{ $t("nav.global") }}
+    <Button :to="localePath('/')" variant="ghost" class="justify-start">
+      <Icon name="i-heroicons-home" />
+      My Feed
+    </Button>
+
+    <Button :to="localePath('/explore')" variant="ghost" class="justify-start">
+      <Icon name="i-heroicons-fire" />
+      Explore
     </Button>
 
     <Button
-      :to="
-        currentCity
-          ? localePath(`/explore${currentCity}`)
-          : localePath('/explore')
-      "
+      :to="localePath('/bookmarks')"
       variant="ghost"
       class="justify-start"
     >
-      <Icon name="heroicons:map-pin" />
-      {{ $t("nav.local") }}
+      <Icon name="i-heroicons-bookmark" />
+      Bookmarks
     </Button>
 
     <div class="flex justify-start mt-4">
       <TLanguageSwitcher />
     </div>
 
-    <div class="h-8"></div>
+    <div class="h-8 mt-4"></div>
 
     <div v-if="isAdmin(true)" class="border-b pt-2 text-xs font-bold uppercase">
       Administration
