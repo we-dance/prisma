@@ -55,12 +55,15 @@ const posts = [
   {
     id: "4",
     author: {
-      name: "Aina Kaiser",
+      name: "Alex Razbakov",
       photo:
-        "https://firebasestorage.googleapis.com/v0/b/wedance-4abe3.appspot.com/o/media%2Fv0dfuvXmPJW4TN4wPS2KEo849WT2%2F5eb0f724-2a86-491c-98a6-f614e0a6c8bf?alt=media&token=2fc50226-d15c-4a27-a340-0cee1e4bd868",
-      username: "Aina",
+        "https://firebasestorage.googleapis.com/v0/b/wedance-4abe3.appspot.com/o/media%2FtvR012ArEpQhCJdPHh6G7sLuqoO2%2F85cc5d77-6212-4707-85e0-24bdf72b1c7c?alt=media&token=2872dc07-fa22-46b7-8f0e-41c935fc6345",
+      username: "alexrazbakov",
     },
-    content: "Changó: Aluya vs A La Metá Steps",
+    title: "Changó: Aluya vs A La Metá Steps",
+    image: "https://wedance.vip/img/chango.jpg",
+    content:
+      "It was a unique opportunity for a conversation, one that would delve into the intricacies of Afro-Cuban dance, as Alex Razbakov sat down with Dayron Josue Rivera to explore the stories and significance behind the Aluya and A La Metá steps.",
     type: "article",
     createdAt: "2024-03-19T00:00:00.000Z",
     upvotes: 0,
@@ -70,7 +73,9 @@ const posts = [
 </script>
 
 <template>
-  <div class="container grid grid-cols-4 gap-4 p-4">
+  <div
+    class="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4"
+  >
     <Post v-for="post in posts" :key="post.id" v-bind="post">
       <PostRequest v-if="post.type == 'request'" v-bind="post" />
       <PostArticle v-if="post.type == 'article'" v-bind="post" />

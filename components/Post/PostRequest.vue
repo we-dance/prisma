@@ -7,7 +7,7 @@ defineProps({
 });
 </script>
 <template>
-  <div class="text-sm">
-    {{ content }}
+  <div class="flex w-full h-full justify-center items-center">
+    <p>{{ content }}</p>
   </div>
 </template>

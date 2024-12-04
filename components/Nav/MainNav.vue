@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import WeDanceLogo from "~/public/svg/logo-horizontal-dark.svg?component";
 const localePath = useLocalePath();
 
-const { data, status, signOut } = useAuth();
-const featureFindPartner = false;
 const currentCity = "/de/munich";
 
 function isAdmin(force = false) {
@@ -12,142 +9,26 @@ function isAdmin(force = false) {
 </script>
 
 <template>
-  <nav
-    class="p-4 flex flex-col space-y-2 text-dark h-screen overflow-y-scroll sticky top-0 border-r"
-  >
-    <TButton
-      allow-guests
-      :to="localePath('/')"
-      type="void"
-      title="Homepage"
-      :track="{ event: 'main_menu', action: 'logo' }"
-    >
-      <WeDanceLogo />
-    </TButton>
+  <nav class="p-4 flex flex-col h-screen overflow-y-scroll border-r">
+    <Button :to="localePath('/discover')" variant="ghost" class="justify-start">
+      <Icon name="heroicons:arrow-trending-up" />
+      {{ $t("nav.global") }}
+    </Button>
 
-    <TButton
-      allow-guests
-      :to="localePath('/start')"
-      label="Start Here"
-      type="nav"
-      :track="{ event: 'main_menu', action: 'start' }"
-    />
-
-    <TButton
-      allow-guests
-      :to="localePath('/discover')"
-      icon="heroicons:arrow-trending-up"
-      :label="$t('nav.global')"
-      type="nav"
-      :track="{ event: 'main_menu', action: 'global' }"
-    />
-
-    <TButton
-      allow-guests
+    <Button
       :to="
         currentCity
           ? localePath(`/explore${currentCity}`)
           : localePath('/explore')
       "
-      :label="$t('nav.local')"
-      icon="heroicons:map-pin"
-      type="nav"
-      :track="{ event: 'main_menu', action: currentCity ? 'local' : 'explore' }"
-    />
+      variant="ghost"
+      class="justify-start"
+    >
+      <Icon name="heroicons:map-pin" />
+      {{ $t("nav.local") }}
+    </Button>
 
-    <TButton
-      v-if="featureFindPartner"
-      allow-guests
-      :to="localePath('/find-partner/start')"
-      icon="heroicons:users-solid"
-      :label="$t('nav.partner')"
-      type="nav"
-      :track="{ event: 'main_menu', action: 'find_partner' }"
-    />
-
-    <TButton
-      allow-guests
-      :to="localePath('/search')"
-      icon="heroicons:magnifying-glass"
-      :label="$t('nav.search')"
-      type="nav"
-      :track="{ event: 'main_menu', action: 'search' }"
-    />
-
-    <div class="border-b pt-2 text-xs font-bold uppercase">
-      {{ $t("nav.contribute") }}
-    </div>
-    <TButton
-      v-if="uid"
-      :to="localePath('/events/-/import')"
-      icon="heroicons:plus"
-      :label="$t('nav.addEvent')"
-      type="nav"
-      :track="{ event: 'main_menu', action: 'add_event' }"
-    />
-    <TButton
-      v-else
-      allow-guests
-      :to="localePath('/organize')"
-      icon="heroicons:plus"
-      :label="$t('nav.addEvent')"
-      type="nav"
-      :track="{ event: 'main_menu', action: 'organize' }"
-    />
-
-    <TButton
-      :to="localePath('/reviews/add')"
-      :label="$t('nav.addReview')"
-      type="nav"
-      icon="heroicons:star"
-      :track="{ event: 'main_menu', action: 'add_review' }"
-    />
-
-    <template v-if="status === 'authenticated'">
-      <div class="border-b pt-2 text-xs font-bold uppercase">
-        {{ $t("nav.myProfile") }}
-      </div>
-      <TButton
-        :to="localePath('/chat')"
-        icon="heroicons:chat-bubble-left-right-solid"
-        :label="$t('nav.chat')"
-        type="nav"
-        :track="{ event: 'main_menu', action: 'chat' }"
-      />
-      <TButton
-        :to="localePath(`/${username}`)"
-        type="nav"
-        :track="{ event: 'main_menu', action: 'my_profile' }"
-      >
-        <TProfilePhoto size="xs" :uid="uid" class="mr-1" />
-        <span>{{ $t("nav.myProfile") }}</span>
-      </TButton>
-      <TButton
-        :to="localePath('/settings')"
-        type="nav"
-        icon="heroicons:cog-6-tooth"
-        :label="$t('nav.settings')"
-        :track="{ event: 'main_menu', action: 'settings' }"
-      />
-      <TButton
-        @click="signOut()"
-        type="nav"
-        :label="$t('auth.signout')"
-        :track="{ event: 'main_menu', action: 'sign_out' }"
-      />
-    </template>
-    <template v-else>
-      <TButton
-        allow-guests
-        :to="localePath('/signin')"
-        type="nav"
-        :label="$t('auth.signin')"
-        class="bg-primary border-none text-white hover:bg-dark"
-        :track="{ event: 'main_menu', action: 'sign_in' }"
-      />
-    </template>
-
-    <div class="flex justify-start">
+    <div class="flex justify-start mt-4">
       <TLanguageSwitcher />
     </div>
 
@@ -156,63 +37,43 @@ function isAdmin(force = false) {
     <div v-if="isAdmin(true)" class="border-b pt-2 text-xs font-bold uppercase">
       Administration
     </div>
-    <TButton
-      v-if="isAdmin(true)"
-      :label="`Admin ${isAdmin() ? 'ON' : 'OFF'}`"
-      type="nav"
-      @click="toggleAdmin()"
-    />
 
-    <TButton
-      v-if="isAdmin()"
-      to="/admin/nfc"
-      type="nav"
-      class="text-gray-700"
-      label="NFC"
-    />
+    <Button v-if="isAdmin(true)" variant="ghost">
+      Admin {{ isAdmin() ? "ON" : "OFF" }}
+    </Button>
 
-    <TButton
+    <Button v-if="isAdmin()" :to="localePath('/admin/nfc')" variant="ghost">
+      NFC
+    </Button>
+
+    <Button v-if="isAdmin()" :to="localePath('/admin/cities')" variant="ghost">
+      Cities
+    </Button>
+
+    <Button v-if="isAdmin()" :to="localePath('/admin/reports')" variant="ghost">
+      Reports
+    </Button>
+
+    <Button
       v-if="isAdmin()"
-      to="/admin/cities"
-      type="nav"
-      class="text-gray-700"
-      label="Cities"
-    />
-    <TButton
+      :to="localePath('/admin/suspended')"
+      variant="ghost"
+    >
+      Suspended
+    </Button>
+
+    <Button v-if="isAdmin()" :to="localePath('/admin/emails')" variant="ghost">
+      Emails
+    </Button>
+
+    <Button
       v-if="isAdmin()"
-      to="/admin/reports"
-      type="nav"
-      class="text-gray-700"
-      label="Reports"
-    />
-    <TButton
-      v-if="isAdmin()"
-      to="/admin/suspended"
-      type="nav"
-      class="text-gray-700"
-      label="Suspended"
-    />
-    <TButton
-      v-if="isAdmin()"
-      to="/admin/emails"
-      type="nav"
-      class="text-gray-700"
-      label="Emails"
-    />
-    <TButton
-      v-if="isAdmin()"
-      to="/admin/templates"
-      type="nav"
-      class="text-gray-700"
-      label="Templates"
-    />
+      :to="localePath('/admin/templates')"
+      variant="ghost"
+    >
+      Templates
+    </Button>
 
     <TFooter />
   </nav>
 </template>
-
-<style scoped>
-nav .router-link-exact-active {
-  @apply text-brand;
-}
-</style>

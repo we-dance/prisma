@@ -15,25 +15,9 @@ watch(searchQuery, () => {
 </script>
 
 <template>
-  <div
-    v-if="isMenuOpen"
-    class="fixed w-full h-full top-0 left-0 bg-black opacity-50 z-50"
-    @click="isMenuOpen = false"
-  />
-  <transition name="slide">
-    <div
-      v-if="isMenuOpen"
-      class="bg-white fixed left-0 w-56 bottom-0 top-0 z-50 shadow-lg"
-    >
-      <MainNav />
-    </div>
-  </transition>
-
-  <header class="flex bg-white p-2 gap-2 justify-start items-center border-b">
-    <Button variant="ghost" title="Open Menu" @click="isMenuOpen = !isMenuOpen">
-      <Icon name="heroicons:bars-3" size="24" />
-    </Button>
-
+  <header
+    class="flex bg-white px-4 p-2 gap-2 justify-start items-center border-b"
+  >
     <router-link title="Homepage" to="/">
       <WeDanceLogo />
     </router-link>
@@ -43,6 +27,11 @@ watch(searchQuery, () => {
     </Button>
     <TQrCodeButton label="Share" />
     <Button @click="auth('continue')">Sign in</Button>
+    <template v-if="status === 'authenticated'">
+      <Button @click="signOut" variant="ghost">
+        {{ $t("auth.signout") }}
+      </Button>
+    </template>
   </header>
   <div v-if="false" class="flex-grow flex justify-center">
     <div class="relative w-full max-w-md items-center">
