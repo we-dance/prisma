@@ -23,9 +23,21 @@ defineProps({
       username: "",
     }),
   },
+  title: {
+    type: String,
+    required: false,
+  },
+  image: {
+    type: String,
+    required: false,
+  },
+  url: {
+    type: String,
+    required: false,
+  },
   content: {
     type: String,
-    required: true,
+    required: false,
   },
   type: {
     type: String,
@@ -43,12 +55,24 @@ defineProps({
     type: Number,
     default: 0,
   },
+  event: {
+    type: Object,
+    required: false,
+    default: () => ({
+      image: "",
+      type: "",
+      styles: [],
+      name: "",
+      date: "",
+      location: "",
+    }),
+  },
 });
 </script>
 
 <template>
   <div
-    class="flex flex-col border-b pb-4 gap-2 bg-white rounded-lg shadow px-4 h-80"
+    class="flex flex-col border-b pb-4 gap-2 bg-white rounded-lg shadow px-4"
   >
     <div class="flex items-start pt-4">
       <template v-if="false">
@@ -135,8 +159,11 @@ defineProps({
       </div>
     </div>
 
-    <div class="flex-grow">
-      <slot />
+    <div class="flex-grow overflow-hidden">
+      <PostRequest v-if="type === 'request'" v-bind="$props" />
+      <PostArticle v-if="type === 'article'" v-bind="$props" />
+      <PostEvent v-if="type === 'event'" v-bind="$props" />
+      <PostVideo v-if="type === 'video'" v-bind="$props" />
     </div>
 
     <div class="flex flex-wrap gap-2 items-center">

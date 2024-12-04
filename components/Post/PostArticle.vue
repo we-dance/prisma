@@ -14,9 +14,14 @@ defineProps({
   },
 });
 </script>
+
 <template>
   <div class="relative flex flex-col gap-4 h-full overflow-hidden rounded">
-    <NuxtImg :src="image" class="absolute inset-0 w-full h-full object-cover" />
+    <NuxtImg
+      v-if="image"
+      :src="image"
+      class="absolute inset-0 w-full h-full object-cover"
+    />
     <div
       class="relative flex flex-col justify-end h-full p-4 bg-gradient-to-t from-black/80 to-transparent"
     >

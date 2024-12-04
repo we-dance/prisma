@@ -7,5 +7,7 @@ defineProps({
 });
 </script>
 <template>
-  <WYoutubeThumb :url="url" show-play />
+  <div>
+    <WYoutubeThumb :url="url" show-play />
+  </div>
 </template>
