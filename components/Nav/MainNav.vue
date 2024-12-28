@@ -18,24 +18,31 @@ function isAdmin(force = false) {
     </Button>
 
     <Button variant="ghost" as-child class="justify-start">
+      <NuxtLink :to="localePath('/explore')">
+        <Icon name="i-heroicons-calendar" />
+        Events
+      </NuxtLink>
+    </Button>
+
+    <Button variant="ghost" as-child class="justify-start">
       <NuxtLink :to="localePath('/hosts')">
-        <Icon name="i-heroicons-home" />
+        <Icon name="i-heroicons-users" />
         Hosts
       </NuxtLink>
     </Button>
 
-    <Button :to="localePath('/explore')" variant="ghost" class="justify-start">
-      <Icon name="i-heroicons-fire" />
-      Explore
+    <Button variant="ghost" as-child class="justify-start">
+      <NuxtLink :to="localePath('/hosts')">
+        <Icon name="i-heroicons-musical-note" />
+        Artists
+      </NuxtLink>
     </Button>
 
-    <Button
-      :to="localePath('/bookmarks')"
-      variant="ghost"
-      class="justify-start"
-    >
-      <Icon name="i-heroicons-bookmark" />
-      Bookmarks
+    <Button variant="ghost" as-child class="justify-start">
+      <NuxtLink :to="localePath('/hosts')">
+        <Icon name="i-heroicons-building-storefront" />
+        Venues
+      </NuxtLink>
     </Button>
 
     <div class="flex justify-start mt-4">
