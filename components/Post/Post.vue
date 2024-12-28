@@ -1,17 +1,19 @@
 <script setup>
-defineProps({
+import { useTimeAgo } from "@vueuse/core";
+
+import PostRequest from "./PostRequest";
+import PostArticle from "./PostArticle";
+import PostEvent from "./PostEvent";
+import PostVideo from "./PostVideo";
+
+const props = defineProps({
   id: {
     type: String,
     required: true,
   },
-  scene: {
+  style: {
     type: Object,
     required: false,
-    default: () => ({
-      hashtag: "casino",
-      name: "Casino",
-      image: "",
-    }),
   },
   author: {
     type: Object,
@@ -44,7 +46,7 @@ defineProps({
     default: "",
   },
   createdAt: {
-    type: String,
+    type: Date,
     required: true,
   },
   upvotes: {
@@ -68,6 +70,29 @@ defineProps({
     }),
   },
 });
+
+const timeAgo = useTimeAgo(props.createdAt);
+const time = computed(() => new Date(props.createdAt).toLocaleString());
+
+const as = computed(() => {
+  const map = {
+    article: PostArticle,
+    event: PostEvent,
+    video: PostVideo,
+  };
+
+  if (props.url?.includes("youtu")) {
+    return PostVideo;
+  }
+
+  if (props.title && (props.content || props.image)) {
+    return PostArticle;
+  }
+
+  return map[props.type] || PostRequest;
+});
+
+const showStyle = false;
 </script>
 
 <template>
@@ -75,11 +100,11 @@ defineProps({
     class="flex flex-col border-b pb-4 gap-2 bg-white rounded-lg shadow px-4"
   >
     <div class="flex items-start pt-4">
-      <template v-if="false">
+      <template v-if="!showStyle">
         <div class="w-10 flex-shrink-0">
           <div class="flex items-center space-x-1">
             <div>
-              <a :href="`/${author.username}`" class="">
+              <a :href="`/@${author.username}`" class="">
                 <img
                   :src="author.photo"
                   :alt="`${author.name} photo`"
@@ -90,12 +115,12 @@ defineProps({
           </div>
         </div>
         <div class="flex-grow">
-          <div class="block text-sm leading-tight">
+          <div class="block text-sm leading-none">
             <div class="flex flex-wrap space-x-1 text-xs">
               <div class="flex items-center space-x-1">
                 <div>
                   <a
-                    :href="`/${author.username}`"
+                    :href="`/@${author.username}`"
                     class="hover:underline font-bold"
                   >
                     {{ author.name }}
@@ -104,24 +129,26 @@ defineProps({
               </div>
               <span>•</span>
               <div>
-                <a :href="`/stories/${id}`" class="hover:underline">
-                  {{ new Date(createdAt).toLocaleDateString() }}
+                <a :href="`/posts/${id}`" class="hover:underline" :title="time">
+                  {{ timeAgo }}
                 </a>
               </div>
             </div>
-            <div class="text-xs">{{ type }}</div>
+            <a :href="`/${style.hashtag}`" class="hover:underline text-xs">
+              {{ style.name }}
+            </a>
           </div>
         </div>
       </template>
-      <template v-if="true">
+      <template v-if="showStyle">
         <div class="w-10 flex-shrink-0">
           <div class="flex items-center space-x-1">
             <div>
-              <a :href="`/${scene.hashtag}`" class="">
+              <a :href="`/${style.hashtag}`" class="">
                 <img
-                  v-if="scene.image"
-                  :src="scene.image"
-                  :alt="`${scene.image} photo`"
+                  v-if="style.image"
+                  :src="style.image"
+                  :alt="`${style.image} photo`"
                   class="rounded-full w-8 h-8"
                 />
                 <div v-else class="rounded-full w-8 h-8 bg-gray-200"></div>
@@ -135,16 +162,18 @@ defineProps({
               <div class="flex items-center space-x-1">
                 <div>
                   <a
-                    :href="`/${scene.hashtag}`"
+                    :href="`/${style.hashtag}`"
                     class="hover:underline font-bold"
                   >
-                    {{ scene.name }}
+                    {{ style.name }}
                   </a>
                 </div>
               </div>
               <span>•</span>
               <div>
-                <a :href="`/stories/${id}`" class="hover:underline"> 2h </a>
+                <a :href="`/stories/${id}`" class="hover:underline">
+                  {{ timeAgo }}
+                </a>
               </div>
             </div>
           </div>
@@ -160,10 +189,7 @@ defineProps({
     </div>
 
     <div class="flex-grow overflow-hidden">
-      <PostRequest v-if="type === 'request'" v-bind="$props" />
-      <PostArticle v-if="type === 'article'" v-bind="$props" />
-      <PostEvent v-if="type === 'event'" v-bind="$props" />
-      <PostVideo v-if="type === 'video'" v-bind="$props" />
+      <component :is="as" v-bind="$props" />
     </div>
 
     <div class="flex flex-wrap gap-2 items-center">

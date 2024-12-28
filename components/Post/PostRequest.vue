@@ -1,13 +1,18 @@
 <script setup>
 defineProps({
+  title: {
+    type: String,
+    required: false,
+  },
   content: {
     type: String,
-    required: true,
+    required: false,
   },
 });
 </script>
 <template>
-  <div class="flex w-full h-full justify-center items-center">
+  <div class="flex flex-col w-full h-full justify-center items-center">
+    <p>{{ title }}</p>
     <p>{{ content }}</p>
   </div>
 </template>

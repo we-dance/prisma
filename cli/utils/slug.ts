@@ -1,6 +1,10 @@
 import CyrillicToTranslit from "cyrillic-to-translit-js";
 
 export function getNormalizedString(str: string) {
+  if (!str) {
+    return "";
+  }
+
   return str.normalize("NFKC").replace(/[\u0300-\u036f]/g, "");
 }
 

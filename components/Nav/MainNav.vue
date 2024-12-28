@@ -10,7 +10,11 @@ function isAdmin(force = false) {
 
 <template>
   <nav class="p-4 flex flex-col h-screen overflow-y-scroll border-r">
-    <Button :to="localePath('/')" variant="ghost" class="justify-start">
+    <Button
+      :to="localePath('/landing/posts')"
+      variant="ghost"
+      class="justify-start"
+    >
       <Icon name="i-heroicons-home" />
       My Feed
     </Button>

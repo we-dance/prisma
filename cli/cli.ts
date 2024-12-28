@@ -6,6 +6,7 @@ import {
   importCities,
   importSubscribers,
   importDanceStyles,
+  importPosts,
 } from "./importer";
 import { getUniqueUsername } from "./importer/profile";
 import { logger } from "./utils/logger";
@@ -58,6 +59,7 @@ program
   .option("-a, --accounts", "Import accounts")
   .option("-c, --cities", "Import cities")
   .option("-p, --profiles", "Import profiles")
+  .option("-b, --posts", "Import blog posts")
   .option("-e, --events", "Import events")
   .option("-s, --subscribers", "Import subscribers")
   .action(async (options) => {
@@ -69,6 +71,7 @@ program
       cities,
       subscribers,
       danceStyles,
+      posts,
     } = options;
     logger.level = getLogLevel(program.opts().verbose);
 
@@ -78,6 +81,7 @@ program
       accounts,
       profiles,
       events,
+      posts,
       cities,
       subscribers,
       danceStyles,
@@ -111,6 +115,10 @@ program
 
     if (all || subscribers) {
       await importSubscribers(multibar);
+    }
+
+    if (all || posts) {
+      await importPosts(multibar);
     }
 
     multibar.stop();

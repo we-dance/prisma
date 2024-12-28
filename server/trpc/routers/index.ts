@@ -4,6 +4,7 @@ import { profilesRouter } from "./profiles";
 import { citiesRouter } from "./cities";
 import { stylesRouter } from "./styles";
 import { videosRouter } from "./videos";
+import { postsRouter } from "./posts";
 
 export const appRouter = router({
   events: eventsRouter,
@@ -11,6 +12,7 @@ export const appRouter = router({
   cities: citiesRouter,
   styles: stylesRouter,
   videos: videosRouter,
+  posts: postsRouter,
 });
 
 export type AppRouter = typeof appRouter;

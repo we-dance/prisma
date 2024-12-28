@@ -22,10 +22,12 @@ defineProps({
       :src="image"
       class="absolute inset-0 w-full h-full object-cover"
     />
+    <div v-else class="absolute inset-0 w-full h-full bg-red-500" />
+
     <div
       class="relative flex flex-col justify-end h-full p-4 bg-gradient-to-t from-black/80 to-transparent"
     >
-      <h3 class="font-bold text-white">{{ title }}</h3>
+      <h3 class="font-bold text-white leading-none">{{ title }}</h3>
       <p class="text-sm text-white line-clamp-3">{{ content }}</p>
     </div>
   </div>

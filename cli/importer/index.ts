@@ -3,7 +3,9 @@ import { getProfiles } from "../provider/profiles";
 import { getAccounts, getUsers, getSuspended } from "../provider/accounts";
 import { getDanceStyles } from "../provider/styles";
 import { getEvents } from "../provider/events";
+import { getPosts } from "../provider/posts";
 import { addEvent } from "./event";
+import { addPost } from "./post";
 import {
   addProfile,
   addCity,
@@ -245,6 +247,47 @@ export async function importProfiles(multibar: cliProgress.MultiBar) {
 
     bar.increment({ failed, created, updated });
   }
+  bar.stop();
+}
+
+export async function importPosts(multibar: cliProgress.MultiBar) {
+  let collection = "posts";
+  const logger = getLogger(collection);
+  logger.info("Importing posts");
+
+  let created = 0;
+  let updated = 0;
+  let ignored = 0;
+  let failed = 0;
+
+  const posts = await getPosts();
+
+  const bar = multibar.create(posts.length, 0, {
+    collection,
+  });
+
+  for (const post of posts) {
+    logger.debug("importing", post.id);
+
+    const result = await addPost(post);
+    bar.increment({ created, updated, ignored, failed });
+
+    if (result.state === "created") {
+      created++;
+    }
+    if (result.state === "updated") {
+      updated++;
+    }
+    if (result.state === "ignored") {
+      ignored++;
+    }
+    if (result.state === "failed") {
+      failed++;
+    }
+
+    logger.log(result.state === "failed" ? "error" : "debug", result);
+  }
+
   bar.stop();
 }
 

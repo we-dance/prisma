@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const tab = ref("news");
-const { posts } = usePosts();
+const { $client } = useNuxtApp();
+const { data: posts } = await $client.posts.list.useQuery();
 </script>
 
 <template>
