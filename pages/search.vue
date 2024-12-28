@@ -39,10 +39,39 @@ watchEffect(() => {
 watch(tab, () => {
   search();
 });
+
+const searchQuery = ref("");
+watch(searchQuery, () => {
+  if (useRoute().path !== "/search") {
+    useRouter().push(`/search?q=${searchQuery.value}`);
+  } else {
+    useRouter().replace(`/search?q=${searchQuery.value}`);
+  }
+});
 </script>
 
 <template>
   <div class="w-full">
+    <div class="flex-grow flex justify-center my-4">
+      <div class="relative w-full max-w-md items-center">
+        <Input
+          type="text"
+          v-model="searchQuery"
+          placeholder="Search"
+          class="pl-10"
+        />
+        <span
+          class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
+        >
+          <Icon
+            name="heroicons:magnifying-glass"
+            class="text-muted-foreground"
+            size="24"
+          />
+        </span>
+      </div>
+    </div>
+
     <Tabs default-value="profiles" v-model="tab">
       <TabsList class="w-full">
         <TabsTrigger value="profiles"> Profiles </TabsTrigger>

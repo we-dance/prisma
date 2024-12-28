@@ -14,24 +14,26 @@ const style = computed(() => data.value.style);
 const timeAgo = "1 week ago";
 const upvotes = 0;
 const commentsCount = 0;
+const isYoutube = computed(() => data.value?.url?.includes("youtu"));
 </script>
 
 <template>
   <main class="mt-4 flex flex-col mx-auto max-w-xl bg-white rounded shadow">
     <template v-if="data">
-      <NuxtImg v-if="data.image" :src="data.image" class="rounded-t" />
+      <WYoutube v-if="isYoutube" :url="data.url" class="rounded-t" />
+      <NuxtImg v-else-if="data.image" :src="data.image" class="rounded-t" />
 
       <div class="flex items-start p-4">
         <div class="w-10 flex-shrink-0">
           <div class="flex items-center space-x-1">
             <div>
-              <a :href="`/@${author.username}`">
+              <NuxtLink :to="`/@${author.username}`">
                 <img
                   :src="author.photo"
                   :alt="`${author.name} photo`"
                   class="rounded-full w-8 h-8"
                 />
-              </a>
+              </NuxtLink>
             </div>
           </div>
         </div>
@@ -40,30 +42,36 @@ const commentsCount = 0;
             <div class="flex flex-wrap space-x-1 text-xs">
               <div class="flex items-center space-x-1">
                 <div>
-                  <a
-                    :href="`/@${author.username}`"
+                  <NuxtLink
+                    :to="`/@${author.username}`"
                     class="hover:underline font-bold"
                   >
                     {{ author.name }}
-                  </a>
+                  </NuxtLink>
                 </div>
               </div>
               <span>•</span>
               <div>
-                <a
-                  :href="`/posts/${id}`"
+                <NuxtLink
+                  :to="`/posts/${id}`"
                   class="hover:underline"
                   :title="timeAgo"
                 >
                   {{ timeAgo }}
-                </a>
+                </NuxtLink>
               </div>
             </div>
-            <a :href="`/${style.hashtag}`" class="hover:underline text-xs">
+            <NuxtLink
+              :to="`/styles/${style.hashtag}`"
+              class="hover:underline text-xs"
+            >
               {{ style.name }}
-            </a>
+            </NuxtLink>
           </div>
         </div>
+        <Button v-if="data.url && !isYoutube" variant="secondary" as-child>
+          <NuxtLink target="_blank" :to="data.url"> Read more </NuxtLink>
+        </Button>
       </div>
 
       <h1 class="font-bold px-4 text-xl">{{ data.title }}</h1>

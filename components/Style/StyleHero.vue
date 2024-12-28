@@ -1,31 +1,7 @@
 <script setup lang="ts">
-interface Moderator {
-  name: string;
-  role: string;
-  avatar?: string;
-}
-
-interface SceneStyle {
-  name: string;
-  description: string;
-  video?: string;
-  stats?: {
-    posts?: string;
-    views?: string;
-    upvotes?: string;
-    members?: string;
-  };
-  moderators?: Moderator[];
-  popular?: boolean;
-  members?: {
-    avatar: string;
-    name: string;
-  }[];
-}
-
 defineProps({
   style: {
-    type: Object as () => SceneStyle,
+    type: Object,
     required: true,
   },
 });
@@ -63,17 +39,13 @@ defineProps({
           <!-- Stats row -->
           <div class="flex gap-4 items-center">
             <div class="flex gap-4 text-xs" v-if="style.stats">
-              <span v-if="style.stats.posts" class="font-medium"
-                >{{ style.stats.posts }}
+              <span v-if="style._count.posts" class="font-medium"
+                >{{ style._count.posts }}
                 <span class="text-muted-foreground">Posts</span></span
               >
-              <span v-if="style.stats.views" class="font-medium"
-                >{{ style.stats.views }}
-                <span class="text-muted-foreground">Views</span></span
-              >
-              <span v-if="style.stats.upvotes" class="font-medium"
-                >{{ style.stats.upvotes }}
-                <span class="text-muted-foreground">Upvotes</span></span
+              <span v-if="style.eventsCount" class="font-medium"
+                >{{ style.eventsCount }}
+                <span class="text-muted-foreground">Events</span></span
               >
             </div>
           </div>
@@ -97,9 +69,7 @@ defineProps({
                   class="w-7 h-7 rounded-full border-2 border-background"
                 />
               </div>
-              <span class="text-sm font-medium">{{
-                style.stats?.members
-              }}</span>
+              <span class="text-sm font-medium">{{ style.membersCount }}</span>
             </div>
 
             <Button variant="ghost">

@@ -91,8 +91,6 @@ const as = computed(() => {
 
   return map[props.type] || PostRequest;
 });
-
-const showStyle = false;
 </script>
 
 <template>
@@ -100,88 +98,51 @@ const showStyle = false;
     class="flex flex-col border-b pb-4 gap-2 bg-white rounded-lg shadow px-4"
   >
     <div class="flex items-start pt-4">
-      <template v-if="!showStyle">
-        <div class="w-10 flex-shrink-0">
-          <div class="flex items-center space-x-1">
-            <div>
-              <a :href="`/@${author.username}`" class="">
-                <img
-                  :src="author.photo"
-                  :alt="`${author.name} photo`"
-                  class="rounded-full w-8 h-8"
-                />
-              </a>
-            </div>
+      <div class="w-10 flex-shrink-0">
+        <div class="flex items-center space-x-1">
+          <div>
+            <NuxtLink :to="`/@${author.username}`" class="">
+              <img
+                :src="author.photo"
+                :alt="`${author.name} photo`"
+                class="rounded-full w-8 h-8"
+              />
+            </NuxtLink>
           </div>
         </div>
-        <div class="flex-grow">
-          <div class="block text-sm leading-none">
-            <div class="flex flex-wrap space-x-1 text-xs">
-              <div class="flex items-center space-x-1">
-                <div>
-                  <a
-                    :href="`/@${author.username}`"
-                    class="hover:underline font-bold"
-                  >
-                    {{ author.name }}
-                  </a>
-                </div>
-              </div>
-              <span>•</span>
+      </div>
+      <div class="flex-grow">
+        <div class="block text-sm leading-none">
+          <div class="flex flex-wrap space-x-1 text-xs">
+            <div class="flex items-center space-x-1">
               <div>
-                <a :href="`/posts/${id}`" class="hover:underline" :title="time">
-                  {{ timeAgo }}
-                </a>
+                <NuxtLink
+                  :to="`/@${author.username}`"
+                  class="hover:underline font-bold"
+                >
+                  {{ author.name }}
+                </NuxtLink>
               </div>
             </div>
-            <a
-              :href="`/styles/${style.hashtag}`"
-              class="hover:underline text-xs"
-            >
-              {{ style.name }}
-            </a>
-          </div>
-        </div>
-      </template>
-      <template v-if="showStyle">
-        <div class="w-10 flex-shrink-0">
-          <div class="flex items-center space-x-1">
+            <span>•</span>
             <div>
-              <a :href="`/${style.hashtag}`" class="">
-                <img
-                  v-if="style.image"
-                  :src="style.image"
-                  :alt="`${style.image} photo`"
-                  class="rounded-full w-8 h-8"
-                />
-                <div v-else class="rounded-full w-8 h-8 bg-gray-200"></div>
-              </a>
+              <NuxtLink
+                :to="`/posts/${id}`"
+                class="hover:underline"
+                :title="time"
+              >
+                {{ timeAgo }}
+              </NuxtLink>
             </div>
           </div>
+          <NuxtLink
+            :to="`/styles/${style.hashtag}`"
+            class="hover:underline text-xs"
+          >
+            {{ style.name }}
+          </NuxtLink>
         </div>
-        <div class="flex-grow">
-          <div class="block text-sm leading-tight">
-            <div class="flex flex-wrap space-x-1 text-xs">
-              <div class="flex items-center space-x-1">
-                <div>
-                  <a
-                    :href="`/${style.hashtag}`"
-                    class="hover:underline font-bold"
-                  >
-                    {{ style.name }}
-                  </a>
-                </div>
-              </div>
-              <span>•</span>
-              <div>
-                <a :href="`/stories/${id}`" class="hover:underline">
-                  {{ timeAgo }}
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </template>
+      </div>
       <div class="relative">
         <div>
           <Button variant="ghost">
@@ -192,7 +153,9 @@ const showStyle = false;
     </div>
 
     <div class="flex-grow overflow-hidden">
-      <component :is="as" v-bind="$props" />
+      <NuxtLink :to="`/posts/${id}`">
+        <component :is="as" v-bind="$props" />
+      </NuxtLink>
     </div>
 
     <div class="flex flex-wrap gap-2 items-center">

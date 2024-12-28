@@ -10,13 +10,11 @@ function isAdmin(force = false) {
 
 <template>
   <nav class="p-4 flex flex-col h-screen overflow-y-scroll border-r">
-    <Button
-      :to="localePath('/landing/posts')"
-      variant="ghost"
-      class="justify-start"
-    >
-      <Icon name="i-heroicons-home" />
-      My Feed
+    <Button variant="ghost" as-child class="justify-start">
+      <NuxtLink :to="localePath('/feed')">
+        <Icon name="i-heroicons-home" />
+        Feed
+      </NuxtLink>
     </Button>
 
     <Button :to="localePath('/explore')" variant="ghost" class="justify-start">
