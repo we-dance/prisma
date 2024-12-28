@@ -17,6 +17,13 @@ function isAdmin(force = false) {
       </NuxtLink>
     </Button>
 
+    <Button variant="ghost" as-child class="justify-start">
+      <NuxtLink :to="localePath('/hosts')">
+        <Icon name="i-heroicons-home" />
+        Hosts
+      </NuxtLink>
+    </Button>
+
     <Button :to="localePath('/explore')" variant="ghost" class="justify-start">
       <Icon name="i-heroicons-fire" />
       Explore
