@@ -134,7 +134,10 @@ const showStyle = false;
                 </a>
               </div>
             </div>
-            <a :href="`/${style.hashtag}`" class="hover:underline text-xs">
+            <a
+              :href="`/styles/${style.hashtag}`"
+              class="hover:underline text-xs"
+            >
               {{ style.name }}
             </a>
           </div>
