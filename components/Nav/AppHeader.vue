@@ -8,7 +8,8 @@ const { auth, isLoggedIn, signOut, data } = useAppAuth();
   <header
     class="flex bg-white px-4 p-2 gap-2 justify-start items-center border-b"
   >
-    <NuxtLink title="Homepage" to="/">
+    <slot />
+    <NuxtLink title="Homepage" to="/" class="hidden md:block">
       <WeDanceLogo />
     </NuxtLink>
     <div class="flex-grow"></div>
