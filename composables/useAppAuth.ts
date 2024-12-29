@@ -5,7 +5,9 @@ export const useAppAuth = () => {
 
   const callbackUrl = "/";
 
-  const { signIn, data, status } = useAuth();
+  const { signIn, signOut, data, status } = useAuth();
+
+  const isLoggedIn = computed(() => status.value === "authenticated");
 
   const auth = async (query: string) => {
     if (status.value === "authenticated") {
@@ -74,9 +76,12 @@ export const useAppAuth = () => {
   return {
     auth,
     login,
+    signOut,
     signInErrors,
     uid,
     authQuery,
     authQueryLoading,
+    isLoggedIn,
+    data,
   };
 };

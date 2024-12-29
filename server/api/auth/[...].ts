@@ -47,6 +47,7 @@ export default NuxtAuthHandler({
         username: profile?.username,
         profileId: profile?.id,
         cityId: profile?.cityId,
+        photo: profile?.photo,
       });
     },
   },

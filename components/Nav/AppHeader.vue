@@ -1,7 +1,7 @@
 <script setup>
 import WeDanceLogo from "~/public/svg/logo-horizontal-dark.svg?component";
 
-const { auth } = useAppAuth();
+const { auth, isLoggedIn, signOut, data } = useAppAuth();
 </script>
 
 <template>
@@ -18,8 +18,9 @@ const { auth } = useAppAuth();
       </NuxtLink>
     </Button>
     <TQrCodeButton label="Share" />
-    <Button @click="auth('continue')">Sign in</Button>
-    <template v-if="status === 'authenticated'">
+    <Button v-if="!isLoggedIn" @click="auth('continue')">Sign in</Button>
+    <template v-if="isLoggedIn">
+      <img :src="data.photo" class="rounded-full w-8 h-8" />
       <Button @click="signOut" variant="ghost">
         {{ $t("auth.signout") }}
       </Button>
