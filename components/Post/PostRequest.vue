@@ -12,7 +12,11 @@ const props = defineProps({
 
 const excerpt = computed(() => {
   if (!props.content) return "";
-  return props.content.replace(/https?:\/\/[^\s]+/g, "");
+  const cleanContent = props.content.replace(/https?:\/\/[^\s]+/g, "");
+  const maxLength = 240;
+  return cleanContent.length > maxLength
+    ? cleanContent.substring(0, maxLength) + "..."
+    : cleanContent;
 });
 </script>
 <template>

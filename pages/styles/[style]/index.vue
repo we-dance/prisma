@@ -82,8 +82,6 @@ async function savePost() {
       </Tabs>
     </div>
 
-    <div class="container">
-      <PostGrid :posts="posts" @refresh="refresh" />
-    </div>
+    <PostGrid :posts="posts" @refresh="refresh" />
   </div>
 </template>
