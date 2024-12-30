@@ -26,6 +26,28 @@ export const stylesRouter = router({
 
     return styles;
   }),
+  battle: publicProcedure
+    .input(z.object({ hashtag: z.string(), userId: z.string().optional() }))
+    .query(async ({ input }) => {
+      const style = await prisma.danceStyle.findUnique({
+        where: { hashtag: input.hashtag },
+        include: {
+          videos: true,
+        },
+      });
+
+      const votes = await prisma.vote.findMany({
+        where: {
+          createdById: input.userId,
+        },
+        select: {
+          winnerId: true,
+          loserId: true,
+        },
+      });
+
+      return { style, votes };
+    }),
   get: publicProcedure
     .input(z.object({ hashtag: z.string(), userId: z.string().optional() }))
     .query(async ({ input }) => {

@@ -3,7 +3,7 @@ import { toast } from "vue-sonner";
 
 const route = useRoute();
 const { $client } = useNuxtApp();
-const { data } = await $client.styles.get.useQuery({
+const { data } = await $client.styles.battle.useQuery({
   hashtag: route.params.style as string,
 });
 
@@ -40,21 +40,10 @@ async function onVote(winner: string) {
 
 <template>
   <div class="mx-auto max-w-xl p-4 flex flex-col gap-4">
-    <section v-if="style" class="bg-white p-4 rounded-md">
-      <h1 class="text-2xl font-bold">{{ style.name }}</h1>
-      <TPreview :content="style.description" excerpt class="text-xs" />
-      <NuxtLink
-        :to="`/styles/${style.hashtag}/about`"
-        class="text-xs text-primary float-end"
-      >
-        Read more
-      </NuxtLink>
-    </section>
-
     <Card v-if="showBattle" class="w-full">
       <CardHeader>
         <CardTitle class="relative">
-          Video Battle
+          {{ style.name }} Battle
           <Popover>
             <PopoverTrigger as-child>
               <Button variant="ghost" class="absolute top-0 right-0">

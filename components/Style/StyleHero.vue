@@ -52,6 +52,11 @@ defineProps({
 
           <p class="text-base text-muted-foreground">
             {{ style.description }}
+            <NuxtLink
+              :to="`/styles/${style.hashtag}/about`"
+              class="underline text-primary hover:no-underline"
+              >Learn more</NuxtLink
+            >
           </p>
 
           <!-- Action buttons and members -->
@@ -106,8 +111,13 @@ defineProps({
         <WYoutube
           v-if="style.video"
           :url="style.video"
-          class="w-full aspect-video rounded-md"
+          class="w-full aspect-video rounded-md mb-4"
         />
+        <Button variant="outline" as-child>
+          <NuxtLink :to="`/styles/${style.hashtag}/battle`"
+            >Pick better video</NuxtLink
+          >
+        </Button>
       </div>
     </div>
   </section>
