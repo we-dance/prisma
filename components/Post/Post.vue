@@ -1,11 +1,11 @@
 <script setup>
 import { useTimeAgo } from "@vueuse/core";
-import { toast } from "vue-sonner";
-
 import PostRequest from "./PostRequest";
 import PostArticle from "./PostArticle";
 import PostEvent from "./PostEvent";
 import PostVideo from "./PostVideo";
+
+const { $client } = useNuxtApp();
 
 const props = defineProps({
   id: {
@@ -94,7 +94,7 @@ const as = computed(() => {
 });
 
 async function archive() {
-  toast.info("archived");
+  await $client.posts.delete.mutate(props.id);
 }
 </script>
 

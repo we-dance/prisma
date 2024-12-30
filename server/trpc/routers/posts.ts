@@ -68,4 +68,18 @@ export const postsRouter = router({
 
     return post;
   }),
+  delete: publicProcedure.input(z.string()).mutation(async ({ input }) => {
+    try {
+      const post = await prisma.post.delete({
+        where: { id: input },
+      });
+
+      return post;
+    } catch (error) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Post not found",
+      });
+    }
+  }),
 });
