@@ -21,10 +21,18 @@ const { auth, isLoggedIn, signOut, data } = useAppAuth();
     <TQrCodeButton label="Share" />
     <Button v-if="!isLoggedIn" @click="auth('continue')">Sign in</Button>
     <template v-if="isLoggedIn">
-      <img :src="data.photo" class="rounded-full w-8 h-8" />
-      <Button @click="signOut" variant="ghost">
-        {{ $t("auth.signout") }}
-      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger as-child>
+          <Button variant="ghost" size="icon">
+            <img :src="data.photo" class="rounded-full w-8 h-8" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem @click="signOut">{{
+            $t("auth.signout")
+          }}</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </template>
   </header>
 </template>

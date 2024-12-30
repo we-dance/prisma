@@ -1,5 +1,6 @@
 <script setup>
 import { useTimeAgo } from "@vueuse/core";
+import { toast } from "vue-sonner";
 
 import PostRequest from "./PostRequest";
 import PostArticle from "./PostArticle";
@@ -91,6 +92,10 @@ const as = computed(() => {
 
   return map[props.type] || PostRequest;
 });
+
+async function archive() {
+  toast.info("archived");
+}
 </script>
 
 <template>
@@ -145,9 +150,17 @@ const as = computed(() => {
       </div>
       <div class="relative">
         <div>
-          <Button variant="ghost">
-            <Icon name="i-heroicons-ellipsis-horizontal" size="24" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger as-child>
+              <Button variant="ghost" size="icon">
+                <Icon name="i-heroicons-ellipsis-horizontal" size="24" />
+                <span class="sr-only">More</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem @click="archive()">Archive</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>
