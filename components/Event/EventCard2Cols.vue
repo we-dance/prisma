@@ -27,21 +27,6 @@ const props = withDefaults(
     side: "date",
   }
 );
-
-const cover = computed(() => {
-  if (!props.event.cover) {
-    return "";
-  }
-
-  if (props.event.cover.includes("cloudinary.com")) {
-    return props.event.cover.replace(
-      "https://res.cloudinary.com/djumxevsm/image/upload",
-      ""
-    );
-  } else {
-    return props.event.cover;
-  }
-});
 </script>
 
 <template>
@@ -90,15 +75,14 @@ const cover = computed(() => {
     </div>
     <div>
       <NuxtImg
-        v-if="cover"
+        v-if="event.cover"
         class="w-20 rounded"
         format="webp"
-        data-provider="cloudinary"
         width="68"
         height="68"
         fit="fill"
         loading="lazy"
-        :src="cover"
+        :src="event.cover"
         :alt="`${event.name} cover photo`"
       />
     </div>
