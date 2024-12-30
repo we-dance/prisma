@@ -86,7 +86,7 @@ const as = computed(() => {
     return PostVideo;
   }
 
-  if (props.title && (props.content || props.image)) {
+  if (props.image) {
     return PostArticle;
   }
 
