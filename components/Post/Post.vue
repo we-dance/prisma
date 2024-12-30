@@ -5,8 +5,6 @@ import PostArticle from "./PostArticle";
 import PostEvent from "./PostEvent";
 import PostVideo from "./PostVideo";
 
-const { $client } = useNuxtApp();
-
 const props = defineProps({
   id: {
     type: String,
@@ -72,6 +70,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(["refresh"]);
+
 const timeAgo = useTimeAgo(props.createdAt);
 const time = computed(() => new Date(props.createdAt).toLocaleString());
 
@@ -93,8 +93,11 @@ const as = computed(() => {
   return map[props.type] || PostRequest;
 });
 
+const { $client } = useNuxtApp();
+
 async function archive() {
   await $client.posts.delete.mutate(props.id);
+  emit("refresh");
 }
 </script>
 

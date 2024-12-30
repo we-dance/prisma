@@ -82,4 +82,42 @@ export const postsRouter = router({
       });
     }
   }),
+
+  create: publicProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        content: z.string(),
+        styleId: z.number(),
+        authorId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const post = await prisma.post.create({
+        data: {
+          title: input.title,
+          content: input.content,
+          styleId: input.styleId,
+          authorId: input.authorId,
+          slug: new Date().toISOString(),
+        },
+        include: {
+          style: {
+            select: {
+              name: true,
+              hashtag: true,
+            },
+          },
+          author: {
+            select: {
+              name: true,
+              username: true,
+              photo: true,
+            },
+          },
+        },
+      });
+
+      return post;
+    }),
 });
