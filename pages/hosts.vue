@@ -31,7 +31,7 @@ console.log(profiles);
       <TabLink to="/">Hosts</TabLink>
       <TabLink to="/calendar">Venues</TabLink>
       <TabLink to="/artists">Artists</TabLink>
-      <TabLink to="/groups">Calendar</TabLink>
+      <TabLink to="/events">Events</TabLink>
     </TabsContainer>
 
     <div class="flex justify-end">
