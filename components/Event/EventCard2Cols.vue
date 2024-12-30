@@ -39,7 +39,7 @@ const cover = computed(() => {
       ""
     );
   } else {
-    return "";
+    return props.event.cover;
   }
 });
 </script>
@@ -93,11 +93,10 @@ const cover = computed(() => {
         v-if="cover"
         class="w-20 rounded"
         format="webp"
-        provider="cloudinary"
+        data-provider="cloudinary"
         width="68"
         height="68"
         fit="fill"
-        :placeholder="[68, 68]"
         loading="lazy"
         :src="cover"
         :alt="`${event.name} cover photo`"

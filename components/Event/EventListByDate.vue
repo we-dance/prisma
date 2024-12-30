@@ -32,7 +32,7 @@ const $i18n = {
         {{ getDate(date, $i18n.locale) }}
       </h2>
       <div v-for="item in items" :key="item.id">
-        <EventCard :key="item.id" :event="item" side="time" />
+        <EventCard2Cols :key="item.id" :event="item" side="time" />
       </div>
     </div>
   </section>
