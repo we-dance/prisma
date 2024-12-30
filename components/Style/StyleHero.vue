@@ -113,11 +113,18 @@ defineProps({
           :url="style.video"
           class="w-full aspect-video rounded-md mb-4"
         />
-        <Button variant="outline" as-child>
-          <NuxtLink :to="`/styles/${style.hashtag}/battle`"
-            >Pick better video</NuxtLink
-          >
-        </Button>
+        <div class="flex gap-4">
+          <Button variant="outline" as-child>
+            <NuxtLink :to="`/styles/${style.hashtag}/battle`"
+              >Pick better video</NuxtLink
+            >
+          </Button>
+          <Button variant="link" as-child>
+            <NuxtLink :to="`/styles/${style.hashtag}/add`"
+              >Suggest a video</NuxtLink
+            >
+          </Button>
+        </div>
       </div>
     </div>
   </section>
