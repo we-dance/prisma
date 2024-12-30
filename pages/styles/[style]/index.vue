@@ -48,38 +48,34 @@ async function savePost() {
 <template>
   <StyleHero :style="style" class="p-4 bg-white" />
 
-  <div class="flex justify-center mt-4">
-    <Dialog v-model:open="postModalOpen">
-      <DialogTrigger as-child>
-        <Button> New post </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <form @submit.prevent="savePost()">
-          <DialogHeader>
-            <DialogTitle>New post</DialogTitle>
-          </DialogHeader>
-          <div class="flex flex-col gap-4 py-4">
-            <Input v-model="title" placeholder="Post Title" />
-            <Textarea v-model="content" placeholder="Share your thoughts" />
-          </div>
-          <DialogFooter>
-            <Button type="submit"> Post </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
-  </div>
+  <TabsContainer>
+    <TabLink :to="`/styles/${style.hashtag}`">News</TabLink>
+    <TabLink :to="`/styles/${style.hashtag}/artists`">Artists</TabLink>
+    <TabLink :to="`/styles/${style.hashtag}/festivals`">Festivals</TabLink>
+    <TabLink :to="`/styles/${style.hashtag}/about`">About</TabLink>
+  </TabsContainer>
 
   <div class="p-4 gap-4 flex flex-col">
-    <div v-if="false" class="container">
-      <Tabs v-model="tab">
-        <TabsList>
-          <TabsTrigger value="news">Events</TabsTrigger>
-          <TabsTrigger value="calendar">Articles</TabsTrigger>
-          <TabsTrigger value="artists">Hosts</TabsTrigger>
-          <TabsTrigger value="groups">Artists</TabsTrigger>
-        </TabsList>
-      </Tabs>
+    <div class="flex justify-center">
+      <Dialog v-model:open="postModalOpen">
+        <DialogTrigger as-child>
+          <Button> New post </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <form @submit.prevent="savePost()">
+            <DialogHeader>
+              <DialogTitle>New post</DialogTitle>
+            </DialogHeader>
+            <div class="flex flex-col gap-4 py-4">
+              <Input v-model="title" placeholder="Post Title" />
+              <Textarea v-model="content" placeholder="Share your thoughts" />
+            </div>
+            <DialogFooter>
+              <Button type="submit"> Post </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
 
     <PostGrid :posts="posts" @refresh="refresh" />
