@@ -87,6 +87,7 @@ export const postsRouter = router({
     .input(
       z.object({
         title: z.string(),
+        link: z.string(),
         content: z.string(),
         styleId: z.number(),
         authorId: z.string(),
@@ -100,6 +101,7 @@ export const postsRouter = router({
           styleId: input.styleId,
           authorId: input.authorId,
           slug: new Date().toISOString(),
+          url: input.link,
         },
         include: {
           style: {

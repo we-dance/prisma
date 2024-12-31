@@ -4,10 +4,15 @@ defineProps({
     type: String,
     required: true,
   },
+  content: {
+    type: String,
+  },
+  title: {
+    type: String,
+  },
 });
 </script>
 <template>
-  <div>
-    <WYoutubeThumb :url="url" show-play />
-  </div>
+  <WYoutubeThumb :url="url" show-play />
+  <p class="text-xs mt-1">{{ title || content }}</p>
 </template>

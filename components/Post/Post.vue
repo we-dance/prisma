@@ -4,6 +4,7 @@ import PostRequest from "./PostRequest";
 import PostArticle from "./PostArticle";
 import PostEvent from "./PostEvent";
 import PostVideo from "./PostVideo";
+import LinkPreview from "./LinkPreview";
 
 const props = defineProps({
   id: {
@@ -84,6 +85,8 @@ const as = computed(() => {
 
   if (props.url?.includes("youtu")) {
     return PostVideo;
+  } else if (props.url) {
+    return LinkPreview;
   }
 
   if (props.image) {

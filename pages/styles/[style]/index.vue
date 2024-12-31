@@ -17,6 +17,7 @@ const { data: posts, refresh } = await $client.posts.list.useQuery({
 });
 const title = ref("");
 const content = ref("");
+const link = ref("");
 const postModalOpen = ref(false);
 
 async function savePost() {
@@ -35,6 +36,7 @@ async function savePost() {
     content: content.value,
     styleId: style.id,
     authorId: me.value.profileId,
+    link: link.value,
   });
 
   await refresh();
@@ -68,6 +70,7 @@ async function savePost() {
             </DialogHeader>
             <div class="flex flex-col gap-4 py-4">
               <Input v-model="title" placeholder="Post Title" />
+              <Input v-model="link" placeholder="Link" />
               <Textarea v-model="content" placeholder="Share your thoughts" />
             </div>
             <DialogFooter>
