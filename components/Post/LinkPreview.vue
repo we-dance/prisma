@@ -51,7 +51,7 @@ export default {
       v-if="item"
       :href="url"
       target="_blank"
-      class="flex gap-2 items-center p-4"
+      class="flex gap-2 items-start p-4"
     >
       <div v-if="item.image" class="w-[50%]">
         <img :src="item.image" class="w-full object-cover rounded" />
